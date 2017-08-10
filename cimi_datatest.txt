@@ -1,0 +1,34 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.datatest
+Description:	"Tests of the complex data types in CIMI."
+Uses:			cimi.datatypes
+
+
+EntryElement:	DateTimeTypesTest
+1..1			Date
+1..1			Time
+1..1			DateTime
+1..1			Instant
+1..1			Duration 
+
+EntryElement:	IntegerTypesTest
+1..1			Count
+1..1			UnsignedIntegerCount
+1..1			PositiveIntegerCount
+
+EntryElement:	QuantityTypesTest
+1..1			Quantity
+1..1			Ordinal  
+1..1			Proportion 
+
+EntryElement:	TextTypesTest
+1..1			PlainText
+1..1			CodedText
+1..1			UriValue
+1..1			EhrUri
+1..1			Identifier
+
+EntryElement:	OtherTypesTest
+1..1			YesNo
+1..1			Parsable
+1..1			Multimedia

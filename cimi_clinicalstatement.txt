@@ -1,0 +1,78 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.clinicalstatement
+Description:	"The Clinical Statement Reference Model Pattern is a core CIMI pattern. It represents a statement made about a patient typically documented as an 'entry' in the patient record (see COMPOSITION pattern). Clinical statements may either be 'indivisible' meaning that they can exist independently but cannot be further broken down into other independent statements. Examples of indivisible statements include a hematocrit measurement or a complex medication order. 'Compound' clinical statements, on the hand, are collections of related indivisible or compound clinical statements. Examples of compound clinical statements are panels (which may include other nested panels) and time series. Clinical statements are composed of following primary components:
+The subject of the statement - generally the subject of the record but this may not always be the case. For instance, a clinical statement may describe a condition affecting a relative of the patient as is the case in the documentation of family history.
+The clinical topic of the statement - for instance, is this statement about a surgical procedure or a medication-related activity. Alternatively, the statement may describe the state of the patient. The context of the clinical statement - for instance, for procedure topics, did the procedure occur, was it planned, proposed, ordered, not performed, and so on. If the statement describes a particular finding about the patient, was that finding observed or not observed in the patient? Was the patient at risk of some condition. Attribution information relating to the statement itself such as who authored, verified, recorded, or signed the statement."
+// BALLOT: The description of the Package should be at a high level. It shouldn't include details about the contents of clinical statements. That belongs in the class description.
+Uses:			cimi.datatypes, cimi.core, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.contextcore, cimi.clinical.informationentry, cimi.clinical.encounter
+
+EntryElement:		ClinicalStatement
+Based on:			InformationEntry
+Concept:			MTH#C3242447
+Description:		"The documentation of clinical information about a subject of information such as a patient or a relative of the patient, asserted by a particular source, recorded, and potentially verified. The ClinicalStatement class provides the core pattern for more specific clinical statement archetypes, such as a statement that a finding has been found in a patient or that a procedure has been proposed by a clinical decision support system. The ClinicalStatement pattern defines the core attributes common to most clinical statements and specifies a composition pattern that encourage model component reuse and better alignment with the SNOMED CT Concept Model. A clinical statement is composed of the StatementTopic class (grouping of attributes for capturing information about a procedure or a clinical finding) and the StatementContext class (grouping of attributes providing the context for the statement topic such as whether a procedure was performed, requested, not performed or whether a finding is suspected present or absent in the patient). At the archetype level, the topic and context components are coordinated to form the clinical statement. For instance, the composition of the ProcedureTopic with the NotPerformed context indicates that the given procedure was not performed."
+0..1				Topic
+0..1				Context
+0..1				OriginatingFrom
+0..1				Encounter  // TODO: change to ref(Encounter)
+// BALLOT: ClinicalStatement.Encounter should be a reference to an Encounter. How is the difference between in-lining an encounter and referencing an encounter demonstrated in the model?
+// BALLOT: ClinicalStatement doesn't need both "OriginatingFrom" and "Encounter" - they seem to have almost identical descriptions. The "OriginatingFrom" attribute should be eliminated.
+
+
+// TODO: It isn't necessary to have a Topic attribute. It is sufficient to say the ClinicalStatement has 0..1 StatementTopic, cutting out the middleman
+Element:			Topic
+Concept:			MTH#C1706203 "Subject - topic"
+Description:		"What the statement is about, e.g., the kind of finding or procedure asserted. Attribute aligns with the SNOMED CT Situation with Explicit Context (SWEC) Concept Model attributes 'Associated finding (attribute)' (SCTID: 246090004) and 'Associated procedure (attribute)' (SCTID: 363589002). The range of this attribute is a structure (StatementTopic) rather than a value set. The topic of the clinical statement must align with the range specified by the SWEC Concept Model. For instance, if the 'topic' attribute's meaning is bound to 'Associated finding', then the topic may not be a specialization of the Act statement topic."
+Value:				StatementTopic
+
+// TODO: It isn't necessary to have a Context attribute. It is sufficient to say the ClinicalStatement has 0..1 StatementContext, cutting out the middleman
+Element:			Context
+Concept:			MTH#C0449255
+Description:		"The ontological status of the statement, e.g., whether it exists, does not exist, is planned, etc. Attribute aligns with the SNOMED CT Situation with Explicit Context Concept Model context attributes 'Finding context (attribute)' (SCTID: 408729009) and 'Procedure context (attribute)' (SCTID: 408730004). The range of this attribute is a structure (StatementContext) rather than a value set. The context of the clinical statement must align with the range specified by the SWEC Concept Model. For instance, if the 'context' attribute's meaning is bound to 'Finding context', then the context may not be a specialization of the ActionContext statement context. Instead, it should be a specialization of the FindingContext statement context."
+Value:				StatementContext
+
+Element:			OriginatingFrom
+Concept:			TBD
+Description:		"The encounter or episode of care from which this statement originates."
+Value:				ref(Encounter)
+// BALLOT: The range of ClinicalStatement.OriginatingFrom is unclear. Given as Class<T>, but what it T? Any Topic? Any Encounter or EpisodeOfCare
+
+
+Abstract Element:	Component
+Based on:			CLUSTER
+Concept:			TBD
+Description:		"The component abstract class is used to represent dependent observations, findings, or procedures associated with the parent clinical statement. A dependent component is a component that does not have an independent existence outside of its parent. For instance, the description of a wound bed must exist in the context of a wound assertion. However, a systolic blood pressure measurement can exist independently of a blood pressure panel. This distinction is important. Collections of independent statements should be represented using the composition structures offered by Compound Clinical Statement. Collections of dependent structures should be modeled using the Component pattern."
+1..1				Topic
+1..1				Context
+// BALLOT: The name "Component" should be in ALL CAPS to indicate it is an abstract class
+// BALLOT: In Component, why are both Topic and Context 1..1, while they are each 0..1 in ClinicalStatement?
+
+Element:		CompositeComponent
+Based on:		Component
+Concept:		TBD
+Description:	"A component that itself can contain sub-components - e.g., the dimensional features of a wound or wound tunneling."
+0..*			Component
+// BALLOT: Creating a list to hold the Components of a CompositeComponent means that the list will have to be sliced in order to define the particular contents of a composite. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
+// BALLOT: It is odd that CompositeComponent not inherit from COMPOSITION, since it is a composition. If there is a reason it inherits from Component in preference to Composition? Should multiple inheritance be used?
+
+Element:		CompoundClinicalStatement
+Based on:		ClinicalStatement
+Concept:		TBD
+Description:	"Clinical statement representing multiple units of information that are treated as a whole such as a panel. A compound clinical statement is a collection of independent clinical statement, whether indivisible or compound. Note that complex medications are indivisible clinical statements even though their structure may be a composite data structure. They are generally treated as an independent entry in a record and their parts do not constitute independent entries in a record."
+0..*			ClinicalStatement
+// BALLOT: The type for the content of a CompoundClinicalStatement is given as List<Class<T>>. The range of T is not defined. 
+
+Element:		IndivisibleClinicalStatement
+Based on:		ClinicalStatement
+Concept:		TBD
+Description:	"The documentation of clinical information about a subject of information such as a patient or a relative of the patient, asserted by a particular source, recorded, and potentially verified. The ClinicalStatement class provides the core pattern for more specific clinical statement archetypes, such as a statement that a finding has been found in a patient or that a procedure has been proposed by a clinical decision support system. The ClinicalStatement pattern defines the core attributes common to most clinical statements and specifies a composition pattern that encourage model component reuse and better alignment with the SNOMED CT Concept Model. A clinical statement is composed of the StatementTopic class (grouping of attributes for capturing information about a procedure or a clinical finding) and the StatementContext class (grouping of attributes providing the context for the statement topic such as whether a procedure was performed, requested, not performed or whether a finding is suspected present or absent in the patient). At the archetype level, the topic and context components are coordinated to form the clinical statement. For instance, the composition of the ProcedureTopic with the NotPerformed context indicates that the given procedure was not performed."
+// BALLOT: The definition of IndivisibleClinicalStatement should not be the same as for ClinicalStatement. It should describe what makes the indivisible clinical statement different from a "regular" clinical statement.
+0..*			Component
+// BALLOT: Creating a list to hold the contents of an IndivisibleClinicalStatement means that the list will have to be sliced in order to define the particular contents of a composition. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
+
+Element:		SimpleComponent
+Based on:		Component
+Concept:		TBD
+Description:	"A leaf-level component of a clinical statement such as a component for a complex medication that is ordered as a single unit or individual observation components associated with a wound assertion such as the diameter of a wound."
+// BALLOT: The attributes of SimpleComponent and Component are exactly the same. Why is the SimpleComponent class necessary? What makes it different?
+
+

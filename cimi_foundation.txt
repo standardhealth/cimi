@@ -1,0 +1,69 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.foundation
+Description:	"The Foundation Package contains the base classes from which all CIMI classes are derived. Foundation classes have been harmonized with the ISO 13606 EHR Specification. Its three core components are (1) COMPOSITION (used to represent clinical documents or knowledge artifacts), (2) ENTRY used to represent clinical statement content, and (3) CLUSTER (used to represent supporting data structures)."
+Uses:			cimi.datatypes, cimi.core
+
+Abstract Element:	CLUSTER
+Based on:			LOCATABLE
+Concept:			TBD
+Description:		"Abstract class representing a reusable structure in a model such as an address or an entity such as a device."
+
+Abstract Element:	BASEENTITY
+Based on:			CLUSTER
+Concept:			TBD
+Description:		"Parent class for all entities."
+
+Abstract Element:	COMPOSITION
+Based on:			LOCATABLE
+Concept:			TBD
+Description:		"A composition is considered the unit of modification of the record, the unit of transmission in record extracts, and the unit of attestation by authorising clinicians. In this latter sense, it may be considered equivalent to a signed document."
+0..*				CONTENT
+// BALLOT: Creating a list to hold the contents of a COMPOSITION means that the list will have to be sliced in order to define the particular contents of a composition. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
+// BALLOT: COMPOSITION doesn't have any children (not even CompositeComponent inherits from it). Is it vestigial?
+
+Abstract Element:	CONTENT
+Based on:			LOCATABLE
+Concept:			TBD
+Description:		"Abstract ancestor of all concrete content types. A unit of content that makes up a composition - e.g., a clinical statement in a patient record, a simple or composite action is a knowledge document."
+
+Abstract Element:	ENTRY
+Based on:			CONTENT
+Concept:			TBD
+Description:		"An ENTRY is the root of a logical item of hard clinical information created in the clinical statement context, within a clinical session or of clinical knowledge in a knowledge artifact. With regards to clinical information entries, there can be numerous such contexts in a clinical session. Observations and other Entry types only ever document information captured&#47;created in the event documented by the enclosing Composition. An ENTRY is also the minimal unit of information any query should return, since a whole ENTRY (including subparts) records spatial structure, timing information, and contextual information, as well as the subject and generator of the information."
+
+Abstract Element:	SECTION
+Based on:			CONTENT
+Concept:			TBD
+Description:		"Represents a heading in a heading structure, or section tree . Can also be used to represent a collection of entries without metadata. (For collections of entries with shared metadata, use COMPOUND _ENTRY instead). Created according to archetyped structures for typical headings such as SOAP, physical examination, but also pathology result heading structures. Should not be used instead of ENTRY hierarchical structures."
+0..*				CONTENT
+// BALLOT: Creating a list to hold the contents of a SECTION means that the list will have to be sliced in order to define the particular contents of a section. This is against the architectural principles of CIMI. The content of a section should be added as subelements in a new child class, and not inserted into a sliced list.
+
+Abstract Element:	VIRTUALCLUSTER
+Based on:			CLUSTER
+Concept:			TBD
+Description:		"A dependent model structure designed to support attribute reuse but which may be ignored by tooling such as code generators. This allows grouping of attributes to be used in a number of compositional structures in order to encourage pattern reuse and consistency but which can be structurally flattened in a derived artifact (e.g., a java class representing the composition). An example of this pattern is the CIMI Clinical Statement pattern which combines statement context and topic to build the set of relevant clinical statements."
+
+Abstract Element:	PARTICIPATION
+Based on:			ASSOCIATIONCLASS
+Concept:			TBD	
+Description:		"Model of a participation of a Party (any Actor or Role) in an activity. Used to represent any participation of a Party in some activity, which is not explicitly in the model, e.g. assisting nurse. Can be used to record past or future participations. Should not be used in place of more permanent relationships between demographic entities."
+1..1				PARTY
+// BALLOT: In the definition of PARTICIPATION, either use party (lower case) if using the English language word, or PARTY, if citing the class, but not Party.
+
+Abstract Element:	PARTY
+Based on:			LOCATABLE
+Concept:			TBD
+Description:		"A party involved in an activity. PARTY has two specializations: ACTOR and ROLE."
+1..1				Type
+0..*				PARTYRELATIONSHIP
+0..*				Identifier
+// BALLOT: Definition of PARTY is circular. Additionally, the definition of PARTY should be self-contained, not defined in terms of its subclasses. 
+
+Element:			PARTYRELATIONSHIP
+Based on:			ASSOCIATIONCLASS
+//1..1				PARTY
+// TODO: CLI tooling doesn't like the recursive definition of PARTY > PARTYRELATIONSHIP > PARTY and has a stack overflow. For now, PARTYRELATIONSHIP.PARTY is commented out.
+// BALLOT: The definition of PARTY_RELATONSHIP is circular
+// BALLOT: It is odd that PARTYRELATIONSHIP (and ASSOCIATIONCLASS, for that matter) does not involve two parties. A relationship, by nature, connects two things.
+// BALLOT: PARTYRELATIONSHIP should have a reference to the second party, rather than an attribute that is that party. CIMI never seems to differentiate. Is that a problem? Presumably, the two parties involved in the relationship refer to eachother through the PARTYRELATIONSHIP, instead of being together in the same structure.
+

@@ -1,0 +1,75 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.informationentry 
+Description:	""
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.provenance, cimi.clinical.commondatastructures
+
+// BALLOT: (General comment) The granularity of modules varies widely. Some modules contain a large number of classes, and some contain just one class. Not high priority, but at the risk of channelling Goldilocks, can CIMI be refactored so modules are not too big, not too small, but "just right"?
+
+
+Element:		InformationEntry
+Based on:		ENTRY
+Concept:		TBD
+Description:	"Documentation missing"
+0..1			Key
+0..*			Identifier
+0..1			SubjectOfInformation
+0..1			Authored
+0..1			Recorded
+0..1			Verified
+0..1			Signed
+0..*			Cosigned
+0..1			AdditionalText
+0..1			RecordStatus
+// BALLOT: Definition of InformationEntry is missing
+// BALLOT: InformationEntry class does not belong in the Clinical module grouping. It belongs in the ClinicalStatement module.
+// BALLOT: Perhaps InformationEntry has not been brought up to date with the Attribution model. It seems that InformationEntry should have 1..* Attribution, and in each Attribution, the nature of the activity (in Attribution.activity) would capture if that activity were authoring, recording, verifying, etc.
+// BALLOT: Many of the properties of ClinicalStatement (inherited from InformationEntry) deal with provenance. Many of those deals with attribution. Of course, Provenance deals with attribution. The CIMI Architecture Guide clearly states these two patterns. But this is not enough; CIMI does not state which is preferred, and how and when each model is to be used. It is very confusing. Moreover, this makes it difficult or impossible to map to FHIR, which has one way to express provenance information.
+
+
+Element:		Key
+Concept:		TBD
+Description:	"The 'key' attribute is an optional attribute allowing the coding of some of the information represented by the clinical statement. The range of this attribute (i.e., allowable codes assigned as a value for this attribute) must derive from and conform with the SNOMED CT Situation with Explicit Context (SWEC) concept hierarchies defined in SNOMED CT. Note that this attribute may consist of precoordinated codes (not recommended) or SNOMED CT expressions."
+Value:			CodedText
+// BALLOT: The description of InformationEntry.Key is too vague. Specifically, it is defined as "the coding of some of the information represented by the ClinicalStatement". That allows the key to be used for almost anything. If the key is to be usable for search or in reasoning, it needs a more adequate definition.
+
+Element:		SubjectOfInformation
+Based on:		PARTICIPATION
+Concept:		TBD
+Description:	"The entity being described by this statement. The entity may be animate (a patient, a relative of the patient, a veterinary patient, a cohort) or inanimate (a well, a geographical location). The subject of information is constrained in archetypes. This attribute aligns with the SNOMED CT Situation with Explicit Context (SWEC) and is bound to the SNOMED attribute: 'Subject relationship context (attribute)' (SCTID: 408732007)"
+1..1			RelationshipToSOR
+//BALLOT: SubjectOfInformation.RelationshipToSubjectOfRecord results in a FHIR StructureDefinition name that exceeds FHIR's length limit on names. Change it to RelationshipToSOR and FHIR is happy again. Please make it possible to map to FHIR as simply as possible, without special rules and transformations.
+
+Element:		RelationshipToSOR
+Concept:		TBD
+Description:	"Indicates the statement's subject relationship to the subject of record. For instance, the statement maybe about the subject of record in which case the relationship is self or the subject of the statement may be a relative to the subject of record such as is the case with family history statements."
+Value:			CodedText
+
+Element:		Recorded
+Concept:		TBD
+Description:	"Provenance information specific to the recording of the clinical statement (e.g., when recorded, where recorded, etc...)."
+Value:			Attribution
+
+Element:		Verified
+Concept:		TBD
+Description:	"Provenance information specific to the verification process associated with this statement (e.g., verifier, verification method, when verified, etc...)."
+Value:			Attribution
+
+Element:		Signed
+Concept:		TBD
+Description:	"Provenance information specific to the signing of the clinical statement."
+Value:			Attribution
+
+Element:		Cosigned
+Concept:		TBD
+Description:	"Provenance information specific to the cosigning of the clinical statement."
+Value:			Attribution
+
+Element:		AdditionalText
+Concept:		TBD
+Description:	"Unstructured notes appended to a clinical statement."
+Value:			Annotation
+
+Element:		RecordStatus
+Concept:		TBD
+Description:	"Concept indicating the state of this record. E.g., 'entered in error'."
+Value:			CodedText

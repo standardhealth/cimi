@@ -1,0 +1,51 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.core
+Description:	""
+Uses:			cimi.datatypes
+
+Abstract Element:	LOCATABLE
+Concept:			TBD
+Description:		"Most classes in the CIMI reference model inherit from the LOCATABLE class, which defines the idea of 'locatability in an archetyped structure'. LOCATABLE defines a runtime name and an archetype_node_id. The archetype_node_id is the standardised semantic code for a node and comes from the corresponding node in the archetype used to create the data. The only exception is at archetype root points in data, where archetype_node_id carries the archetype identifier in string form rather than an interior node id from an archetype. LOCATABLE also provides the attribute archetype_details, which is non-Void for archetype root points in data, and carries meta-data relevant to root points. The name attribute carries a name created at runtime. The 'meaning' of any node is derived formally from the archetype by obtaining the text value for the archetype_node_id code from the archetype ontology section, in the language required."
+1..1				ArchetypeNodeId
+1..1				Name
+0..1				ArchetypeDetails
+
+Element:			ArchetypeNodeId
+Concept:			TBD
+Description:		"The standardised semantic code for a node and comes from the corresponding node in the archetype used to create the data. The only exception is at archetype root points in data, where archetype_node_id carries the archetype identifier in string form rather than an interior node id from an archetype."
+Value:				string
+
+Element:			Name
+Concept:			TBD
+Description:		"A name created at runtime."  //BALLOT: too broad a name
+Value:				string
+
+Element:			ArchetypeDetails
+Concept:			TBD
+Description:		"LOCATABLE also provides the attribute Archetype_details, which is non-Void for archetype root points in data, and carries meta-data relevant to root points."
+0..1				ARCHETYPED
+
+Abstract Element:	ARCHETYPED
+Concept:			TBD
+Description:		"Archetypes act as the configuration basis for the particular structures of instances defined by the reference model. To enable archetypes to be used to create valid data, key classes in the reference model act as root points for archetyping; accordingly, these classes have the archetype_details attribute set. An instance of the class ARCHETYPED contains the relevant archetype identification information, allowing generating archetypes to be matched up with data instances."
+1..1				ArchetypeId
+1..1				RmVersion
+
+// BALLOT: The ARCHETYPED class doesn't seem to have a purpose. It has neither parents nor children. The hierarchy could be simplified by including two attributes of ARCHETYPED directly in LOCATABLE. 
+// BALLOT: It isn't indicated whether ARCHETYPED an abstract class, but the use of all caps indicates it may be. If so, it should be documented as such. Also, if this is an abstract class, where are its instantiable children?
+
+Element:			ArchetypeId
+Concept:			TBD
+Description:		"Globally unique archetype identifier."
+Value:				string
+
+Element:			RmVersion
+Concept:			TBD
+Description:		"Version of the CIMI reference model used to create this object. Expressed in terms of the release version string, e.g. 1.0 , 1.2.4 ."
+Value:				string
+
+Abstract Element:	ASSOCIATIONCLASS
+Concept:			TBD
+Description:		"Abstract parent type for an association class."
+Value:				0..1 TEXT
+// BALLOT: ASSOCIATIONCLASS should be moved to the Foundation module, since it has no parent class, and its various child classes are found in the Foundation module

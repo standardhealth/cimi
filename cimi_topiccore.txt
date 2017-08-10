@@ -1,0 +1,58 @@
+Grammar: 		DataElement 5.0
+Namespace:		cimi.clinical.topiccore
+Description:	"The Topic Core package contains the top-level specializations of the Statement Topic class, namely, the FindingTopic, ActionTopic, and EventTopic classes."
+Uses:			cimi.datatypes, cimi.foundation
+
+Element:		StatementTopic
+Based on:		VIRTUALCLUSTER
+Concept:		TBD
+Description:	"Compositional and reusable grouping of clinical statement attributes that make up the clinical focus of the statement. StatementTopic class attributes are aligned with SNOMED CT Concept Model attributes when such an overlap exists. Note that this class does not include contextual attributes such as the nature of the action (ordered, proposed, planned, etc...), the nature of the patient state being described (e.g., present, suspected present, absent), and the provenance of this information (the who, when, where, how, why of the information recorded)."
+1..1			Key
+
+Element:		Key
+Concept:		TBD
+Description:	"The concept representing the finding&#47;event being observed or the action being described. The code attribute's semantics is aligned to either associatedFinding or associatedProcedure in the SNOMED CT Situation with Explicit Context Concept Model. For findings, the key contains a concept for an observable entity. For assertions, the key contains a concept specifying that an assertion is made. For acts, the key contains a concept specifying the procedure described."
+Value:			CodedText
+
+Element:		EventTopic
+Based on:		StatementTopic
+Concept:		TBD
+Description:	"An non-clinical event such as a natural disaster. Topic allows the capture of information related to such events when they pertain to the clinical context associated with a given patient."
+// BALLOT: Typo in EventTopic definition. "A non-" not "An non-"
+
+Element:		FindingTopic
+Based on:		StatementTopic
+Concept:		TBD
+Description: 	"The characteristics looked for in medical investigations or diagnostics and the outcome."
+0..1			Result
+0..1			Description
+0..*			Multimedia
+
+Element:		Result
+Concept:		TBD
+Description:	"Description of the finding."
+Value:			PlainText
+
+Element:		Description
+Concept:		TBD
+Description:	"The unqualified value of the evaluation or assertion."
+Value:			DATAVALUE
+
+Element:		ProcedureTopic
+Based on:		StatementTopic
+Concept:		TBD
+Description:	"Description of a healthcare action, independent of action context."
+0..1			Description
+0..1			Reason
+0..1			Method
+
+Element:		Reason
+Concept:		TBD
+Description:	"The reason for performing this act."
+Value:			TEXT
+
+Element:		Method
+Concept:		TBD
+Description:	"Technique or way of accomplishing the act. E.g., endoscopic, arthroscopic, etc."
+Value:			CodedText
+

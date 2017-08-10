@@ -1,0 +1,419 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.datatypes
+Description:	"Complex data types in CIMI."
+// BALLOT: Complex data types should not be in all capital letters. Complex data types such as CODED_TEXT and TIME appear in all caps. Primitive types do not. Other classes do not. Abstract classes DO appear in all caps. What is the rhyme and reason? The current system makes it difficult to differentiate abstract and concrete classes (e.g., TEXT and PLAIN_TEXT), or remember how something is capitalized (e.g., TIME versus Timing). The complex data types act the same way as other "regular" elements. I suggest: (1) All caps for abstract classes, (2) CapitalCase for all classes including complex data types, and (3) lower case text for primitive types.
+
+CodeSystem:     MTH = http://ncimeta.nci.nih.gov
+
+Abstract Element: 	DATAVALUE
+Concept:			MTH#C1704610  // TODO BALLOT: All CIMI classes and attributes should be anchored to semantic definitions
+Description:		"Root for data value types."
+//BALLOT: FHIR does not permit underscores (_) in the names of StructureDefinitions. To reduce mapping headaches, CIMI should not use names with underscores (such as DATA_VALUE). If underscores are retained, any conversions, maps, and validations become more difficult (after you strip them, it is hard to know where they were). This suggestion will not affect CIMI's functionality in any way.
+
+Abstract Element:	ENCAPSULATED 
+Based on:			DATAVALUE
+Concept:			MTH#C1548310
+Description:		"Abstract class defining the common meta-data of all types of encapsulated data."
+
+Element:			Parsable
+Based on:			ENCAPSULATED
+Concept:			TBD // not exactly MTH#C3873593 "SNOMED CT parsable string"
+Description:		"ENCAPSULATED data expressed as a parsable String. The internal model of the data item is not described in the openEHR model in common with other encapsulated types, but in this case, the form of the data is assumed to be plaintext, rather than compressed or other types of large binary data."
+Value:				string
+1..1				Formalism
+
+Element:			Formalism
+Concept:			TBD
+Description:		"Name of the formalism, e.g. GLIF 1.0 , Proforma etc."
+Value:				CodedText
+
+Abstract Element:	TEXT
+Based on:			DATAVALUE
+Concept:			MTH#C1527021
+Description:		"Abstract parent for text and coded text item, which may contain any amount of legal characters arranged as e.g. words, sentences etc (i.e. one TEXT may be more than one word). Visual formatting and hyperlinks may be included. Displayable rendition of the item, regardless of its underlying structure. For CODED_TEXT, this is the rubric of the complete term as provided by the terminology service. No carriage returns, line feeds, or other non-printing characters permitted."
+Value:				string
+0..*				TermMapping  
+// TODO: The definition of TEXT the class, and the definition of its value are different -- this causes a collision in CAMEO, where the description of the class IS the description of its value. Here, I have concatenated the two descriptions.
+// BALLOT: Please define "rubric" in this context. Is it the fully specified name? The preferred term? The definition? 
+// BALLOT: Change "Abstract parent for text" to "Abstract parent for simple text"
+// TODO:  TEXT has 0..* TermMappings; the name 'mapping' is the name of the containing list. That name disappears when mapping to CAMEO.
+// BALLOT: Mapping is too broad a name, and cannot be reused. I suggest renaming the attribute "TermMappings"
+
+Element:			TermMapping
+Concept:			TBD
+Description:		"Represents a coded term mapped to a TEXT, and the relative match of the target term with respect to the mapped item. Plain or coded text items may appear in the EHR for which one or mappings in alternative terminologies are required. Mappings are only used to enable computer processing, so they can only be instances of CODED_TEXT. Used for adding classification terms (e.g. adding ICD classifiers to SNOMED descriptive terms), or mapping into equivalents in other terminologies (e.g. across nursing vocabularies)."
+1..1				Match
+0..1				Purpose  
+1..1				Target   
+// BALLOT:  For consistency, the attribute of TermMapping currently called Target should be renamed Value. 
+// BALLOT: Perhaps the better name for TermMapping is "MappedTerm". Gerund nouns (-ing endings) can be mistaken for verbs (i.e. term mapping activity).
+
+Element:		Match
+Concept:		TBD
+Description:	"The relative match of the target term with respect to the mapped text item. Result meanings: '&gt;': the mapping is to a broader term e.g. orginal text = arbovirus infection , target = viral infection '=': the mapping is to a (supposedly) equivalent to the original item '&lt;': the mapping is to a narrower term. e.g. original text = diabetes , mapping = diabetes mellitus . '?': the kind of mapping is unknown. The first three values are taken from the ISO standards 2788 ( Guide to Establishment and development of monolingual thesauri ) and 5964 ( Guide to Establishment and development of multilingual thesauri )."
+Value:			string 
+// TODO: no FHIR mapping for "Character" data type
+// BALLOT: Match (TermMapping.Match) is too broad a name for this element, prevents reuse.
+
+Element:		Purpose   
+Concept:		MTH#C1285529
+Description:	"Purpose of the mapping e.g. automated data mining , billing , interoperability"
+Value:			CodedText
+// BALLOT: Purpose (TermMapping.Purpose) is too broad a name for this element
+
+Element:		Target 
+Concept:		TBD
+Description:	"The target term of the mapping."  
+Value:			CodedText
+// BALLOT: Circular definition of TermMapping.Target
+
+Element:		CodedText
+Based on:		TEXT
+Concept:		MTH#C1547332 "Coded element - Data types"
+Description:		"A text item whose value must be the rubric from a controlled terminology, the key (i.e. the code') of which is the code attribute. In other words: a CODED_TEXT is a combination of a CODE_PHRASE (effectively a code) and the rubric of that term, from a terminology service, in the language in which the data was authored. Since CODED_TEXT is a subtype of TEXT, it can be used in place of it, effectively allowing the type TEXT to mean a text item, which may optionally be coded. Misuse: If the intention is to represent a term code attached in some way to a fragment of plain text, CODED_TEXT should not be used."
+1..1			Code
+0..1			Term
+1..1			TerminologyId
+0..1			TerminologyVersion  
+0..1			Uri
+// BALLOT: In the definition of CodedText, the word "rubric" should be avoided. It is not clear whether "rubric" means the fully specified name, the preferred term, the code, the definition, or maybe something else.  
+
+Element:		Uri
+Concept:		TBD
+Description:	"A URI representation for the identifier of the concept represented by CODED_TEXT."
+Value:			uri
+// BALLOT: The name Uri (in CodedText.Uri) is too general. I suggest changing it to "ConceptUri" to be more clear the Uri is specifically the Uri anchoring the code.
+
+
+Element:		Code
+Concept:		MTH#C0805701
+Description:	"The identifier of a concept in a terminology."
+Value:			string  // TODO: change to code
+/* BALLOT: In FHIR, a code is a string, but with additional restrictions (FHIR: "a code is restricted to a string which has at least one character and no leading or trailing whitespace, and where there is no whitespace other than single spaces in the contents"). In CIMI, any string can be a code, so the definition of a code in CIMI is wider than in FHIR. This is a mapping problem because there can be CIMI codes that cannot map to FHIR's primitive code, and therefore, an extension would be needed to contain CIMI's wider definition of code. This would be a mess (a CIMI-code-extension with a string and a code which would propagate literally everywhere in FHIR). 
+There are two ways to address this problem:
+1) Align CIMI's definition of code to the definition of code in FHIR.
+2) Leave the representation of codes up to the implementing physical systems, which means defining code as a CIMI primitive. Then, different physical systems could implement 'code' as they see fit. This solution is most consistent with CIMI being a logical model.
+*/
+
+Element:		Term
+Concept:		MTH#C1705313 "Term (lexical)"
+Description:	"The preferred textual rendition of the code attribute."
+Value:			string
+
+Element:		TerminologyId 
+Concept:		MTH#C3874293  "Terminology system"  // TODO: Not an exact conceptual match. This MTH represents the concept of a terminology system, not the terminology system name
+Description:	"The terminology that provides the namespace for the code attribute."
+Value:			string
+// BALLOT: The correct HL7 name for a Terminology is CodeSystem. There is a report by Rob McClure, Rob Hausam, and others that establishes the standard definitions around vocabularies and value sets. CIMI should adopt that.
+
+Element:		TerminologyVersion
+Concept:		MTH#C3897197 "Version of the Reference Terminology"
+Description:	"The version of the terminology where the concept exists."
+Value:			string
+
+Element:		PlainText
+Based on:		TEXT
+Concept:		MTH#C1554984
+Description:	"Plain text potentially with simple formatting."  
+0..1 			Language
+// BALLOT: PlainText has misleading name, and an inadequate definition. Even though it is called 'plain text' it can include codings and other properties; it is significantly different than a 'plain-old text'. A better way forward is to unify CodedText and PlainText to create a single object that has the capabilities of both -- the dual ability to have text and/or codes. This isn't difficult to achieve. A structure like CodeableConcept does it; it is a text plus a list of codes, but it lacks important features (namely, the ability to tag a code as original, preferred, synonym, hypo/hypernym, etc.). Aligning with FHIR will greatly simplify CIMI's primary implementation as FHIR profiles.
+
+Element:		Language
+Concept:		MTH#C0023008
+Description:	"The text's language"  
+Value:			CodedText
+// BALLOT: Language has a circular definition
+
+Abstract Element:	ORDEREDVALUE
+Based on:			DATAVALUE
+Concept:			MTH#C1264 "Ordinal"
+
+Element:		Ordinal   
+Based on:		ORDEREDVALUE
+Concept:		MTH#C1264627
+Description:	"Models rankings and scores, e.g. pain, Apgar values, etc, where there is a) implied ordering, b) no implication that the distance between each value is constant, and c) the total number of values is finite. Note that although the term ordinal' in mathematics means natural numbers only, here any integer is allowed, since negative and zero values are often used by medical professionals for values around a neutral point. Examples of sets of ordinal values: -3, -2, -1, 0, 1, 2, 3  — reflex response values 0, 1, 2  — Apgar values This class is used for recording any clinical datum which is customarily recorded using symbolic values. Example: the results on a urinalysis strip, e.g. {neg, trace, , , } are used for leucocytes, protein, nitrites etc; for non-haemolysed blood {neg, trace, moderate}; for haemolysed blood small, moderate, large"
+Value:			decimal // TODO: change to integer
+1..1			Symbol
+// BALLOT: Ordinal.Value is defined as REAL. I'm pretty sure it was intended to be an integer, according to the documentation.
+// BALLOT: Why is the integer the value and not the symbol? It seems that the symbol would be required, and the value would be optional, just a way to compare symbolic values (not required for some purposes)
+
+Element:		Symbol  
+Concept:		TBD
+Description:	"Coded textual representation of this value in the enumeration, which may be strings made from + symbols, or other enumerations of terms such as mild , moderate , severe , or even the same number series as the values, e.g. 1 , 2 , 3 . Codes come from archetype."
+Value:			CodedText 
+// BALLOT: Symbol (in Ordinal.Symbol) is too general a name for reuse 
+
+Abstract Element:	QUANTIFIED
+Based on:			ORDEREDVALUE
+Concept:			TBD
+Description: 		"Abstract class defining the concept of true quantified values, i.e. values which are not only ordered, but which have a precise magnitude.
+Models rankings and scores, e.g. pain, Apgar values, etc, where there is a) implied ordering, b) no implication that the distance between each value is constant, and c) the total number of values is finite. Note that although the term ordinal' in mathematics means natural numbers only, here any integer is allowed, since negative and zero values are often used by medical professionals for values around a neutral point. Examples of sets of ordinal values: -3, -2, -1, 0, 1, 2, 3  — reflex response values 0, 1, 2  — Apgar values This class is used for recording any clinical datum which is customarily recorded using symbolic values. Example: the results on a urinalysis strip, e.g. {neg, trace, , , } are used for leucocytes, protein, nitrites etc; for non-haemolysed blood {neg, trace, moderate}; for haemolysed blood small, moderate, large}."
+0..1				ValueStatus
+// BALLOT: The class name QUANTIFIED is easily mixed up with Quantity. Is there a better name that captures the intended meaning (namely, either time or amount)? I suggest TIME_OR_AMOUNT. Alternatively, the class could be eliminated (I don't see much added value here), thus making ORDERED_VALUE the direct parent of TIME, AMOUNT, and ORDINAL. I propose eliminating the QUANTIFIED class as the most sensible course. 
+
+
+Element:		ValueStatus
+Concept:		TBD
+Description:	"Optional status of magnitude with values: 
+=   magnitude is a point value, <   value is < magnitude, >   value is > magnitude,  <=  value is <= magnitude, >=  value is >= magnitude, ~ value is approximately magnitude. If not present, meaning is = "
+Value:			string 
+// BALLOT: The current set of choices for ValueStatus.Value breaks mapping of CIMI QUANTITY to FHIR Quantity, because FHIR requires the value set http://hl7.org/fhir/ValueSet/quantity-comparator, which has only the 4 inequality values. If CIMI insists on having all six values, then it will be necessary to add an extension to Quantity to hold the CIMI ValueStatus.
+// BALLOT: ValueStatus has an unclear, circular definition: "< value is < magnitude"
+// BALLOT: ValueStatus definition includes a value set, which is a constraint and therefore should be in the ADL, not the BMM. 
+// BALLOT: In the definition of ValueStatus, the word "optional" should be removed. It is not part of the definition but rather the cardinality.
+// TODO BALLOT: TEXT is the incorrect datatype for ValueStatus.value. In this case there is a defined set of permissible values, so the right data type is Code or CodedText.
+
+Abstract Element:	AMOUNT   
+Based on:			QUANTIFIED
+Concept:			TBD
+Description:		"Abstract class defining the concept of relative quantified amounts. For relative quantities, the +' and -' operators are defined." 
+0..1				Accuracy
+0..1				AccuracyIsPercent  
+// BALLOT: The need for this definition is unclear. What is the difference between amount and quantity? Is it necessary to make such a distinction?
+// BALLOT: if there is accuracy, then is Precision not a property of AMOUNT?
+
+Element:		Accuracy
+Concept:		MTH#C4035952  "Data Accuracy"
+Description:	"Accuracy of measurement, expressed either as a half-range percent value (accuracy_is_percent = True) or a half-range quantity. A value of 0 means that accuracy is 100%, i.e. no error. A value of unknown_accuracy_value means that accuracy was not recorded."
+Value:			decimal
+// BALLOT: The documentation of Accuracy says to record unknown accuracy using the value "unknown_accuracy_value" but that is impossible, since Accuracy.value data type is REAL.
+
+Element:		AccuracyIsPercent
+Concept:		TBD 
+Description:	"If True, indicates that when this object was created, accuracy was recorded as a percent value; if False, as an absolute quantity value."
+Value:			boolean
+// BALLOT: AMOUNT.AccuracyIsPercent is a flag pertaining to units, which is not the way CIMI usually expresses units. Percent is a valid UCUM unit of measure. If AMOUNT.Accuracy were allowed to have units, then the user could express the accuracy in appropriate units, including percent. 
+
+Element:		Count
+Based on:		AMOUNT
+Concept:		MTH#C0750480
+Description:	"Countable quantities. Used for countable types such as pregnancies and steps (taken by a physiotherapy patient), number of cigarettes smoked in a day. Misuse: Not to be used for amounts of physical entities (which all have units)"
+Value:			integer
+
+Element:		UnsignedIntegerCount
+//Based on:		Count  
+Concept:		TBD
+Description:	"An integer whose value is greater or equal to zero." 
+Value:			unsignedInt
+// BALLOT: UnsignedIntegerCount cannot inherit from Count because the value, an unsignedInt, cannot override the parent value, integer. unsignedInt is a primitive, not a subclass of integer. This breaks FHIR mappings.
+// BALLOT: The definition of UnsignedIntegerCount is too general. All integers >= 0 are not counts (unsigned ints might represent priorities, disease stages, etc.) 
+
+Element:		PositiveIntegerCount
+//Based on:		UnsignedIntegerCount  
+Concept:		TBD
+Description:	"An integer whose value is greater than zero."  
+Value:			positiveInt
+// BALLOT: The definition of PositiveIntegerCount is too general. All integers > 0 are not counts (postitive ints might represent priorities, disease stages, etc.) 
+// BALLOT: PositiveIntegerCount cannot inherit from UnsignedIntegerCount because the value, a positiveInt, cannot override the parent value, an unsignedInt. positiveInt This breaks FHIR mappings. 
+
+Element:		Quantity
+Based on:		AMOUNT  // Are all quantities amounts?
+Concept:		MTH#C1265611 "Quantity"
+Description:	"Quantitified type representing scientific quantities, i.e. quantities expressed as a magnitude and units. Units were inspired by the Unified Code for Units of Measure (UCUM), developed by Gunther Schadow and Clement J. McDonald of The Regenstrief Institute. Can also be used for time durations, where it is more convenient to treat these as simply a number of seconds rather than days, months, years."
+Value:			decimal
+0..1			Precision
+1..1			Units
+
+Element:		Precision
+Concept:		MTH#C1706245
+Description:	"Precision to which the value of the quantity is expressed, in terms of number of decimal places. The value 0 implies an integral quantity. The value -1 implies no limit, i.e. any number of decimal places."
+// BALLOT: Circular definition
+Value:			integer
+// BALLOT: Incorrect definition and data type. The given definition is close to that of significant figures, i.e., the number of digits that carry real information about a measurement. But sig fig is NOT the number of decimal places; a number like 123000 could have 1, 2, 3, 4, 5, 6 significant figures. But - this is not a general way to define quantify precision, which is defined in statistics as is the reciprocal of the variance (a decimal number).
+
+Element:		Units
+Concept:		MTH#C1519795  "Unit of Measure"
+Description:	"Units, expressed expressed as codes (generally UCUM), e.g. 'kg&#47;m2', “mm[Hg]', 'ms-1', 'km&#47;h'. Implemented accordingly in subtypes."
+Value:			CodedText
+
+// BALLOT: Other descendants of Quantity are missing, such upper and lower bound, statistics (mean, median, stdev,...).  These will be needed at a later date.
+
+Element:		Duration
+Based on:		Quantity
+Concept:		MTH#C0449238
+Description:	"Represents a period of time with respect to a notional point in time, which is not specified. A sign may be used to indicate the duration is backwards in time rather than forwards. NOTE a deviation from ISO8601 is supported, allowing the W' designator to be mixed with other designators. See assumed types section in the Support IM. Used for recording the duration of something in the real world, particularly when there is a need a) to represent the duration in customary format, i.e. days, hours, minutes etc, and b) if it will be used in computational operations with date&#47;time quantities, i.e. additions, subtractions etc. Misuse: Durations cannot be used to represent points in time, or intervals of time."
+0..1			DurationText
+
+Element:		DurationText
+Concept:		TBD
+Description:	"ISO8601 duration string."
+Value:			string
+
+Element:		DateTime
+Based on:		QUANTIFIED
+Concept:		MTH#C1264639
+Description:	"Represents an absolute point in time, specified to the second. Semantics defined by ISO 8601. Used for recording a precise point in real world time, and for approximate time stamps, e.g. the origin of a HISTORY in an OBSERVATION which is only partially known. Value: ISO8601 date/time string."
+// BALLOT: Unicode characters are showing through in documentation, e.g. / is rendering as &#47;
+Value:			string 
+// TODO BALLOT: DateTime.Value has to map to the primitive FHIR dateTime, but string cannot map to dateTime.
+// BALLOT: CIMI definitions should not specify physical formats. As a logical model, CIMI should define the semantics of things, not the formatting. CIMI should not define DATE_TIME as an ISO8601 date/time string. That is a physical implementation, which is the responsibility of the physical layer. In target systems, a DateTime might not be an ISO8601 string, but some other semantic equivalent. Assuming the semantics are the same, we can use FHIR dateTime anywhere a CIMI DATE_TIME is specified, and disregard CIMI’s requirement of using an ISO8601 string.
+
+
+Element:		Date
+Based on:		DateTime
+Concept:		MTH#C0011008 "Date in Time"
+Description:	"Represents an absolute point in time, as measured on the Gregorian calendar, and specified only to the day. Semantics defined by ISO 8601. Used for recording dates in real world time. The partial form is used for approximate birth dates, dates of death, etc."
+// TODO BALLOT: Value has to map to the primitive FHIR date
+
+
+Element:		Instant
+Based on:		DateTime
+Concept:		MTH#C1442880  "Point in time"
+Description:	"An instant in time - known at least to the second and always includes a time zone. Note: This is intended for precisely observed times (typically system logs etc.), and not human-reported times - for them, use date and dateTime. instant is a more constrained dateTime"
+// TODO BALLOT: Value has to map to the primitive FHIR instant
+
+Element:		Time
+Based on:		DateTime
+Concept:		TBD
+Description:	"Represents an absolute point in time from an origin usually interpreted as meaning the start of the current day, specified to a fraction of a second. Semantics defined by ISO 8601. Used for recording real world times, rather than scientifically measured fine amounts of time. The partial form is used for approximate times of events and substance administrations."
+// TODO BALLOT: Value has to map to the primitive FHIR time
+
+Element:		Proportion
+Based on:		AMOUNT
+Concept:		MTH#C1709707
+Description:	"Models a ratio of values, i.e. where the numerator and denominator are both pure numbers. The valid_proportion_kind property of the PROPORTION_KIND class is used to control the type attribute to be one of a defined set. Used for recording titers (e.g. 1:128), concentration ratios, e.g. Na:K (unitary denominator), albumin:creatinine ratio, and percentages, e.g. red cell distirbution width (RDW). Misuse: Should not be used to represent things like blood pressure which are often written using a '&#47;' character, giving the misleading impression that the item is a ratio, when in fact it is a structured value. Similarly, visual acuity, often written as (e.g.) “6&#47;24” in clinical notes is not a ratio but an ordinal (which includes non-numeric symbols like CF = count fingers etc). Should not be used for formulations."
+1..1			Numerator
+1..1			Denominator
+0..1			Precision
+1..1			Type 
+
+//  BALLOT: The class RATIO is still present in the 0.0.3 version. I think it is vestigial and has been replaced by Proportion
+
+Element:		Numerator
+Concept:		MTH#C2825219
+Description:	"Numerator of ratio."  // BALLOT: circular definition
+Value:			decimal // BALLOT: should be Quantity so there can be units
+
+Element:		Denominator
+Concept:		MTH#C2825218
+Description:	"Denominator of ratio."  // BALLOT: circular definition
+Value:			decimal // BALLOT: should be Quantity so there can be units
+	
+Element:		Type   // BALLOT: type is too broad a name, cannot be reused 
+Concept:		TBD
+Description:	"Indicates semantic type of proportion, including percent, unitary, etc."  
+Value:			CodedText
+// BALLOT: Definition of Proportion.type is partly circular, and partly a definition by examples drawn from a value set (percent, unitary, etc.), which should not leak from the ADL into the BMM. 
+
+Element:		UriValue  
+Based on:		DATAVALUE
+Concept:		MTH#C1548524
+Description:	"A reference to an object which conforms to the Universal Resource Identifier (URI) standard. See 'Universal Resource Identifiers in WWW' by Tim Berners-Lee at http://www.ietf.org/rfc/rfc3986.txt. This is a World-Wide Web RFC for global identification of resources. See http://www.w3.org/Addressing for a starting point on URIs."
+Value:			uri
+// BALLOT: The purpose of the class UriValue is not clear. It appears the reason is to establish an inheritance pattern so that UriValue can be used wherever DATAVALUE is specified. If that is the case, why isn't the same thing done for every primitive data type?
+
+Element:		EhrUri
+Based on:		UriValue
+Concept:		TBD
+Description:	"A EHR_URI is a URI which has the scheme name 'ehr', and which can only reference items in EHRs. Used to reference items in an EHR, which may be the same as the current EHR (containing this link), or another."
+
+Element:		Identifier
+Based on:		DATAVALUE
+Concept:		MTH#C0600091
+Description:	"Type for representing identifiers of real-world entities. Typical identifiers include drivers licence number, social security number, veterans affairs number, prescription id, order id, and so on"
+Value:			string  
+0..1			Use   
+1..1			Type  
+1..1			Issuer
+0..1			Namespace
+// BALLOT: Identifier.id attribute, defined as the identifier value, should be renamed Value for consistency
+// BALLOT: Use (Identifier.Use) is too broad a name
+// BALLOT: Type (Identifier.Type) is too broad a name, clashes with Proportion.Type for example
+
+Element:		Use
+Concept:		TBD
+Description:	"The purpose of this identifier. Use is considered a modifying attribute because applications should not mistake a temporary id for a permanent one. Applications can assume that an identifier is permanent unless it explicitly says that it is temporary."
+Value:			CodedText
+
+Element:		Issuer   // BALLOT: Recommend renaming to Publisher for max reuse
+Concept:		MTH#C1709767  "Publisher" 
+Description:	"Optional organisation that assigned the id to the item being identified."
+Value:			string  // BALLOT: is this the correct data type?
+
+Element:		Namespace
+Concept:		MTH#C1709146
+Description:	"The namespace in which the id is unique."  // BALLOT: circular definition
+Value:			UriValue  // should just be uri primitive
+
+Element:		YesNo
+Based on:		DATAVALUE
+Concept:		MTH#C1552663
+Description:	"Items which are truly boolean data, such as true/false or yes/no answers. For such data, it is important to devise the meanings (usually questions in subjective data) carefully, so that the only allowed results are in fact true or false. Misuse: The DV_BOOLEAN class should not be used as a replacement for naively modelled enumerated types such as male&#47;female etc. Such values should be coded, and in any case the enumeration often has more than two values."
+Value:			boolean  
+// BALLOT: The purpose of the YesNo class is not clear, since boolean is a primitive. The only reason I can see is to establish an inheritance pattern so that a boolean can be used wherever DATAVALUE is specified. If this is the case, then it should be named consistently (e.g. UriValue, this should be BooleanValue). Also, if making a concrete class out of primitives is a general requirement, then why don't we see RealValue, StringValue, IntegerValue, etc.?
+// BALLOT: The Documentation mentions the DV_BOOLEAN class - should be updated to the current class name.
+// BALLOT: The values of YesNo are not yes and no, but rather true and false, since it is a boolean. I suggest either renaming this TrueFalse to reflect its values accurately, or eliminating this datatype altogether, since it is 100% redundant with the primitive data type boolean.
+
+Element:		IntervalValue  
+Based on:		DATAVALUE
+Concept:		MTH#C1552713 "Data Type Interval"
+Description:	"Generic class defining an interval (i.e. range) of a comparable type. An interval is a contiguous subrange of a comparable base type. Used to define intervals of dates, times, quantities (whose units match) and so on. The type parameter, T, must be a descendant of the type ORDERED_VALUE, which is necessary (but not sufficient) for instances to be compared (strictly_comparable is also needed). The basic semantics are derived from the class Interval<T>;, described in the support RM."
+1..1			LowerIncluded
+1..1			LowerUnbounded
+1..1			UpperIncluded
+1..1			UpperUnbounded
+0..1			Lower
+0..1			Upper 
+// BALLOT: IntervalValue<OrderedValue> is unworkable in terms of FHIR mapping.
+
+Element:		LowerIncluded
+Concept:		TBD
+Description:	"True if the lower bound of the interval is included. False otherwise."  
+Value:			boolean 
+// BALLOT: The definition of IntervalValue.LowerIncluded is circular 
+// BALLOT: The Value of IntervalValue.LowerIncluded is a boolean, which is appropriate. But CIMI defined YesNo. If YesNo is not used in a case such as this, why was it defined at all? 
+
+Element:		LowerUnbounded
+Concept:		TBD
+Description:	"True if the interval does not specify a lower bound. False otherwise."
+Value:			boolean
+
+Element:		UpperIncluded
+Concept:		TBD
+Description:	"True if the upper bound of the interval is included. False otherwise."  // BALLOT: circular definition
+Value:			boolean  
+// BALLOT: The definition of IntervalValue.UpperIncluded is circular 
+// BALLOT: The Value of IntervalValue.UpperIncluded is a boolean, which is appropriate. But CIMI defined YesNo. If YesNo is not used in a case such as this, why was it defined at all? 
+
+Element:		UpperUnbounded
+Concept:		TBD
+Description:	"True if the interval does not specify a upper bound. False otherwise."
+Value:			boolean
+
+Element:		Lower 
+Concept:		TBD
+Description:	"The interval's lower bound. Values outside the lower bound lie outside the range specified by this interval."
+Value:			Quantity //????? BALLOT: The type in CIMI Doc is "T"
+// BALLOT: Poorly named, unspecific. Should be LowerBound
+
+Element:		Upper  
+Concept:		TBD
+Description:	"The reference range's upper bound. Values outside the upper bound lie outside the range specified by this interval."
+Value:			Quantity //???? BALLOT: The type in CIMI Doc is "T"
+// BALLOT: Poorly named, unspecific. Should be UpperBound
+
+Element:			Multimedia
+Based on:			ENCAPSULATED
+Concept:			MTH#C0376478
+Description:		"A specialisation of DV_ENCAPSULATED for audiovisual and biosignal types. Includes further metadata relating to multimedia types which are not applicable to other subtypes of DV_ENCAPSULATED."
+0..1				AlternateText
+0..1 				Data
+1..1				MediaType
+0..1				Uri
+// BALLOT: In Multimedia, the attribute name Uri is too unspecific. I suggest renaming it "ResourceLocation" (with datatype uri)
+
+Element:			AlternateText
+Concept:			TBD
+Description:		"TEXT to display in lieu of multimedia display."
+Value:				string  // But - it is not a TEXT
+
+Element:			Data
+Concept:			MTH#C1511726
+Description:		"The actual data found at uri, if supplied inline."
+Value:				base64Binary  // TODO: Not sure how we can deduce the FHIR datatype from the CIMI definition, which is List<Byte>
+// BALLOT: In Multimedia, "data" is too broad a name, not reusable. Suggest renaming it "BinaryData" 
+
+Element:			MediaType
+Concept:			MTH#C1553843
+Description:		"Data media type coded from openEHR code set media types (interface for the IANA MIME types code set)."
+Value:				CodedText

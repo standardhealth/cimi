@@ -1,0 +1,4 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.pharmacy
+Description:	""
+Uses:			cimi.datatypes, cimi.foundation

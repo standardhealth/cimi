@@ -1,0 +1,120 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.provenance
+Description:	""
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.association
+// BALLOT: Provenance is very basic
+
+Element:		Attribution
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Attribution provides a formal pattern and reusable structure for attributes of a record that describes an activity in a process involved in producing, delivering or otherwise influencing that resource. Attribution provides a critical foundation for assessing authenticity, enabling trust, and allowing reproducibility. Provenance assertions are a form of contextual metadata and can themselves become important records with their own provenance. Provenance statement indicates clinical significance in terms of confidence in authenticity, reliability, and trustworthiness, integrity, and stage in lifecycle (e.g. Document Completion - has the artifact been legally authenticated), all of which may impact security, privacy, and trust policies. Attribution provides a common reference model pattern that may be included directly within a clinical statement (e.g., the metadata associated with the recording of a clinical statement in a system) or within the Provenance pattern when it is preferrable to have such information external to but referencing the clinical statement (see Provenance). Note that, when included directly within a clinical statement, updates made to attribution attribute values will result in a versioning change in the instance. When part of the Provenance class, updates to provenance do not result in an update of the clinical statement referenced by the Provenance class (see Provenance.target)."
+0..*			Identifier
+1..1			Activity
+0..1			RecordedOn
+0..1			RecordedBy
+0..1			ActivityTimeRange
+0..*			Reason   // from TopicCore
+0..*			Location
+0..*			Policy
+0..*			Agent
+0..*			Entity
+0..*			Signature
+// BALLOT: Attribution should not have a signature. A signature is something you attach an attribution TO. In other words, a signature can be attributed to someone. ClinicalStatement has an attribute Signed which is an Attribution, which has an attribute Signature, which has the actual signature. It is very confusing. 
+// BALLOT: ClinicalStatement has attributes Authored and Recorded. Both are type Attribution. Attribution has attribute RecordedBy, which documents the "The person or entity capturing the attribution information." So where is the actual author of the ClinicalStatement? It isn't ClinicalStatement.Authored.RecordedBy (that's the person recording the attribution). And the person recording the clinical statement isn't ClinicalStatement.Recorded.RecordedBy, either.
+
+
+Element:		Activity
+Concept:		TBD
+Description:	"An activity is something that occurs over a period of time and acts upon or with entities; it may include asserting, recording, verifying, consuming, processing, transforming, modifying, relocating, using, or generating entities."
+Value:			CodedText
+
+Element:		RecordedOn
+Concept:		TBD
+Description:	"The time at which the activity was recorded."
+Value:			DateTime
+
+Element:		RecordedBy
+Concept:		TBD
+Description:	"The person or entity capturing the attribution information."
+Value:			PARTICIPATION
+// BALLOT:	Attribution.RecordedBy should be a PARTY, not a PARTICIPATION. The definition is "The person or entity capturing the attribution information" so clearly it is a PARTY. The participation type is already defined by "RecordedBy", so PARTICIPATION is redundant. Basically PARTICIPATION should be the parent of "RecordedBy", not its value.
+
+Element:		ActivityTimeRange
+Concept:		TBD
+Description:	"The period during which the activity occurred."
+Value:			IntervalValue
+
+Element:		Location
+Concept:		TBD
+Description:	"Where the activity occurred, if relevant."
+Value:			PARTICIPATION
+// BALLOT:  Attribution.Location datatype (PARTICIPATION) is incorrect. It should refer to a physical location, perhaps an address.
+
+Element:		Policy
+Concept:		TBD
+Description:	"Policy or plan that defines the activity. Typically, a single activity may have multiple applicable policy documents, such as patient consent, guarantor funding, etc."
+Value:			uri
+
+Element:		Agent
+Concept:		TBD
+Description:	"A person or other party responsible for execution of some facet of the activity. The agent in an activity for which it can be assigned some degree of responsibility for the activity taking place. The agent comprises both the party involved and its role."
+Value:			PARTICIPATION
+// BALLOT:	Attribution.Agent should be a PARTY, not a PARTICIPATION. The definition is "The person or party responsible for execution..." so clearly as defined, it should be a PARTY.
+// BALLOT:  Attribution.Agent is not the right name. What is needed is a PARTICIPATION, which specifies the type of participation in addition to the party carrying out the activity. Agent should be renamed "Participant" and the definition updated to reflect the change.
+
+Element:		Entity
+Concept:		TBD
+Description:	"An entity used in this activity."
+Value:			PARTICIPATION
+// BALLOT: The Attribution.Entity - as defined ("An entity used in this activity.") - should be type Entity. So either change the datatype or change definition to reflect the datatype. Suggest the latter since the type of participation should be captured.
+// BALLOT: Attribution.Agent and Attribution.Entity should be merged and captured with one attribute: Participant (type PARTICIPATION). Left as is, CIMI would need two new classes, EntityParticipation and AgentParticipation to make sure the right type is used in each attribute (this course of action is not recommended).
+
+Element:		Signature
+Concept:		TBD
+Description:	"A digital signature along with supporting context. The signature may be electronic&#47;cryptographic in nature, or a graphical image representing a hand-written signature, or a signature process. Different Signature approaches have different utilities."
+1..*			Type
+1..1			When
+1..1			Who
+0..1			OnBehalfOf
+0..1			MimeType
+0..1			SignatureContent
+
+// BALLOT: Signature.Type is defined as a "the reason the entity signed". If this is correct, it would be clearer to rename this element "Reason".
+// BALLOT:	Signature.SignatureContent ought to be 1..1 (not 0..1). A digital signature has no purpose if there is no digital signature.
+
+Element:		When
+Concept:		TBD
+Description:	"When the digital signature was signed."
+Value:			DateTime
+// BALLOT: Signature.When should be type Instant, not DateTime, because this will be timestamped by a machine
+
+Element:		Who
+Concept:		TBD
+Description:	"A reference to an application-usable description of the identity that signed (e.g. the signature used their private key)."
+Value:			PARTICIPATION
+// BALLOT: Signature.Who should be a PARTY, not be a PARTICIPATION -- the type of act (digital signing) is known from the context. 
+
+Element:		OnBehalfOf
+Concept:		TBD
+Description:	"A reference to an application-usable description of the identity that is represented by the signature."
+Value:			PARTICIPATION
+// BALLOT: Signature.OnBehalfOf should be a PARTY, not be a PARTICIPATION -- the type of act (signing on behalf of someone) is already known from the context. If CIMI wants to use PARTICIPATION, then there should be one list of participants in the signature (not recommended; it would be overkill)
+
+Element:		MimeType
+Concept:		TBD
+Description:	"A mime type that indicates the technical format of the signature. Important mime types are application&#47;signature+xml for X ML DigSig, application&#47;jwt for JWT, and image&#47;* for a graphical image of a signature, etc."
+Value:			CodedText
+
+Element:		SignatureContent
+Concept:		TBD
+Description:	"The base64 encoding of the Signature content. When signature is not recorded electronically this element would be empty."
+Value:			ENCAPSULATED
+// BALLOT: Signature.SignatureContent datatype is too wide. It can only be a base64encoded string. Change to base64Binary. Can share the same data element with Multimedia.Data. But interestingly, that element is given as List<Byte>, not ENCAPSULATED. It seems something is disjointed here.
+
+
+Element:		Provenance
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"The Provenance pattern supports the attachment of attribution information to one or more clinical statements and is not part of the clinical statements themselves. The attachment of provenance information to a clinical statement in this manner does not impact the versioning of the clinical statement target since attribution information is external to the statement."
+1..1			Attribution
+1..*			AssociatedClinicalStatement

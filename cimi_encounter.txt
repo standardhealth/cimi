@@ -1,0 +1,10 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.encounter
+Description:	""
+Uses:			cimi.datatypes, cimi.foundation
+
+EntryElement:	Encounter
+//Based on: 
+Concept:		MTH#C1947978
+Description:	"An interaction between a patient and a practitioner under the auspices of a given organization for the purpose of providing healthcare-related service(s). It is important to understand that if the there is a change in provider or organization, by definition a new encounter will be generated. For example, if a patient is moved from Surgery to Post-Op, a new encounter is generated. Similarly, if a patient receives care from 2 nurses while in Post-Op, there will be 2 encounters."
+// TODO: fill in the rest of this 

@@ -1,0 +1,10 @@
+Grammar:	Map 5.0
+Namespace:	cimi.datatest
+Target:		FHIR_STU_3
+
+DateTimeTypesTest maps to Basic:
+IntegerTypesTest maps to Basic:
+QuantityTypesTest maps to Basic:
+TextTypesTest maps to Basic:
+OtherTypesTest maps to Basic:
+

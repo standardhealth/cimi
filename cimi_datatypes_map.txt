@@ -1,0 +1,135 @@
+Grammar:	Map 5.0
+Namespace:	cimi.datatypes
+Target:		FHIR_STU_3
+
+// Mappings based on Table 4 in CIMI Architecture Guide
+
+Date maps to date:
+// BALLOT: Infeasible mapping of Date.Value (string) to the FHIR date, becomes an extension on the FHIR primitive type.
+
+Time maps to time:
+// BALLOT: Infeasible mapping of Time.Value (string) to the FHIR time, becomes an extension on the FHIR primitive type.
+	
+DateTime maps to dateTime:
+// BALLOT: Infeasible mapping of DateTime.Value (string) to the FHIR dateTime, becomes an extension on the FHIR primitive type.
+
+Instant maps to instant:
+// BALLOT: Infeasible mapping of Instant.Value (string) to FHIR instant, becomes an extension on the FHIR primitive type.
+
+PositiveIntegerCount maps to positiveInt:
+// BALLOT: Infeasible mapping of PositiveIntegerCount.Value (integer) to FHIR positiveInt, becomes an extension on the FHIR primitive type.
+
+UnsignedIntegerCount maps to unsignedInt:
+// BALLOT: Infeasible mapping of UnsignedIntegerCount.Value (integer) to FHIR unsignedInt, becomes an extension on the FHIR primitive type.
+
+UriValue maps to uri:
+
+YesNo maps to boolean:
+
+Parsable maps to string:
+//  Extending primitive types isn't great practice, but this seems like the most logical choice
+
+
+Code maps to code:
+// BALLOT: Code should be a data type in CIMI because it is often used where a selection is made to a fixed value set. Code appears in CodedText, but only as an attribute, with a specific implementation (as a string). Physical systems may implement Code differently; hence Code should be an additional primitive type.
+
+TermMapping maps to Coding:
+	Target.Value.Term maps to display
+	//Target.Value.TerminologyId maps to system 
+	Target.Value.TerminologyVersion maps to version
+	// Match becomes an extension to Coding
+	// Purpose becomes an extension to Coding
+	// BALLOT: TermMapping.Target.TerminologyID: Infeasible mapping string to uri
+
+PlainText maps to CodeableConcept:
+	Value maps to text
+	TermMapping maps to coding 
+
+CodedText maps to CodeableConcept:
+	Value maps to text
+	TermMapping maps to coding
+	// Code, Term, TerminologyId, and TerminologyVersion become extensions 	
+	
+// BALLOT: Mapping CodedText to CodeableConcept is difficult. CIMI puts the original code at the top level, in CodedText.Code, CodedText.Term, etc., and puts additional mappings in the mapping array. FHIR groups all codings into one array. To map CodedText, we have two choices (1) pool the top level code and all mappings into CodeableConcept.coding, or (2) extend CodeableConcept so the original term appears at the top level, and only mapped terms appear in Coding. To maintain fidelity to two-level structure of CIMI CodedText, I have taken the latter route, but feel this is antithetical to FHIR's representation of CodeableConcept. Implementations will have to reach into extensions to find the principal code, and that's ugly. My suggestion is to put the purpose and match of term mapping on FHIR Coding, and then put all codes into the Coding array. This requires modest restructuring on both CIMI and FHIR sides that will make things much, much tidier.
+	
+Ordinal maps to integer:
+//  BALLOT: Extending primitive types isn't great practice, but this seems like the most logical choice
+
+
+Count maps to Count:
+	// Value maps to value   
+	// ValueStatus maps to comparator
+	// TODO: constrain unit to "1"
+	// TODO: constrain system to "UCUM"
+// BALLOT: Count.Value maps to Quantity.value is an infeasible mapping of integer to decimal. In FHIR, Count is a variation on Quantity, whose value[x] includes decimal but not integer. Integers are indicated with unit of measure of "1" which is a UCUM standard unit for integer counts. I disagree with FHIR's decision to not have Quantity.valueInteger, but if they don't change that, I'm not sure how CIMI can reasonably map its Count to FHIR's Count. 
+// BALLOT: Count.ValueStatus maps to Quantity.comparator is conceptually the correct mapping, but ValueStatus is a string and comparator is a code, therefore the mapping is infeasible. 
+
+Quantity maps to Quantity:
+	Value maps to value
+	Units maps to unit
+	//ValueStatus maps to comparator
+	// BALLOT: Quantity.ValueStatus maps to FHIR's Quantity.comparator is conceptually the correct mapping, but ValueStatus is a string and comparator is a code, therefore the mapping is infeasible.
+
+// Duration - no mapping required, inherits from Quantity
+
+Proportion maps to Ratio:
+	constrain numerator to 1..1
+	Numerator maps to numerator.value
+	constrain denominator to 1..1
+	Denominator maps to denominator.value
+
+// EhrUri - no mapping required, inherits from UriValue	
+
+Identifier maps to Identifier:
+	Value maps to value 
+	// Use maps to use    
+	// Issuer maps to assigner  
+	// Type maps to type    
+	Namespace maps to system
+	constrain period to 0..0
+	// BALLOT: Identifier.Use: infeasible mapping from CodedText to code
+	// BALLOT: Identifier.Issuer: infeasible mapping from string to ref(Organization)
+	// BALLOT: Identifier.Type: infeasible mapping from CodedText to CodeableConcept
+	// BALLOT: Does  Should FHIR's Identifier.period be allowed, or constrained to 0..0? In general, should a FHIR profile constrain elements in FHIR to 0..0 if they are not explicitly in CIMI?
+	
+/*	Don't even know what to do here
+IntervalValue maps to Period or Range
+	LowerIncluded
+	LowerUnbounded
+	UpperIncluded
+	UpperUnbounded
+	Lower
+	Upper
+*/
+// BALLOT TODO: Unclear how to handle the mapping of IntervalValue; it can't be mapped in a parameterized form.
+
+
+Multimedia maps to Attachment:
+	Data maps to data
+	// MediaType maps to contentType
+	// BALLOT: infeasible mapping from CodedText (Coding) to code
+	Uri maps to url
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

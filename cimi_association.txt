@@ -1,0 +1,33 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.association
+Description:	"Association classes are utilized when an association between two classes needs to be further qualified. The Association package introduces the ClinicalStatementAssociation which relates two clinical statements and further qualifies the relation. The source statement is the statement containing the association class. The target statement is the statement referenced by the target attribute of the association class. CIMI defines two specializations of the ClinicalStatementAssociation class: (1) Justification and (2) Interpretation. Justification qualifies the association through the type and justificationCode attributes. Interpretation qualifies the association through the type and hasInterpretation attributes."
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinical.clinicalstatement
+
+Element:		ClinicalStatementAssociation
+Based on:		ASSOCIATIONCLASS
+Concept:		TBD
+Description:	"Association class used to represent the relationship between a class and one or more clinical statements where the relationship is qualified by one or more attributes."
+0..*			AssociatedClinicalStatement  // called Target in CIMI, but this clashes semantically with TermMapping.Target
+
+Element:		AssociatedClinicalStatement
+Concept:		TBD
+Description:	"The associated statement(s)"
+Value:			ClinicalStatement
+// BALLOT: The datatype of ClinicalStatementAssociation.target is given as Class<T> (where is T defined?) but should be ClinicalStatement, because this is explicitly a relationship between a ClinicalStatement and one or more other ClinicalStatements.
+
+Element:		Interpretation
+Based on:		ClinicalStatementAssociation
+Concept:		TBD
+Description:	"The interpretation provided by the containing type for the set of clinical statements that comprise the target of the relationship. For instance, Assertion.interpretation can be interpreted as follows: the assertion interprets the set of clinical statements specified as the range of Assertion.interpretation.target and the interpretation is specified by the Assertion.interpretation.hasInterpretation code."
+1..1			HasInterpretation
+
+Element:		HasInterpretation
+Concept:		TBD
+Description:	"The interpretation provided by the containing type for the set of clinical statements that comprise the target of the relationship. For instance, Assertion.interpretation can be interpreted as follows: the assertion interprets the set of clinical statements specified as the range of Assertion.interpretation.target and the interpretation is specified by the Assertion.interpretation.hasInterpretation code."
+Value:			TEXT
+
+Element:		Justification
+Based on:		ClinicalStatementAssociation
+Description:	"Asserted clinical justification to perform or not perform an act such as a diagnostic test, a medication treatment, or a procedure. The justification can be specified as a code or as a clinical statement, e.g., code for diabetes (ICD-9-CM 250.0) or a Condition occurrence statement (with diabetes code) documented elsewhere in a patient's record."
+Value:			TEXT
+

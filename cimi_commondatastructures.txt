@@ -1,0 +1,37 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.commondatastructures
+Description:	"The Common Data Structure Package holds a number of data structures used by other classes in the model."
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.provenance
+
+Element:		Annotation
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Text node with optional attribution"
+1..1			Content
+0..1			Authored
+
+Element:		Authored
+Concept:		TBD
+Description:	"Provenance information specific to the assertion being made (e.g., the author(s), when authored, the location where the assertion was made, etc...)."
+Value:			Attribution
+
+Element:		Content
+Concept:		TBD
+Description:	"The annotation's text content."
+Value:			TEXT
+// BALLOT: Annotation.Content should be type PlainText, not TEXT. Putting a code (CodedText) here would not be consistent with the intent of Annotation.
+
+Element:		Age
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Type for the capture of age-related information."
+Value:			Duration
+0..1			AgeGroup
+// BALLOT:	Age requires a numerical age, but it would be useful to be able to specify Age only as an AgeGroup, without a numerical age. For example, in KnownOrSuspectedPresence context, AgeAtOnset could then be "child" or "adolescent", without requiring more specificity. I think this is frequently useful, especially in terms of patient history.
+
+Element:		AgeGroup
+Concept:		TBD
+Description:	"Classification of age - e.g., neonatal, infant, pre-adolescent, etc..."
+Value:			CodedText
+
+// TODO: Finish this (many classes missing)

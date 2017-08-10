@@ -1,0 +1,84 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinical.contextcore
+Description:	"The Context Core Package defines the high-level clinical statement context classes. Three types of contexts are currently defined in CIMI: (1) Finding Contexts, (2) Action Contexts, and (3) Event Contexts. Finding contexts are used to specify whether a finding was observed to be present or absent. Action contexts are used to specify whether a clinical activity was performed, ordered, planned, or perhaps not performed."
+Uses:			cimi.datatypes, cimi.foundation
+
+Element:		StatementContext
+Based on:		VIRTUALCLUSTER
+Concept:		TBD
+Description: 	"Compositional and reusable grouping of clinical statement attributes that provides the context for the topic of a clinical statement. The StatementContext class aligns with the SNOMED CT Situations with Explicit Context. The StatementContext provides the expressivity required to specify that an act was performed or not performed or that a finding was asserted to be present or absent for the given subject of information. It also often holds provenance information relevant to the context of the clinical statement. It is important to note that by default the context applies to the conjunction of the attribute specified in the statement. For instance, if a clinical statement has a topic describing a rash on left arm and a context of 'absent', then the statement states that the subject of interest did not have a rash on the left arm but might have had one on the right arm."
+1..1			ContextCode //Formerly Context
+// BALLOT: ClinicalStatement.Context is given by a StatementContext. StatementContext also has a context, StatementContext.Context. The resulting path, ClinicalStatement.Context.Context, is quite confusing, especially since both contexts share virtually identical definitions. I suggest ClinicalStatement.Context.ContextCode would be much cleaner.
+0..1			TemporalContext
+
+Element:		ContextCode
+Concept:		TBD
+Description:	"The ontological status of the statement, e.g., whether it exists, does not exist, is planned, etc. Attribute aligns with the SNOMED CT Situation with Explicit Context (SWEC) Concept Model context attributes: 'Finding context (attribute)' (SCTID: 408729009) and 'Procedure context (attribute)' (SCTID: 408730004). The range allowed for this attribute shall be consistent with the SNOMED CT concept model specification for SWEC."
+Value:			CodedText
+
+Element:		TemporalContext
+Concept:		TBD
+Description:	"Whether the topic is prospective or retrospective. E.g., action occurred in the past. This attribute is aligned with the SNOMED Situation With Explicit Context temporal context attribute."
+Value:			CodedText
+
+Element:		FindingContext
+Based on:		StatementContext
+Concept:		TBD
+Description:	"The FindingContext class aligns with the SNOMED Situation with Explicit Context for findings and provides the context for the EvaluationResult and Assertion topics of a clinical statement. For instance, a statement about findings may state that the finding was observed present or absent."
+0..1			CurrentStatus
+
+Element:		CurrentStatus
+Concept:		TBD
+Description:	"Current state of the evaluation (e.g., pending, complete, partial)."
+// BALLOT: The name "CurrentStatus" is confusing because it is really a "PastStatus" - the status when the information was last updated. Suggest changing to "FindingStatus"
+// BALLOT: FindingContext.CurrentStatus has an inadequate defintion. What is the 'evaluation' whose state the CurrentStatus represents?
+
+Element:		PresenceAbsenceContext
+Based on:		FindingContext
+Concept:		TBD
+Description:	"Base class for contexts asserting presence or absence of a finding."
+
+Element:		Absent
+Based on:		PresenceAbsenceContext
+Concept:		TBD
+Description:	"Context indicating the known absence of a finding in the subject of information. If the finding is suspected to be absent, use the known or suspected present context instead."
+
+Element:		KnownOrSuspectedPresent
+Based on:		PresenceAbsenceContext
+Concept:		TBD
+Description:	"Context indicating that finding is known present or suspected present."
+0..1			Certainty
+0..1			DateOfOnset
+0..1			AgeAtOnset
+0..1			DateAbated
+0..1			HasAbated
+
+
+Element:		Certainty
+Concept:		TBD
+Description:	"The confidence associated with this statement."
+Value:			CodedText
+
+Element:		DateOfOnset
+Concept:		TBD
+Description:	"Date or time when the characteristic was first observed. When the asserted condition began manifesting. This property may have a broad precision (e.g., a year rather than a date)."
+Value:			DateTime
+
+Element:		AgeAtOnset
+Concept:		TBD
+Description:	"The age of the patient or subject at onset of the Condition. Note that this property could potentially be derived."
+Value:			Quantity
+// BALLOT: KnownOrSuspectedPresent.AgeAtOnset has incorrect datatype. It is defined as QUANTITY, it should be Age.
+
+Element:		DateAbated
+Concept:		TBD
+Description:	"Date, if known, when clinical finding abated."
+Value:			DateTime
+
+Element:		HasAbated
+Concept:		TBD
+Description:	"Flag indicating whether a condition has abated when a specific date of, time period, or age at abatement is not known."
+Value:			YesNo
+
+
+// TODO: fill in the rest of this

@@ -37,6 +37,7 @@ Element:		Description
 Concept:		TBD
 Description:	"The unqualified value of the evaluation or assertion."
 Value:			DATAVALUE
+// BALLOT: Description is a general attribute that can be reused over and over. To facilitate that, the definition pf Description should be generic. As an example, FindingTopic.Description defines description in the context of FindingTopic, which means the definition is not encapsulated, and limits the reuse of the element.
 
 Element:		ProcedureTopic
 Based on:		StatementTopic

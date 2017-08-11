@@ -19,7 +19,7 @@ Concept:			TBD
 Description:		"A composition is considered the unit of modification of the record, the unit of transmission in record extracts, and the unit of attestation by authorising clinicians. In this latter sense, it may be considered equivalent to a signed document."
 0..*				CONTENT
 // BALLOT: Creating a list to hold the contents of a COMPOSITION means that the list will have to be sliced in order to define the particular contents of a composition. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
-// BALLOT: COMPOSITION doesn't have any children (not even CompositeComponent inherits from it). Is it vestigial?
+// BALLOT: COMPOSITION is abstract, and doesn't have any children (not even CompositeComponent inherits from it). Is it necessary? If not, can it be removed?
 
 Abstract Element:	CONTENT
 Based on:			LOCATABLE

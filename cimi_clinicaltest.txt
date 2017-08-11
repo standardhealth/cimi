@@ -1,0 +1,40 @@
+Grammar:		DataElement 5.0
+Namespace:		cimi.clinicaltest
+Description:	"Tests of the data types in CIMI clinical."
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.association, cimi.clinical.clinicalstatement, cimi.clinical.commondatastructures, cimi.clinical.contextcore, cimi.clinical.informationentry, cimi.clinical.provenance, cimi.clinical.topiccore 
+
+EntryElement:	AssociationTest
+1..1			ClinicalStatementAssociation
+1..1			Interpretation
+1..1			Justification
+
+EntryElement:	ClinicalStatementTest
+1..1			ClinicalStatement
+1..1			CompositeComponent
+1..1			CompoundCS
+1..1			IndivisibleCS
+1..1			SimpleComponent
+
+EntryElement:	CommonDataStructuresTest
+1..1			Annotation
+1..1			Age
+
+EntryElement:	ContextCoreTest
+1..1			StatementContext
+1..1			FindingContext
+1..1			PresenceAbsenceContext
+1..1			Absent
+1..1			KnownOrSuspectedPresent
+
+EntryElement:	InformationEntryTest
+1..1			InformationEntry
+
+EntryElement:	ProvenanceTest
+1..1			Attribution
+1..1			Provenance
+
+EntryElement:	TopicCoreTest
+1..1			StatementTopic
+1..1			EventTopic
+1..1			FindingTopic
+1..1			ProcedureTopic

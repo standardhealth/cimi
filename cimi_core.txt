@@ -17,8 +17,9 @@ Value:				string
 
 Element:			Name
 Concept:			TBD
-Description:		"A name created at runtime."  //BALLOT: too broad a name
+Description:		"A name created at runtime."  
 Value:				string
+//BALLOT: too broad a name
 
 Element:			ArchetypeDetails
 Concept:			TBD

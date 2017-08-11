@@ -45,8 +45,8 @@ Description:		"Represents a coded term mapped to a TEXT, and the relative match 
 1..1				Match
 0..1				Purpose  
 1..1				Target   
-// BALLOT:  For consistency, the attribute of TermMapping currently called Target should be renamed Value. 
-// BALLOT: Perhaps the better name for TermMapping is "MappedTerm". Gerund nouns (-ing endings) can be mistaken for verbs (i.e. term mapping activity).
+// BALLOT: For consistency, the attribute of TermMapping currently called Target (a CodedText) should be renamed Value. 
+// BALLOT: A better name for TermMapping is "MappedTerm". TermMapping sounds like an activity.
 
 Element:		Match
 Concept:		TBD
@@ -59,7 +59,7 @@ Element:		Purpose
 Concept:		MTH#C1285529
 Description:	"Purpose of the mapping e.g. automated data mining , billing , interoperability"
 Value:			CodedText
-// BALLOT: Purpose (TermMapping.Purpose) is too broad a name for this element
+// BALLOT: The definition of Purpose (in TermMapping.Purpose) is too narrow. Purpose is a general concept that could be defined more broadly, which would promote reuse of this element (if it ends up as an extension)
 
 Element:		Target 
 Concept:		TBD

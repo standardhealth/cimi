@@ -1,4 +1,44 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinical.entity
-Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Description:	"The Entity package contains classes representing common clinical entities and their related structures. Entities may include material entities such as people or medications. They may include other entity types such as organizations."
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore
+
+Element:		Entity
+Based on:		BASEENTITY
+Concept:		TBD
+Description:	"Root class for material entities such as anatomical locations, devices, and substances."
+0..*			Identifier  // from datatypes
+0..*			Description  // from topiccore
+0..*			Image
+
+Element:		Image
+Concept:		TBD
+Description:	"An image of this entity such as a profile image or a product image for a catalog."
+Value:			Multimedia
+
+Element:		AnatomicalLocation
+Based on:		Entity
+Concept:		TBD
+Description:	"A part of the body."
+1..1			BodySite
+0..1			Laterality
+0..1			AnatomicalDirection
+
+Element:		BodySite
+Concept:		TBD
+Description:	"The anatomical location code"
+Value:			CodedText
+
+Element:		Laterality
+Concept:		TBD
+Description:	"The laterality of a bilaterally duplicated structure."
+Value:			TEXT
+// BALLOT: The datatype of AnatomicalLocation.Laterality should be CodedText, not TEXT
+
+Element:		AnatomicalDirection
+Concept:		TBD
+Description:	"Example values: proximal, distal, lateral, medial.."
+Value:			CodedText
+
+
+		

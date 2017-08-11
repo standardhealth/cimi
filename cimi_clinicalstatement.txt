@@ -54,20 +54,22 @@ Description:	"A component that itself can contain sub-components - e.g., the dim
 // BALLOT: Creating a list to hold the Components of a CompositeComponent means that the list will have to be sliced in order to define the particular contents of a composite. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
 // BALLOT: It is odd that CompositeComponent not inherit from COMPOSITION, since it is a composition. If there is a reason it inherits from Component in preference to Composition? Should multiple inheritance be used?
 
-Element:		CompoundClinicalStatement
+Element:		CompoundCS
 Based on:		ClinicalStatement
 Concept:		TBD
 Description:	"Clinical statement representing multiple units of information that are treated as a whole such as a panel. A compound clinical statement is a collection of independent clinical statement, whether indivisible or compound. Note that complex medications are indivisible clinical statements even though their structure may be a composite data structure. They are generally treated as an independent entry in a record and their parts do not constitute independent entries in a record."
 0..*			ClinicalStatement
 // BALLOT: The type for the content of a CompoundClinicalStatement is given as List<Class<T>>. The range of T is not defined. 
+// BALLOT: CompoundClinicalStatement with namespace cimi.clinical.clinicalstatement generates too long a name for a FHIR StructureDefinition, so shortened to CompoundCS
 
-Element:		IndivisibleClinicalStatement
+Element:		IndivisibleCS
 Based on:		ClinicalStatement
 Concept:		TBD
 Description:	"The documentation of clinical information about a subject of information such as a patient or a relative of the patient, asserted by a particular source, recorded, and potentially verified. The ClinicalStatement class provides the core pattern for more specific clinical statement archetypes, such as a statement that a finding has been found in a patient or that a procedure has been proposed by a clinical decision support system. The ClinicalStatement pattern defines the core attributes common to most clinical statements and specifies a composition pattern that encourage model component reuse and better alignment with the SNOMED CT Concept Model. A clinical statement is composed of the StatementTopic class (grouping of attributes for capturing information about a procedure or a clinical finding) and the StatementContext class (grouping of attributes providing the context for the statement topic such as whether a procedure was performed, requested, not performed or whether a finding is suspected present or absent in the patient). At the archetype level, the topic and context components are coordinated to form the clinical statement. For instance, the composition of the ProcedureTopic with the NotPerformed context indicates that the given procedure was not performed."
-// BALLOT: The definition of IndivisibleClinicalStatement should not be the same as for ClinicalStatement. It should describe what makes the indivisible clinical statement different from a "regular" clinical statement.
 0..*			Component
 // BALLOT: Creating a list to hold the contents of an IndivisibleClinicalStatement means that the list will have to be sliced in order to define the particular contents of a composition. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
+// BALLOT: CompoundClinicalStatement with namespace cimi.clinical.clinicalstatement generates too long a name for a FHIR StructureDefinition, so shortened to CompoundCS
+// BALLOT: The definition of IndivisibleClinicalStatement should not be the same as for ClinicalStatement. It should describe what makes the indivisible clinical statement different from a "regular" clinical statement.
 
 Element:		SimpleComponent
 Based on:		Component

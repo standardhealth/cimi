@@ -87,12 +87,13 @@ Identifier maps to Identifier:
 	// Type maps to type    
 	Namespace maps to system
 	constrain period to 0..0
-	// BALLOT: Identifier.Use: infeasible mapping from CodedText to code
-	// BALLOT: Identifier.Issuer: infeasible mapping from string to ref(Organization)
-	// BALLOT: Identifier.Type: infeasible mapping from CodedText to CodeableConcept
-	// BALLOT: Does  Should FHIR's Identifier.period be allowed, or constrained to 0..0? In general, should a FHIR profile constrain elements in FHIR to 0..0 if they are not explicitly in CIMI?
+// BALLOT: Identifier.Use: infeasible mapping from CodedText to code
+// BALLOT: Identifier.Issuer: infeasible mapping from string to ref(Organization)
+// BALLOT: Identifier.Type: infeasible mapping from CodedText to CodeableConcept
+// BALLOT: Does  Should FHIR's Identifier.period be allowed, or constrained to 0..0? In general, should a FHIR profile constrain elements in FHIR to 0..0 if they are not explicitly in CIMI?
+
 	
-/*	Don't even know what to do here
+/*	Don't have a clue what to do here, with IntervalValue<T> 
 IntervalValue maps to Period or Range
 	LowerIncluded
 	LowerUnbounded
@@ -107,9 +108,8 @@ IntervalValue maps to Period or Range
 Multimedia maps to Attachment:
 	Data maps to data
 	// MediaType maps to contentType
-	// BALLOT: infeasible mapping from CodedText (Coding) to code
 	Uri maps to url
-
+// BALLOT: Infeasible mapping from Multimedia.MediaType (CodedText) to FHIR Attachment.contentType (code)
 
 
 

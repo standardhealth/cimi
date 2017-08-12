@@ -25,19 +25,19 @@ Based on:		StatementTopic
 Concept:		TBD
 Description: 	"The characteristics looked for in medical investigations or diagnostics and the outcome."
 0..1			Result
-0..1			Description
+0..*			Description  //TODO: This should be 0..1, but doing so generates an CLI error
 0..*			Multimedia
 
 Element:		Result
 Concept:		TBD
-Description:	"Description of the finding."
-Value:			PlainText
+Description:	"The unqualified value of the evaluation or assertion."
+Value:			DATAVALUE
 
 Element:		Description
 Concept:		TBD
-Description:	"The unqualified value of the evaluation or assertion."
-Value:			DATAVALUE
-// BALLOT: Description is a general attribute that can be reused over and over. To facilitate that, the definition pf Description should be generic. As an example, FindingTopic.Description defines description in the context of FindingTopic, which means the definition is not encapsulated, and limits the reuse of the element.
+Description:	"Description of the finding."
+Value:			PlainText
+// BALLOT: Description is the type of attribute that could be reused many times over. To facilitate that, it should be defined in a generic way. FindingTopic.Description defines description specifically in reference to a finding, which limits potential reuse of the element.
 
 Element:		ProcedureTopic
 Based on:		StatementTopic

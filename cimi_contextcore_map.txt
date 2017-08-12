@@ -1,0 +1,13 @@
+Grammar:	Map 5.0
+Namespace:	cimi.clinical.contextcore
+Target:		FHIR_STU_3
+
+
+KnownOrSuspectedPresent maps to Condition:
+	//Certainty
+	DateOfOnset maps to onset[x].dateTime
+	// AgeAtOnset maps to onset[x].Age  
+	DateAbated maps to abatement[x].dateTime
+	HasAbated maps to abatement[x].boolean
+// BALLOT: AgeAtOnset (type Quantity) cannot be mapped to FHIR Condition.onset[x].Age because Quantity cannot be mapped to an Age datatype.	
+	

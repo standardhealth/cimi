@@ -1,0 +1,5 @@
+Grammar:	Map 5.0
+Namespace:	cimi.clinical.commondatastructures
+Target:		FHIR_STU_3
+
+Age maps to Age:

@@ -30,7 +30,7 @@ Description:	"The FindingContext class aligns with the SNOMED Situation with Exp
 Element:		CurrentStatus
 Concept:		TBD
 Description:	"Current state of the evaluation (e.g., pending, complete, partial)."
-// BALLOT: The name "CurrentStatus" is confusing because it is really a "PastStatus" - the status when the information was last updated. Suggest changing to "FindingStatus"
+// BALLOT: The name "CurrentStatus" could cause confusion because if refers to the time the record was written. However, when the record is read, the CurrentStatus is really a PastStatus - namely, the status when the information was last updated. Suggest changing to "FindingStatus", which has no unintended implications of time.
 // BALLOT: FindingContext.CurrentStatus has an inadequate defintion. What is the 'evaluation' whose state the CurrentStatus represents?
 
 Element:		PresenceAbsenceContext
@@ -48,11 +48,10 @@ Based on:		PresenceAbsenceContext
 Concept:		TBD
 Description:	"Context indicating that finding is known present or suspected present."
 0..1			Certainty
-0..1			DateOfOnset
+0..*			DateOfOnset //TODO: This should be 0..1, but doing so generates an CLI error
 0..1			AgeAtOnset
-0..1			DateAbated
-0..1			HasAbated
-
+0..*			DateAbated //TODO: This should be 0..1, but doing so generates an CLI error
+0..*			HasAbated  //TODO: This should be 0..1, but doing so generates a CLI error:  ERROR shr: Cannot constrain cardinality to 0..1 because there is no tail cardinality max that can get us there (module=shr-fhir-export, shrId=cimi.clinical.contextcore.KnownOrSuspectedPresent, target=Condition, mappingRule="HasAbated maps to abatement[x].boolean")
 
 Element:		Certainty
 Concept:		TBD
@@ -68,7 +67,7 @@ Element:		AgeAtOnset
 Concept:		TBD
 Description:	"The age of the patient or subject at onset of the Condition. Note that this property could potentially be derived."
 Value:			Quantity
-// BALLOT: KnownOrSuspectedPresent.AgeAtOnset has incorrect datatype. It is defined as QUANTITY, it should be Age.
+// BALLOT: AgeAtOnset (KnownOrSuspectedPresent.AgeAtOnset) has an incorrect datatype. It is defined as QUANTITY, it should be Age. 
 
 Element:		DateAbated
 Concept:		TBD

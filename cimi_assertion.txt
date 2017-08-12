@@ -8,7 +8,7 @@ Element:		BaseAssertion
 Based on:		FindingTopic
 Concept:		TBD
 Description:	"Base assertion class required for specialization hierarchies. Associates with a key='Assertion', a result with the specific assertion being made."
-0..1			DateAsserted
+0..*			DateAsserted  //TODO: This should be 0..1, but doing so generates an CLI error
 0..1			VerificationStatus
 0..*			FindingMethod
 0..1			ClinicalStatus
@@ -35,16 +35,16 @@ Value:			CodedText
 
 
 
-Element:		Assertion
+EntryElement:	Assertion
 Based on:		BaseAssertion
 Concept:		TBD
 Description:	"Clinical Assertions assert the existence of clinical conditions, diseases, symptoms, etc. in the patient."
 0..*			DueTo
 0..*			DueToCode
-0..1			Severity
+0..*			Severity  //TODO: This should be 0..1, but doing so generates an CLI error
 0..1			ClinicalCourse
 0..1			Episodicity
-0..1			DiseasePhase
+0..*			DiseasePhase  //TODO: This should be 0..1, but doing so generates an CLI error
 0..*			AssociatedPrecondition
 0..*			AssociatedSignAndSymptom
 0..*			Periodicity
@@ -52,7 +52,7 @@ Description:	"Clinical Assertions assert the existence of clinical conditions, d
 0..*			ExacerbatingFactor
 0..1			CausativeAgent
 0..1			CausativeAgentCode
-// BALLOT: The definition of Assertion ("Clinical Assertions assert the existence of clinical conditions, diseases, symptoms, etc. in the patient.") limits the scope of an Assertion too much. Assertions could be about the environment of the patient, the progress of a healing process, the absence of a symptom, etc. 
+// BALLOT: Minor comment: The definition of Assertion ("Clinical Assertions assert the existence of clinical conditions, diseases, symptoms, etc. in the patient.") should be broadened, because assertions could also be about the environment of the patient, the progress of a healing process, even the absence of a symptom, etc. 
 
 Element:		DueTo
 Concept:		TBD

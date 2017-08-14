@@ -34,4 +34,42 @@ Concept:		TBD
 Description:	"Classification of age - e.g., neonatal, infant, pre-adolescent, etc..."
 Value:			CodedText
 
+Abstract Element:	PartyName
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Abstract supertype for the name of a party."
+0..*			Identifier
+// BALLOT: Why does PartyName require an Identifier? A Party may have an identifier (e.g., an NPI for a practitioner) but I can't think of a use case where the NAME of the party has an identifier.
+
+Element:		ActorName
+Based on:		PartyName	
+Concept:		TBD
+Description:	"The name of an actor - typically either the name of a person or of an organization."
+0..1			NameAsText
+0..*			Use
+
+Element:		NameAsText
+Concept:		TBD
+Description:	"The name of an actor - typically either the name of a person or of an organization."
+Value:			PlainText
+
+Element:		Use
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Structure capturing usage preferences for, say, a name, an address, or contact information."
+Value:			TEXT
+0..1			DateRange  // DELTA: Changed ActorName.Use.DateTimeRange to DateRange.
+0..*			Identifier
+// BALLOT: Why does Use (ActorName.Use) require an Identifier? PartyName already has an Identifier, so now we have two sets of identifiers associated with the name of an Actor: ActorName.Identifer and ActorName.Use.Identifier. ActorName.Use has a code which tells you how the name is used, and that should be sufficient.
+// BALLOT: Change ActorName.Use.DateTimeRange to DateRange. We just need effectives dates, not times (Organization.DateRange establishes the precedent).
+
+Element:		BaseOrganizationName
+Based on:		ActorName
+
+// BALLOT: I have trouble understanding the thinking behind the hierarchy of organization names under ActorName. First there is BaseOrganizationName and then GenericOrganizationName. Is a GenericOrganizationName really a subtype of BaseOrganizationName? The only difference is that the former has a list of "parts". What is the use case for splitting an organization name into parts? Does having parts make an organization name more generic?
+
+// BALLOT: BasePersonName.PreferredFlag can probably be eliminated because that should be already captured in ActorName.Use. 
+
+
+
 // TODO: Finish this (many classes missing)

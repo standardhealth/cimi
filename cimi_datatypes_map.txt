@@ -29,7 +29,7 @@ YesNo maps to boolean:
 Parsable maps to string:
 //  Extending primitive types isn't great practice, but this seems like the most logical choice
 
-
+// DELTA: Changed Code to primitive code
 Code maps to code:
 // BALLOT: Code should be a data type in CIMI because it is often used where a selection is made to a fixed value set. Code appears in CodedText, but only as an attribute, with a specific implementation (as a string). Physical systems may implement Code differently; hence Code should be an additional primitive type.
 

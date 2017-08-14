@@ -33,7 +33,7 @@ Concept:			MTH#C1527021
 Description:		"Abstract parent for text and coded text item, which may contain any amount of legal characters arranged as e.g. words, sentences etc (i.e. one TEXT may be more than one word). Visual formatting and hyperlinks may be included. Displayable rendition of the item, regardless of its underlying structure. For CODED_TEXT, this is the rubric of the complete term as provided by the terminology service. No carriage returns, line feeds, or other non-printing characters permitted."
 Value:				string
 0..*				TermMapping  
-// TODO: The definition of TEXT the class, and the definition of its value are different -- this causes a collision in CAMEO, where the description of the class IS the description of its value. Here, I have concatenated the two descriptions.
+// TODO: The definition of TEXT (the class) and the definition of its Text.Value are different. This causes a semantic collision in CAMEO. CAMEO considers the definition of the Class identical to the definition of the value. Because there are two definitions given, we can either choose one or the other. Here, I have concatenated the two descriptions.
 // BALLOT: Please define "rubric" in this context. Is it the fully specified name? The preferred term? The definition? 
 // BALLOT: Change "Abstract parent for text" to "Abstract parent for simple text"
 // TODO:  TEXT has 0..* TermMappings; the name 'mapping' is the name of the containing list. That name disappears when mapping to CAMEO.
@@ -84,16 +84,11 @@ Description:	"A URI representation for the identifier of the concept represented
 Value:			uri
 // BALLOT: The name Uri (in CodedText.Uri) is too general. I suggest changing it to "ConceptUri" to be more clear the Uri is specifically the Uri anchoring the code.
 
-
 Element:		Code
 Concept:		MTH#C0805701
 Description:	"The identifier of a concept in a terminology."
-Value:			string  // TODO: change to code
-/* BALLOT: In FHIR, a code is a string, but with additional restrictions (FHIR: "a code is restricted to a string which has at least one character and no leading or trailing whitespace, and where there is no whitespace other than single spaces in the contents"). In CIMI, any string can be a code, so the definition of a code in CIMI is wider than in FHIR. This is a mapping problem because there can be CIMI codes that cannot map to FHIR's primitive code, and therefore, an extension would be needed to contain CIMI's wider definition of code. This would be a mess (a CIMI-code-extension with a string and a code which would propagate literally everywhere in FHIR). 
-There are two ways to address this problem:
-1) Align CIMI's definition of code to the definition of code in FHIR.
-2) Leave the representation of codes up to the implementing physical systems, which means defining code as a CIMI primitive. Then, different physical systems could implement 'code' as they see fit. This solution is most consistent with CIMI being a logical model.
-*/
+Value:			code  
+// BALLOT: In FHIR, a code is a string, but with additional restrictions (FHIR: "a code is restricted to a string which has at least one character and no leading or trailing whitespace, and where there is no whitespace other than single spaces in the contents"). In CIMI, any string can be a code, and thus, definition of "Code" in CIMI is wider than that of "code" in FHIR. This is a mapping problem because CIMI can have codes that cannot map to a FHIR code. Therefore, an extension is needed to contain CIMI's wider definition of code. This creates a CIMI-code-extension with a string and a code which appears literally everywhere in FHIR profiles. There are two ways to address this problem: (1) Align CIMI's definition of code to the definition of code in FHIR, or (2) Leave the representation of codes up to the implementing physical systems, which means defining code as a CIMI primitive. Then, different physical systems could implement 'code' as they see fit. This solution is most consistent with CIMI being a logical model.
 
 Element:		Term
 Concept:		MTH#C1705313 "Term (lexical)"
@@ -298,7 +293,8 @@ Value:			CodedText
 Element:		UriValue  
 Based on:		DATAVALUE
 Concept:		MTH#C1548524
-Description:	"A reference to an object which conforms to the Universal Resource Identifier (URI) standard. See 'Universal Resource Identifiers in WWW' by Tim Berners-Lee at http://www.ietf.org/rfc/rfc3986.txt. This is a World-Wide Web RFC for global identification of resources. See http://www.w3.org/Addressing for a starting point on URIs."
+Description:	"A reference to an object which conforms to the Universal Resource Identifier (URI) standard. See 'Universal Resource Identifiers in WWW' by Tim Berners-Lee at www.ietf.org/rfc/rfc3986.txt. This is a World-Wide Web RFC for global identification of resources. See www.w3.org/Addressing for a starting point on URIs."
+// TODO: Text highlighting in Notepad++ breaks when URLs occur inside quoted strings. Temporarily changed http://example.com to example.com to avoid this
 Value:			uri
 // BALLOT: The purpose of the class UriValue is not clear. It appears the reason is to establish an inheritance pattern so that UriValue can be used wherever DATAVALUE is specified. If that is the case, why isn't the same thing done for every primitive data type?
 
@@ -312,18 +308,19 @@ Based on:		DATAVALUE
 Concept:		MTH#C0600091
 Description:	"Type for representing identifiers of real-world entities. Typical identifiers include drivers licence number, social security number, veterans affairs number, prescription id, order id, and so on"
 Value:			string  
-0..1			Use   
+0..1			IdentifierUse   // DELTA: Changed to Identifier.Use to deconflict with the date element Use (appears in ActorName.Use)
 1..1			Type  
 1..1			Issuer
 0..1			Namespace
-// BALLOT: Identifier.id attribute, defined as the identifier value, should be renamed Value for consistency
+// BALLOT: Identifier.id attribute (datatype string), defined as the value of the identifier, should be renamed Value for consistency
 // BALLOT: Use (Identifier.Use) is too broad a name
-// BALLOT: Type (Identifier.Type) is too broad a name, clashes with Proportion.Type for example
+// BALLOT: Type (in Identifier.Type) is too broad a name, clashes with Proportion.Type for example
 
-Element:		Use
+Element:		IdentifierUse
 Concept:		TBD
 Description:	"The purpose of this identifier. Use is considered a modifying attribute because applications should not mistake a temporary id for a permanent one. Applications can assume that an identifier is permanent unless it explicitly says that it is temporary."
 Value:			CodedText
+// BALLOT: Contrast Identifier.Use with ActorName.Use. The latter has a DateRange, which seems like a good addition.
 
 Element:		Issuer   // BALLOT: Recommend renaming to Publisher for max reuse
 Concept:		MTH#C1709767  "Publisher" 
@@ -392,6 +389,13 @@ Description:	"The reference range's upper bound. Values outside the upper bound 
 Value:			Quantity //???? BALLOT: The type in CIMI Doc is "T"
 // BALLOT: Poorly named, unspecific. Should be UpperBound
 
+// DELTA: Added DateRange as placeholder
+Element:		DateRange
+Based on:		IntervalValue		
+Concept:		TBD
+Description:	"Placeholder for date range"
+
+
 Element:			Multimedia
 Based on:			ENCAPSULATED
 Concept:			MTH#C0376478
@@ -400,7 +404,7 @@ Description:		"A specialisation of DV_ENCAPSULATED for audiovisual and biosignal
 0..1 				Data
 1..1				MediaType
 0..1				Uri
-// BALLOT: In Multimedia, the attribute name Uri is too unspecific. I suggest renaming it "ResourceLocation" (with datatype uri)
+// BALLOT: In Multimedia, the attribute name Uri is too unspecific. I suggest renaming it "ResourceLocation" (with datatype uri) to facilitate reuse.
 
 Element:			AlternateText
 Concept:			TBD

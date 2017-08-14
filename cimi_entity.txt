@@ -1,7 +1,8 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinical.entity
 Description:	"The Entity package contains classes representing common clinical entities and their related structures. Entities may include material entities such as people or medications. They may include other entity types such as organizations."
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.procedure, cimi.clinical.provenance, cimi.clinical.commondatastructures
+
 
 Element:		Entity
 Based on:		BASEENTITY
@@ -10,11 +11,13 @@ Description:	"Root class for material entities such as anatomical locations, dev
 0..*			Identifier  // from datatypes
 0..*			Description  // from topiccore
 0..*			Image
+// BALLOT: Why does an Entity have multiple descriptions? Or multiple Identifiers? Is there a specific use case this addresses?
 
 Element:		Image
 Concept:		TBD
 Description:	"An image of this entity such as a profile image or a product image for a catalog."
 Value:			Multimedia
+// BALLOT: Image should includes other details of the image, for example, when the image was taken, that the image depicts (e.g., a bodysite), who took the image, etc. FHIR's Media resource fulfills this need by providing context around the Attachment datatype. CIMI Multimedia is a data type, analogous to Attachment, and can't stand alone. 
 
 Element:		AnatomicalLocation
 Based on:		Entity
@@ -23,6 +26,7 @@ Description:	"A part of the body."
 1..1			BodySite
 0..1			Laterality
 0..1			AnatomicalDirection
+// BALLOT: I question why AnatomicalLocation inherits from Entity. I think of entities as physical objects. Physical objects have a location, but location is a conceptual thing. By analogy, a geolocation is conceptual, not a physical entity. 
 
 Element:		BodySite
 Concept:		TBD
@@ -40,5 +44,314 @@ Concept:		TBD
 Description:	"Example values: proximal, distal, lateral, medial.."
 Value:			CodedText
 
+EntryElement:	Specimen
+Based on:		Entity
+Description:	"Sample for analysis"
+1..1			SpecimenCode
+0..1			AccessionIdentifier
+0..1			Status
+0..1			SourceSpecimen
+0..1			TypeText
+0..1			Collection
+0..1			SpecimenContainer  // DELTA: Changed from Container to SpecimenContainer to prevent clash with MedicationPackage.Container
+//0..*			Treatment
+0..1			HandlingRisk
+0..*			SpecialHandling
+0..1			ReceiveAction
+// BALLOT: Specimen.HandlingRisk should be 0..* so hazards can be separately listed, e.g., radioactive, infectious, biohazard, inhalation hazard, combustible, corrosive, poison, etc.
+// BALLOT: Specimen.SourceSpecimen should be a reference to another specimen. In other words, the datatype should be ref(Specimen), not type Specimen
+// BALLOT: Renamed Specimen.Type to Specimen.TypeText because the datatype is TEXT, whereas other uses of Type data element are CodedText
+// BALLOT: In Specimen, both Container and Treatment have information about additives in the specimen. There is Specimen.Container.Additive (and Specimen.Container.AdditiveCode) and Specimen.Treatment.Additive. With three places to look, it makes it hard to know what the additives are. Why not just Specimen.Additive? What's even more confusing is that Specimen.Container allows representing the additive as a CodedText, while Specimen.Treatment allows only a Substance.
+
+Element:		SpecimenCode
+Concept:		TBD
+Description:	"The concept that represents this specimen."
+Value:			CodedText
+
+Element:		AccessionIdentifier
+Concept:		TBD
+Description:	"Identifier assigned by the lab"
+Value:			Identifier
+
+// DELTA: Commented out Specimen.Status (duplicate data element)
+//Element:		Status
+//Concept:		TBD
+//Description:	"Code indicating the status of the specimen. E.g., available, unavailable, unsatisfactory"
+//Value:			CodedText 
+
+Element:		SourceSpecimen
+Concept:		TBD
+Description:	"Identifier for the source specimen from which this specimen was derived."
+Value:			Specimen
+// BALLOT: The definition of Specimen.SourceSpecimen says it is the "identifier for the source specimen" yet the datatype is not Identifier - it is Specimen. Which should it be, Identifier or Specimen -- or perhaps, Reference(Specimen)?
+
+Element:		TypeText
+Concept:		TBD
+Description:	"Kind of material that forms the specimen"
+Value:			TEXT
+
+Element:		Collection
+Concept:		TBD
+Description:	"Attribution information about the specimen collection activity."
+Value:			SpecimenCollection
+
+Element:		Container
+Concept:		TBD
+Description:	"Attribution information about the specimen collection activity."
+Value:			SpecimenContainer
+/*
+Element:		Treatment
+Concept:		TBD
+Description:	"Treatment and processing step details"
+Value:			SpecimenTreatment
+*/
+Element:		HandlingRisk
+Concept:		TBD
+Description:	"Cautions on the handling of this specimen."
+Value:			TEXT
+
+Element:		SpecialHandling
+Concept:		TBD
+Description:	"Information about the proper handling of the specimen."
+Value:			TEXT
+
+Element:		ReceiveAction
+Concept:		TBD
+Description:	"Attribution information associated with receiving the specimen."
+Value:			Attribution
+// BALLOT: In Specimen.ReceiveAction, the datatype (Attribution) seems to be incorrect. Is this supposed to a person who receives of the sample, perhaps?	
+
+Element:		SpecimenContainer
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Direct container of specimen (tube&#47;slide, etc.)"
+0..1			Identifier
+0..1			Description
+0..1			TypeText
+0..1			Capacity
+0..1			SpecimenQuantity
+0..*			Additive
+0..1			AdditiveCode
+0..1			SequenceNumber
+// BALLOT: SpecimenContainer should inherit from Entity. It is a physical object, and not only that, but if it inherited from Entity, it wouldn't have to define identifier and description again.		
+// BALLOT: SpecimenContainer.AdditiveCode should be 0..* to match Additive (0..* Substance). I think the idea is that there can be multiple additives. 
+// BALLOT: In SpecimenContainer, SpecimenQuantity (datatype Quantity) describes the amount of specimen. SpecimenCollection breaks out amount of specimen in a number of individual attributes: amount, volume, dimension, and size. Which is the best way to do this? Shouldn't we be consistent about how we refer to the size or amount of a specimen?
+
+Element:		Capacity
+Concept:		TBD
+Description:	"Container volume or size."
+Value:			Quantity
+
+Element:		SpecimenQuantity
+Concept:		TBD
+Description:	"Quantity of specimen within container."
+Value:			Quantity
+
+Element:		Additive
+Concept:		TBD
+Description:	"Additive associated with container."
+Value:			Substance
+
+Element:		AdditiveCode
+Concept:		TBD
+Description:	"Additive associated with container."
+Value:			TEXT
+// BALLOT: SpecimenContainer.Additive and SpecimenContainer.AdditiveCode have exactly the same description. The descriptions must distinguish them.
+// BALLOT: SpecimenContainer.AdditiveCode should be a CodedText (currently a TEXT). The name says it is a code, so it should be a code.
+
+Element:		SequenceNumber
+Concept:		TBD
+Description:	"The sequence number for this specimen in a collection of specimens."
+Value:			TEXT
+// BALLOT: Why is SpecimenContainer.SequenceNumber a TEXT? It should be an integer or a string. I don't think the sequence number will ever be coded, and TEXT  datatype is specifically designed for code mapping.
+
+/*
+Element:		SpecimenTreatment
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Treatment performed on the specimen."
+0..1			Description
+0..1			Procedure 
+0..*			Additive
+// BALLOT: Why doesn't SpecimenTreatment inherit from ProcedureTopic? It is certainly a procedure. The only unusual aspect is that the subject of that procedure is a specimen. This illustrates a basic problem with modeling from a class hierarchy point of view, namely, it forces a committment to "what's what", while in fact, "what's what" looks different depending on your point of view. In this case, from the point of view of the user of a specimen, the treatment is an attribute of the specimen. From the point of view of the person preparing the specimen, the preparation is a procedure.
+
+Element:		Procedure  // rename ProcedureCode?
+Concept:		TBD
+Description:	"A coded value specifying the procedure used to process the specimen."
+Value:			CodedText
+
+*/
+EntryElement:	Substance
+Based on:		Entity
+Concept:		TBD
+Description:	"A homogeneous material with a definite composition."
+1..1			SubstanceCode
+0..1			Status
+0..1			Category
+0..*			Ingredient
+0..*			Instance
+
+Element:		SubstanceCode
+Concept:		TBD
+Description:	"The concept that represents this substance."
+Value:			CodedText
+
+Element:		Status
+Concept:		TBD
+Description:	"A code to indicate if the substance is actively used."
+Value:			CodedText
+// BALLOT: The definition of Substance.Status "A code to indicate if the substance is actively used" is puzzling. What does "actively used" mean? It a substance active if it is active in a formulary? Only when it is actively being taken as a medication? Is a pint of blood in a blood bank active? Or only when it is being consumed?
+
+Element:		Category
+Concept:		TBD
+Description:	"A code that classifies the general type of substance. This is used for searching, sorting and display purposes."
+Value:			CodedText
+
+Element:		Instance
+Concept:		TBD
+Description:	"Substance may be used to describe a kind of substance, or a specific package/container of the substance: an instance."
+Value:			SubstanceInstance
+// BALLOT: Substance.Instance: Unclear definition
+
+Element:		Ingredient
+Based on:		CLUSTER
+Description:	"A components that go to make up the described item."
+0..1			ItemCode
+0..1			Substance
+0..1			MedicationIngredient  // DELTA: Changed Ingredient.Medication to Ingredient.MedicationIngredient to avoid clash with Medication
+0..1			Amount
+0..1			IsActive
+// BALLOT: Substance.Ingredient is type Ingredient, which is different than substance. But an ingredient is a substance that happens to be in the company of other substances. There should only be one class, Substance.
+// BALLOT: Ingredient.Substance should be type Ref(Substance), not type Substance
+
+Element:		ItemCode
+Concept:		TBD
+Description:	"Identifies a component items"
+Value:			CodedText
+
+Element:		MedicationIngredient
+Concept:		TBD
+Description:	"The medication ingredient"
+Value:			Medication
+// BALLOT: Ingredient.Medication is confusing. A medication is a substance made up of ingredients, which are substances, and one or more of those substances can be active ingredients. But why does an ingredient have a medication? This doesn't seem to make any sense.
+
+// DELTA: Commented out Ingredient.Amount to not conflict with Amount defined in Procedure
+//Element:		Amount
+//Concept:		TBD
+//Description:	""
+//Value:			ref(LOCATABLE)  //????
+// BALLOT: Ingredient.Amount datatype is given as Class<T>. Not sure why. Amount should be a Quantity. Not what Class<T> is supposed to mean. Does that mean any class without restriction? There is no documentation of <T>.
+
+Element:		IsActive
+Concept:		TBD
+Description:	"Flag indicating whether the ingredient is an active ingredient in a formulation."
+Value:			CodedText
+// BALLOT: Ingredient.IsActive should be a boolean (currently a CodedText). If a more detailed classification of ingredients is desired (e.g. active, excipient, adjuvant, suspension agent excipient, etc.) then IsActive is the wrong name for this attribute. 
+
+Abstract Element:	UnitOfDistribution
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Abstract class representing a substance container or package."
+
+Element:		SubstanceInstance
+Based on:		UnitOfDistribution
+Concept:		TBD
+Description:	"A specific package&#47;container of the substance"
+0..*			Identifier
+0..1			Expiry
+0..1			Quantity
+// BALLOT: Why is SubstanceInstance not an Entity? (currently a UnitOfDistribution, which is a CLUSTER)
+
+Element:		Expiry
+Concept:		TBD
+Description:	"When no longer valid to use."
+Value:			DateTime
+
+Element:		Medication
+Based on:		Entity
+Concept:		TBD
+Description:	"Class representing a medication. It covers the ingredients and the packaging for a medication"
+1..1			MedicationCode  // TODO: Suggest changing Medication.MedicationCode to Medication.SpecificType to generalize (follow SHR)
+0..1			Status
+0..1			MedicationPackage  // DELTA: Removed middleman attribute "Package"
+0..1			IsBrand
+0..1			IsOverTheCounter
+0..1			Manufacturer
+//0..1			Form
+//0..*			Ingredient
+// BALLOT: Medication.IsBrand and Medication.IsOverTheCounter should both be booleans, not CodedText
+// BALLOT: There is a circularity between Medication and MedicationPackage that needs to be undone. Currently, a Medication has a Package and Package has a Content and Content has a Medication. They can't all embed eachother as attributes. A solution would be to remove PackageContent.item (datatype Medication), and just use the item code.
+
+Element:		MedicationCode
+Concept:		TBD
+Description:	"The medication concept that represents this medication."
+Value:			CodedText
+
+Element:		IsBrand
+Concept:		TBD
+Description:	"Set to true if the item is attributable to a specific manufacturer."
+Value:			CodedText
+
+Element:		IsOverTheCounter
+Concept:		TBD
+Description:	"Set to true if the medication can be obtained without an order from a prescriber."
+Value:			CodedText
+
+Element:		Manufacturer
+Concept:		TBD
+Description:	"Describes the details of the manufacturer of the medication product. This is not intended to represent the distributor of a medication product."
+Value:			Organization
+
+EntryElement:	Organization
+Based on:		Entity
+Concept:		TBD
+0..1			BaseOrganizationName
+//0..*			Address
+//0..*			ElectronicContact
+//0..1			DepartmentOrUnit
+//0..1			Industry
+0..1			Status
+//0..*			Accreditation
+//0..1			DateRange
+// TO DO: Finish the attributes of Organization
+
+
+Element:		MedicationPackage
+Based on:		UnitOfDistribution
+Concept:		TBD
+Description:	"A package for a medication."
+0..1			Container
+0..*			PackageContent  // DELTA: Removed middleman (here MedicationPackage has a Content which is a PackageContent. The Content data element is a "middleman element" and totallly unnecessary.)
+0..*			PackageBatch
+// BALLOT: Medication.Package has a circular definition. There are numerous circular and low quality definitions in CIMI. Someone needs to walk through every definition and make sure they are accurate, non-circular, and descriptive."
+
+Element:		Container
+Concept:		TBD
+Description:	"The kind of container that this package comes as."
+Value:			CodedText
+// BALLOT: There are two container classes, SpecimenContainer and Medication.Container. They are currently unrelated. Container is an entity that has two subclasses, SpecimenContainer and MedicationContainer. 
+
+Element:		PackageContent
+Concept:		TBD
+Description:	"A set of components that go to make up the described item."
+//0..1			Medication // DELTA: removed middleman and removed this attribute to break circularity
+// TODO: CLI Stack overflow here: Medication -> MedicationPackage -> PackageContent -> Medication -> MedicationPackage -> PackageContent -> Medication
+0..1			MedicationCode   // DELTA: changed ItemCode to MedicationCode. The "item" can only be a medication
+0..1			Amount
+// BALLOT: MedicationPackage.Content.item is datatype Medication. But a MedicationPackage can contain things like applicators,  instructions, inhaler spacer, measurement strips, etc. Consequently, Medication doesn't seem like the correct datatype.
+
+Element:		PackageBatch
+Concept:		TBD
+Description:	"Information about a group of medication produced or packaged from one production run."
+0..1			LotNumber
+0..1			Expiry // DELTA: changed to Expiry to make use of data element already defined
+
+// BALLOT: In PackageBatch has attribute ExpirationDate, and UnitOfDistribution has Expiry. Suggest using the same data element for both. They are synonyms, but to me, ExpirationDate is more clear.
+
+Element:		LotNumber
+Concept:		TBD
+Description:	"The assigned lot number of a batch of the specified product."
+Value:			TEXT
+// BALLOT: PackageContent.LotNumber is a TEXT, but why not Identifier or string? TEXT is specifically for things that might be mapped to coded values (not a possibility here).
 
 		

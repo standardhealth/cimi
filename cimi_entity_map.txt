@@ -1,0 +1,6 @@
+Grammar:	Map 5.0
+Namespace:	cimi.clinical.entity
+Target:		FHIR_STU_3
+
+Specimen maps to Specimen:
+// TODO: Complete this mapping

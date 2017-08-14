@@ -32,6 +32,5 @@ Assertion maps to Condition:
 
 // BALLOT: Infeasible datatype mapping from Assertion.ClinicalStatus to FHIR Condition.clinicalStatus (CodedText to code)
 // BALLOT: Infeasible datatype mapping from Assertion.VerificationStatus to FHIR Condition.verificationStatus (CodedText to code)
-// BALLOT: CIMI needs to have an analogue of FHIR's Media resource. Media provides the context around an image (when the image was taken, date, bodysite, etc.). CIMI Multimedia is a data type, similar to FHIR Attachment data type. It has no context, and can't stand alone. 
 // BALLOT: In mapping Assertion to FHIR Condition, a relevant multimedia image (inherited from FindingTopic.Multimedia) should be included in evidence.detail. However, Multimedia is a datatype, and as such, it can't be mapped to evidence.detail because the latter requires a reference to a resource (Reference(Any)).
 // BALLOT: Assertion.Description.Value mapping to Condition.note.text isn't a great fit because the notes are supposed to be an annotations, later updates. I think it would be more appropriate to map Description.Value to the narrative that accompanies every DomainResource (text.div), but that is datatype xhtml, and string can't be mapped to xhtml. 

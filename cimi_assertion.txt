@@ -41,7 +41,7 @@ Concept:		TBD
 Description:	"Clinical Assertions assert the existence of clinical conditions, diseases, symptoms, etc. in the patient."
 0..*			DueTo
 0..*			DueToCode
-0..1			Severity  //TODO: This should be 0..1, but doing so generates an CLI error
+0..*			Severity  //TODO: This should be 0..1, but doing so generates an CLI error
 0..1			ClinicalCourse
 0..1			Episodicity
 0..*			DiseasePhase  //TODO: This should be 0..1, but doing so generates an CLI error
@@ -120,7 +120,6 @@ Description:	"Code for a substance, medication, microorganism, force, or other a
 Value:			CodedText
 
 
-
 Element:		FindingSiteAssertion
 Based on:		Assertion
 Concept:		TBD
@@ -155,7 +154,7 @@ Description:	"An assertion of a wound."
 Element:		PeriwoundCondition
 Concept:		TBD
 Description:	"A description of the skin around the wound (periwound). (LOINC)"
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/periwound_condition_range_vs.v0.0.1
 	
 Element:		WoundSize
 Concept:		TBD
@@ -166,15 +165,16 @@ Element:		Tunneling
 Based on:		CLUSTER
 Concept:		MTH#C0406830
 Description:	"whether tunneling is present"
-0..1			Direction
+0..1			Direction //from http://example.com/valueset/tunneling_direction_range_vs.v0.0.1
 0..1			Length
 // BALLOT: The definition of Tunneling ("whether tunneling is present") might be improved as follows: "Describes a discharging blind-ended track that extends from the surface of an organ to an underlying area or abscess cavity."
+// BALLOT: Tunneling and Undermining both use clock direction, but to do so, they define separate value sets. Clock direction is a common way to describe anatomical location and it would be useful to have a reusable data element, so every time anyone uses clock direction, it is the exactly the same. 
 
 Element:		Undermining
 Based on:		CLUSTER
 Concept:		TBD
 Description:	"whether undermining is present"
-0..1			Direction
+0..1			Direction //from http://example.com/valueset/undermining_direction_range_vs.v0.0.1
 0..1			Length
 // BALLOT: The definition of undermining is circular
 
@@ -182,7 +182,6 @@ Element:		Exudate
 Concept:		TBD
 Description:	"Description of the exudate observed on this wound."
 Value:			WoundExudate
-// BALLOT: 
 
 Element:		WoundExudate
 Concept:		TBD
@@ -197,13 +196,13 @@ Value:			boolean
 Element:		Odor
 Concept:		TBD
 Description:	"The odor of the exudate"
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_exudate_odor_range_vs.v0.0.1
 // BALLOT: Odor should be defined independent of the containing class (in this case WoundExudate). This would have the effect of creating a reusable extension for odor. The specific value set could be bound to the element when it appears in the context of a wound.
 
 Element:		Color
 Concept:		TBD
 Description:	"The color of the exudate"
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_exudate_color_range_vs.v0.0.1
 
 Element:		DrainageAmount
 Concept:		TBD
@@ -218,7 +217,7 @@ Value:			CodedText
 Element:		Appearance
 Concept:		TBD
 Description:	"The appearance of the exudate."
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_exudate_appearance_range_vs.v0.0.1
 
 
 Element:		VisibleInternalStructure
@@ -253,7 +252,7 @@ Concept:		TBD
 Element:		WoundBaseAppearance
 Concept:		TBD
 Description:	"LOINC: 'Described as necrotic, sloughing, fibrinous, granulated, intact, approximated, etc. The wound bed appearance may or may not be differentiated from the wound edge, especially if the wound is healing well.' Need to rewrite, e.g., 'physiological state of wound surface tissue as evaluated by visual inspection'"
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_bed_and_edge_wound_base_appearance_range_vs.v0.0.1
 
 Element:		AppearanceRatio
 Concept:		TBD
@@ -263,22 +262,22 @@ Value:			Proportion
 Element:		WoundBaseColor
 Concept:		TBD
 Description:	"The color of the base of the wound."
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_bed_and_edge_wound_base_color_range_vs.v0.0.1
 
 Element:		WoundEdgeAppearance
 Concept:		TBD
 Description:	"The appearance of the edge of a wound."
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_bed_and_edge_wound_edge_appearance_range_vs.v0.0.1
 
 Element:		WoundEdgeColor
 Concept:		TBD
 Description:	"The color of the edge of the wound when different than the bed."
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_bed_and_edge_wound_edge_color_range_vs.v0.0.1
 
 Element:		WoundClosureType
 Concept:		TBD
 Description:	"Description of the wound closure."
-Value:			CodedText
+Value:			CodedText //from http://example.com/valueset/wound_bed_and_edge_wound_closure_type_range_vs.v0.0.1
 
 
 Element:		Tunneling

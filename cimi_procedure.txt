@@ -1,4 +1,52 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinical.procedure
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.entity
+
+
+Element:		SpecimenCollection
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Attribution specific to the collection of a specimen."
+0..*			CollectionSite
+0..*			CollectionSiteCode
+0..1			Amount
+0..1			Volume
+0..1			Size
+0..1			Dimension
+// BALLOT: Why does the class describing a specimen collection procedure (SpecimenCollection) have so much information about the specimen taken? I would have suspected that information would reside in the Specimen class, with the procedure pointing (by reference) to the specimen taken. Another possiblity is that the reference to the specimen would be part of the Performance context, since there is no specimen in the NonPerformance context.
+// BALLOT: The differences between SpecimenCollection.Amount and SpecimenCollection.Volume are not clearly defined. The amount could be a volume, a volume could be an amount. Similarly, the differences between SpecimenCollection.Size and SpecimenCollection.Dimension are not clearly defined. 
+
+
+Element:		CollectionSite
+Concept:		TBD
+Description:	"Anatomical collection site as a post-coordinated body site."
+Value:			AnatomicalLocation
+
+Element:		CollectionSiteCode
+Concept:		TBD
+Description:	""
+Value:			CodedText
+
+Element:		Amount
+Concept:		TBD
+Description:	"The quantity of specimen collected"
+Value:			Quantity
+
+Element:		Volume
+Concept:		TBD
+Description:	"The volume of the collected specimen"
+Value:			Quantity
+
+Element:		Size
+Concept:		TBD
+Description:	"The size of the collected specimen."
+Value:			TEXT
+
+Element:		Dimension
+Concept:		TBD
+Description:	"The dimension of the collected specimen."
+Value:			Quantity
+// BALLOT: The definition of SpecimenCollection.Dimension is circular.
+
+

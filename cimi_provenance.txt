@@ -17,7 +17,7 @@ Description:	"Attribution provides a formal pattern and reusable structure for a
 0..*			Location
 0..*			Policy
 0..*			Agent
-0..*			Entity
+0..*			ParticipatingEntity
 0..*			Signature
 // BALLOT: Attribution should not have a signature. A signature is something you attach an attribution TO. In other words, a signature can be attributed to someone. ClinicalStatement has an attribute Signed which is an Attribution, which has an attribute Signature, which has the actual signature. It is very confusing. 
 // BALLOT: ClinicalStatement has attributes Authored and Recorded. Both are type Attribution. Attribution has attribute RecordedBy, which documents the "The person or entity capturing the attribution information." So where is the actual author of the ClinicalStatement? It isn't ClinicalStatement.Authored.RecordedBy (that's the person recording the attribution). And the person recording the clinical statement isn't ClinicalStatement.Recorded.RecordedBy, either.
@@ -62,11 +62,11 @@ Value:			PARTICIPATION
 // BALLOT:	Attribution.Agent should be a PARTY, not a PARTICIPATION. The definition is "The person or party responsible for execution..." so clearly as defined, it should be a PARTY.
 // BALLOT:  Attribution.Agent is not the right name. What is needed is a PARTICIPATION, which specifies the type of participation in addition to the party carrying out the activity. Agent should be renamed "Participant" and the definition updated to reflect the change.
 
-Element:		Entity
+Element:		ParticipatingEntity  // Changed to not clash with Entity
 Concept:		TBD
 Description:	"An entity used in this activity."
 Value:			PARTICIPATION
-// BALLOT: The Attribution.Entity - as defined ("An entity used in this activity.") - should be type Entity. So either change the datatype or change definition to reflect the datatype. Suggest the latter since the type of participation should be captured.
+// BALLOT: The Attribution.Entity - as defined ("An entity used in this activity.") - should be type Entity. Change the datatype or change definition to reflect the datatype. Suggest the latter since the type of participation should be captured.
 // BALLOT: Attribution.Agent and Attribution.Entity should be merged and captured with one attribute: Participant (type PARTICIPATION). Left as is, CIMI would need two new classes, EntityParticipation and AgentParticipation to make sure the right type is used in each attribute (this course of action is not recommended).
 
 Element:		Signature

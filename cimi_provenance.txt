@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.provenance
+Namespace:		cimi.clinicalprovenance
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.association
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalassociation
 // BALLOT: Provenance is very basic
 
 Element:		Attribution

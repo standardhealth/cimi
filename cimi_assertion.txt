@@ -1,14 +1,14 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.assertion
+Namespace:		cimi.clinicalassertion
 Description:	"The CIMI Assertion pattern is used for assertions made about an individual's state. Typically, assertions are used to assert that the patient is a member of a 'cohort' of patient sharing a common characteristic such as asserting that a patient has diabetes or brown hair color. In an assertion, the key specifies that the statement's topic is an assertion-style statement while the name contains the concept or post-coordinated expression being asserted. Assertions do not imply necessarily that clinical judgement was used to derive the assertion though this is often the case (e.g., a formal diagnosis after a review of the evidence. Rather, the Assertion pattern is merely a structural pattern for finding statements that are not in the form of a question-answer pair (e.g., Systolic Blood Pressure = 120 mmHg). For the latter pattern, consider using the EvaluationResult pattern."
-Uses:			cimi.datatypes, cimi.core, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.entity
+Uses:			cimi.datatypes, cimi.core, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalentity
 
 	
 Element:		BaseAssertion
 Based on:		FindingTopic
 Concept:		TBD
 Description:	"Base assertion class required for specialization hierarchies. Associates with a key='Assertion', a result with the specific assertion being made."
-0..*			DateAsserted  //TODO: This should be 0..1, but doing so generates an CLI error
+0..1			DateAsserted
 0..1			VerificationStatus
 0..*			FindingMethod
 0..1			ClinicalStatus
@@ -41,10 +41,10 @@ Concept:		TBD
 Description:	"Clinical Assertions assert the existence of clinical conditions, diseases, symptoms, etc. in the patient."
 0..*			DueTo
 0..*			DueToCode
-0..*			Severity  //TODO: This should be 0..1, but doing so generates an CLI error
+0..1			Severity  //TODO: This should be 0..1, but doing so generates an CLI error
 0..1			ClinicalCourse
 0..1			Episodicity
-0..*			DiseasePhase  //TODO: This should be 0..1, but doing so generates an CLI error
+0..1			DiseasePhase  //TODO: This should be 0..1, but doing so generates an CLI error
 0..*			AssociatedPrecondition
 0..*			AssociatedSignAndSymptom
 0..*			Periodicity

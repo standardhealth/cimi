@@ -1,5 +1,5 @@
 Grammar:	Map 5.0
-Namespace:	cimi.clinical.assertion
+Namespace:	cimi.clinicalassertion
 Target:		FHIR_STU_3
 
 // Assertion is a finding topic, not a complete clinical statement. Some elements have to come from 
@@ -10,7 +10,8 @@ Assertion maps to Condition:
 	//ArchetypeDetails
 	//Key
 	//Result
-	Description.Value maps to note.text // Could map to text.div but text.div is type xhtml
+	constrain note to 0..1  // To match cardinality of Description
+	Description.Value maps to note.text // Did not map to text.div because text.div is type xhtml
 	// Multimedia maps to evidence.detail 
 	DateAsserted maps to assertedDate
 	//VerificationStatus maps to verificationStatus

@@ -1,5 +1,5 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.encounter
+Namespace:		cimi.clinicalencounter
 Description:	""
 Uses:			cimi.datatypes, cimi.foundation
 

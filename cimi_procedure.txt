@@ -1,10 +1,10 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.procedure
+Namespace:		cimi.clinicalprocedure
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.entity
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalentity
 
 
-Element:		SpecimenCollection
+EntryElement:	SpecimenCollection
 Based on:		ProcedureTopic
 Concept:		TBD
 Description:	"Attribution specific to the collection of a specimen."

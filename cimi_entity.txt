@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.entity
+Namespace:		cimi.clinicalentity
 Description:	"The Entity package contains classes representing common clinical entities and their related structures. Entities may include material entities such as people or medications. They may include other entity types such as organizations."
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinical.topiccore, cimi.clinical.procedure, cimi.clinical.provenance, cimi.clinical.commondatastructures
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalprocedure, cimi.clinicalprovenance, cimi.clinicalcommondatastructures
 
 
 Element:		Entity
@@ -11,7 +11,7 @@ Description:	"Root class for material entities such as anatomical locations, dev
 0..*			Identifier  // from datatypes
 0..*			Description  // from topiccore
 0..*			Image
-// BALLOT: Why does an Entity have multiple descriptions? Or multiple Identifiers? Is there a specific use case this addresses?
+// BALLOT: Why does an Entity need multiple descriptions? Is there a specific use case this addresses?
 
 Element:		Image
 Concept:		TBD
@@ -26,12 +26,13 @@ Description:	"A part of the body."
 1..1			BodySite
 0..1			Laterality
 0..1			AnatomicalDirection
-// BALLOT: I question why AnatomicalLocation inherits from Entity. I think of entities as physical objects. Physical objects have a location, but location is a conceptual thing. By analogy, a geolocation is conceptual, not a physical entity. 
+// BALLOT: Why does AnatomicalLocation inherit from Entity? I think of entities primarily as physical objects. Physical objects have a location, but location is conceptual. By analogy, one would not call a geolocation an entity, so why AnatomicalLocation?
 
 Element:		BodySite
 Concept:		TBD
 Description:	"The anatomical location code"
 Value:			CodedText
+// BALLOT: BodySite should be renamed AnatomicalLocationCode to make its meaning more clear.
 
 Element:		Laterality
 Concept:		TBD
@@ -54,7 +55,7 @@ Description:	"Sample for analysis"
 0..1			TypeText
 0..1			Collection
 0..1			SpecimenContainer  // DELTA: Changed from Container to SpecimenContainer to prevent clash with MedicationPackage.Container
-//0..*			Treatment
+0..*			Treatment
 0..1			HandlingRisk
 0..*			SpecialHandling
 0..1			ReceiveAction
@@ -99,12 +100,12 @@ Element:		Container
 Concept:		TBD
 Description:	"Attribution information about the specimen collection activity."
 Value:			SpecimenContainer
-/*
+
 Element:		Treatment
 Concept:		TBD
 Description:	"Treatment and processing step details"
 Value:			SpecimenTreatment
-*/
+
 Element:		HandlingRisk
 Concept:		TBD
 Description:	"Cautions on the handling of this specimen."
@@ -121,7 +122,7 @@ Description:	"Attribution information associated with receiving the specimen."
 Value:			Attribution
 // BALLOT: In Specimen.ReceiveAction, the datatype (Attribution) seems to be incorrect. Is this supposed to a person who receives of the sample, perhaps?	
 
-Element:		SpecimenContainer
+EntryElement:	SpecimenContainer
 Based on:		CLUSTER
 Concept:		TBD
 Description:	"Direct container of specimen (tube&#47;slide, etc.)"
@@ -165,8 +166,8 @@ Description:	"The sequence number for this specimen in a collection of specimens
 Value:			TEXT
 // BALLOT: Why is SpecimenContainer.SequenceNumber a TEXT? It should be an integer or a string. I don't think the sequence number will ever be coded, and TEXT  datatype is specifically designed for code mapping.
 
-/*
-Element:		SpecimenTreatment
+
+EntryElement:	SpecimenTreatment
 Based on:		CLUSTER
 Concept:		TBD
 Description:	"Treatment performed on the specimen."
@@ -180,14 +181,14 @@ Concept:		TBD
 Description:	"A coded value specifying the procedure used to process the specimen."
 Value:			CodedText
 
-*/
+
 EntryElement:	Substance
 Based on:		Entity
 Concept:		TBD
 Description:	"A homogeneous material with a definite composition."
-1..1			SubstanceCode
-0..1			Status
-0..1			Category
+1..1			SubstanceCode  // TODO: Should be 1..1 but this causes a CLI "tail cardinality" error
+0..1			Status   // TODO: Should be 0..1 but this causes a CLI "tail cardinality" error
+0..1			Category   // TODO: Should be 0..1 but this causes a CLI "tail cardinality" error
 0..*			Ingredient
 0..*			Instance
 
@@ -200,7 +201,7 @@ Element:		Status
 Concept:		TBD
 Description:	"A code to indicate if the substance is actively used."
 Value:			CodedText
-// BALLOT: The definition of Substance.Status "A code to indicate if the substance is actively used" is puzzling. What does "actively used" mean? It a substance active if it is active in a formulary? Only when it is actively being taken as a medication? Is a pint of blood in a blood bank active? Or only when it is being consumed?
+// BALLOT: The definition of Substance.Status "A code to indicate if the substance is actively used" is puzzling. What does "actively used" mean? Active in the current formulary? Actively being taken as a medication by this patient? By any patient? Is a pint of blood in a blood bank "active"? 
 
 Element:		Category
 Concept:		TBD
@@ -235,7 +236,7 @@ Description:	"The medication ingredient"
 Value:			Medication
 // BALLOT: Ingredient.Medication is confusing. A medication is a substance made up of ingredients, which are substances, and one or more of those substances can be active ingredients. But why does an ingredient have a medication? This doesn't seem to make any sense.
 
-// DELTA: Commented out Ingredient.Amount to not conflict with Amount defined in Procedure
+// DELTA: Commented out Ingredient.Amount to not conflict with SpecimenCollection.Amount defined in the Procedure module
 //Element:		Amount
 //Concept:		TBD
 //Description:	""
@@ -312,7 +313,7 @@ Concept:		TBD
 //0..1			Industry
 0..1			Status
 //0..*			Accreditation
-//0..1			DateRange
+0..1			DateRange
 // TO DO: Finish the attributes of Organization
 
 

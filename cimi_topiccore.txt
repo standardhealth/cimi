@@ -1,5 +1,5 @@
 Grammar: 		DataElement 5.0
-Namespace:		cimi.clinical.topiccore
+Namespace:		cimi.clinicaltopiccore
 Description:	"The Topic Core package contains the top-level specializations of the Statement Topic class, namely, the FindingTopic, ActionTopic, and EventTopic classes."
 Uses:			cimi.datatypes, cimi.foundation
 
@@ -25,7 +25,7 @@ Based on:		StatementTopic
 Concept:		TBD
 Description: 	"The characteristics looked for in medical investigations or diagnostics and the outcome."
 0..1			Result
-0..*			Description  //TODO: This should be 0..1, but doing so generates an CLI error
+0..1			Description  //TODO: This should be 0..1, but doing so generates an CLI error
 0..*			Multimedia
 
 Element:		Result

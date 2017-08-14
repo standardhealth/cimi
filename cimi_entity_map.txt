@@ -1,6 +1,81 @@
 Grammar:	Map 5.0
-Namespace:	cimi.clinical.entity
+Namespace:	cimi.clinicalentity
 Target:		FHIR_STU_3
 
+
+AnatomicalLocation maps to BodySite:
+	Identifier maps to identifier
+	//Description maps to description
+	Image maps to image
+	BodySite maps to code
+	//Laterality
+	//AnatomicalDirection
+// BALLOT: AnatomicalLocation.Description cannot be mapped to BodySite.description because the former is 0..* and the latter is 0..1.
+
+Substance maps to Substance:
+	Identifier maps to identifier
+	//Status maps to status
+	Category maps to category
+	SubstanceCode maps to code
+	//Description maps to description
+	Instance.Value.Identifier maps to instance.identifier
+	Instance.Value.Expiry maps to instance.expiry
+	Instance.Value.Quantity maps to instance.quantity
+	//Ingredient.Amount maps to ingredient.quantity
+	Ingredient.ItemCode maps to ingredient.substance[x].CodeableConcept
+	Ingredient.Substance maps to ingredient.substance[x].Reference
+// BALLOT: CIMI Substance.Description cannot be mapped to FHIR Substance.description because the former is 0..* and the latter is 0..1.
+// BALLOT: Infeasible mapping from Substance.Status (CodedText) to FHIR Substance.status (code)
+// BALLOT: Infeasible mapping from Substance.Ingredient.Amount (Quantity) to FHIR Substance.ingredient.quantity (Ratio)
+/*	
 Specimen maps to Specimen:
-// TODO: Complete this mapping
+	Identifier maps to identifer
+	//Description maps to
+	//Image maps to
+	SpecimenCode maps to 
+	AccessionIdentifier maps to accessionIdentifier
+	Status maps to status
+	SourceSpecimen maps to parent
+	TypeText maps to type
+	Collection maps to collection
+	// ?? maps to collection.collector
+	// ?? maps to collection.collected[x].dateTime
+	// ?? maps to collection.collected[x].Period
+	//Collection.Description maps to
+	//Collection.Reason maps to
+	Collection.Method maps to collection.method
+	// Collection.CollectionSite maps to
+	Collection.CollectionSiteCode maps to collection.bodySite
+	Collection.Amount maps to collection.quantity
+	//Collection.Volume maps to
+	//Collection.Size maps to
+	//Collection.Dimension maps to	
+	SpecimenContainer.Identifier maps to container.identifier
+	SpecimenContainer.Description maps to container.description
+	SpecimenContainer.TypeText maps to container.type
+	SpecimenContainer.Capacity maps to container.capacity
+	SpecimenContainer.SpecimenQuantity maps to container.specimenQuantity
+	SpecimenContainer.AdditiveCode maps to container.additive[x].CodeableConcept
+	SpecimenContainer.Additive maps to container.additive[x].Reference
+	Treatment.Value.Description maps to processing
+	Treatment.Value.Procedure maps to processing
+	Treatment.Value.Additive maps to processing
+	
+	
+	
+	HandlingRisk maps to 
+	SpecialHandling maps to 
+	ReceiveAction maps to 
+	// ?? maps to note
+*/
+// BALLOT: It is a problem that CIMI doesn't have a mapping to Specimen.collection.collector. I think it would come from the Performance context applied to SpecimenCollection but without making an explicit ClinicalStatement (e.g. SpecimenCollectionPerformance), it is difficult to see where the collector would come from, or how such a mapping would work.
+	
+/*
+Medication maps to Medication:
+
+
+Organization
+
+Package?
+
+*/

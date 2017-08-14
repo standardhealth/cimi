@@ -1,5 +1,5 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.adverseeventreporting
+Namespace:		cimi.clinicaladverseeventreporting
 Description:	"Package for classes that pertain to Adverse Event Reporting (green in diagram).
 
 CIMI currently defines two types of adverse event reporting entries:

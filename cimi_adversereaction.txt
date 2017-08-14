@@ -1,4 +1,4 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.adversereaction
+Namespace:		cimi.clinicaladversereaction
 Description:	"Package for classes that pertain to AdverseReaction (green in diagram). An adverse reaction is an untoward finding that results from exposure to a substance and is typically a manifestation of an underlying adverse sensitivity to a substance."
 Uses:			cimi.datatypes, cimi.foundation

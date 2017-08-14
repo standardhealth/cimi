@@ -1,5 +1,5 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.contextcore
+Namespace:		cimi.clinicalcontextcore
 Description:	"The Context Core Package defines the high-level clinical statement context classes. Three types of contexts are currently defined in CIMI: (1) Finding Contexts, (2) Action Contexts, and (3) Event Contexts. Finding contexts are used to specify whether a finding was observed to be present or absent. Action contexts are used to specify whether a clinical activity was performed, ordered, planned, or perhaps not performed."
 Uses:			cimi.datatypes, cimi.foundation
 
@@ -48,10 +48,10 @@ Based on:		PresenceAbsenceContext
 Concept:		TBD
 Description:	"Context indicating that finding is known present or suspected present."
 0..1			Certainty
-0..*			DateOfOnset //TODO: This should be 0..1, but doing so generates an CLI error
+0..1			DateOfOnset //TODO: This should be 0..1, but doing so generates an CLI error
 0..1			AgeAtOnset
-0..*			DateAbated //TODO: This should be 0..1, but doing so generates an CLI error
-0..*			HasAbated  //TODO: This should be 0..1, but doing so generates a CLI error:  ERROR shr: Cannot constrain cardinality to 0..1 because there is no tail cardinality max that can get us there (module=shr-fhir-export, shrId=cimi.clinical.contextcore.KnownOrSuspectedPresent, target=Condition, mappingRule="HasAbated maps to abatement[x].boolean")
+0..1			DateAbated //TODO: This should be 0..1, but doing so generates an CLI error
+0..1			HasAbated
 
 Element:		Certainty
 Concept:		TBD

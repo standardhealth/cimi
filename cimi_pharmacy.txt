@@ -1,4 +1,4 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinical.pharmacy
+Namespace:		cimi.clinicalpharmacy
 Description:	""
 Uses:			cimi.datatypes, cimi.foundation

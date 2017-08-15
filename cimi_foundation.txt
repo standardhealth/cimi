@@ -77,3 +77,15 @@ Description:		"Association class relating two parties such as the association of
 // BALLOT: It is odd that PARTYRELATIONSHIP (and ASSOCIATIONCLASS, for that matter) does not involve two parties. A relationship, by nature, connects two things.
 // BALLOT: PARTYRELATIONSHIP should have a reference to the second party, rather than an attribute that is that party. CIMI never seems to differentiate. Is that a problem? Presumably, the two parties involved in the relationship refer to eachother through the PARTYRELATIONSHIP, instead of being together in the same structure.
 
+Element:			BASEACTOR
+Based on:			PARTY
+Concept:			TBD
+Description:		"An entity acting as an actor assuming a role in a participation. For instance, a person may act as a provider in an encounter with a patient."
+1..1				Actor
+
+Element:			Actor
+Concept:			TBD
+Description:		"Entity involved in an activity. Typically a specific person or organization."
+Value:				BASEENTITY
+
+// BALLOT: BASE_ACTOR and Actor seems to be vestigial. BASE_ACTOR has no children, and Actor is type BASE_ENTITY. I don't recall seeing these classes being used anywhere.

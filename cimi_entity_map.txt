@@ -53,32 +53,48 @@ Specimen maps to Specimen:
 // BALLOT: Infeasible mapping between SpecimenContainer.AdditiveCode (TEXT) and container.additive[x].CodeableConcept (CodeableConcept) because of a type mismatch. As noted in a different comment, AdditiveCode should be changed to CodedText, then this will be solved.
 // BALLOT: Infeasible mapping between SpecimenContainer.ContainerType (TEXT) and container.type (CodeableConcept) because the types don't match. Recommend changing ContainerType to CodedText.
 // BALLOT: Infeasible mapping between Specimen.Status (CodedText) and FHIR Specimen.status (code) because the types don't match. (Information loss would result)
-// BALLOT: Infeasible mapping between Specimen.SpecimenType (TEXT) and FHIR Specimen.type (CodeableConcept) because the types don't match.
+// BALLOT: Infeasible mapping between Specimen.SpecimenType (TEXT) and FHIR Specimen.type (CodeableConcept).
 	
+Organization maps to Organization:
+	BaseOrganizationName.NameAsText.Value maps to name
+//	Address
+//	ElectronicContact
+//	DepartmentOrUnit
+//	Industry
+//	Status maps to active
+//	Accreditation
+//	DateRange maps to ??
 
+// BALLOT: Infeasible mapping between Organization.Status (CodedText) and Organization.active (boolean)
+
+	
 Medication maps to Medication:
 	//Identifier maps to ??
 	//Description maps to ??
 	Image maps to image
 	MedicationCode maps to code
-	Status maps to status
+	//Status maps to status
 	MedicationPackage.Container maps to package.container
 	MedicationPackage.PackageContent.MedicationCode maps to package.content.item[x].CodeableConcept
 	MedicationPackage.PackageContent.Amount maps to package.content.amount
 	MedicationPackage.PackageBatch.LotNumber maps to package.batch.lotNumber
 	MedicationPackage.PackageBatch.Expiry maps to package.batch.expirationDate
-	IsBrand maps to isBrand
-	IsOverTheCounter maps to isOverTheCounter
-	Manufacturer maps to manufacturer
+	//IsBrand maps to isBrand
+	//IsOverTheCounter maps to isOverTheCounter
+	Manufacturer.Value maps to manufacturer
 	Form maps to form
 	Ingredient.ItemCode maps to ingredient.item[x].CodeableConcept
 	// Ingredient can be a substance or a medication. Reference(Substance|Medication)
 	Ingredient.Substance maps to ingredient.item[x].Reference
 	//Ingredient.Medication maps to ingredient.item[x].Reference
-	Ingredient.Amount maps to ingredient.amount
-	Ingredient.IsActive maps to ingredient.isActive
+	//Ingredient.Amount maps to ingredient.amount
+	//Ingredient.IsActive maps to ingredient.isActive
 
-
+// BALLOT: Infeasible mapping from Medication.Ingredient.Amount (Quantity) to FHIR Medication.ingredient.amount (Ratio)	
+// BALLOT: Infeasible mapping from Medication.Ingredient.IsActive (CodedText) to FHIR Medication.ingredient.isActive (boolean)
+// BALLOT: Infeasible mapping from Medication.IsBrand (CodedText) to FHIR Medication.isBrand (boolean)
+// BALLOT: Infeasible mapping from Medication.IsOverTheCounter (CodedText) to FHIR Medication.isOverTheCounter (boolean)
+// BALLOT: Infeasible mapping between Medication.Status (CodedText) to FHIR Medication.status (code) (Loss of information)
 /*
 Organization
 Device

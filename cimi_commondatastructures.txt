@@ -94,8 +94,37 @@ Concept:		TBD
 Description:	"The specific criteria that apply for the given reference range. For instance, reference ranges may be specified in a lookup table based on a set of criteria. If a row in this table is selected as the applicable reference range for a measurement, 'criteria' lists the specific criteria for that row in the table. E.g., reference range for post-menopausal women."
 Value:			TEXT
 
+Element:		Timing
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"A timing schedule that specifies an event that may occur multiple times"
+0..*			EventTime   // DELTA: Renamed Timing.Event to Timing.EventTime
+0..1			TimingRepeat  // DELTA: Cut out the middleman
+0..1			TimingCode // DELTA: Changed Timing.code to Timing.TimingCode to avoid clash with the Code datatype
+
+Element:		EventTime
+Concept:		TBD
+Description:	"When the event occurs"
+Value:			DateTime
+
+Element:		TimingRepeat
+Concept:		TBD
+Description:	"When the event is to occur + If there's an offset, there must be a when (and not C, CM, CD, CV) + period SHALL be a non-negative value + If there's a periodMax, there must be a period + If there's a durationMax, there must be a duration + If there's a countMax, there must be a count + if there's a duration, there needs to be duration units + If there's a timeOfDay, there cannot be be a when, or vice versa + if there's a period, there needs to be period units + duration SHALL be a non-negative value"
+0..1			BoundsDuration
+// TODO: Finish filling out TimingRepeat
+
+Element:		BoundsDuration
+Concept:		TBD
+Description:	"Repeat duration."
+Value:			Quantity
 
 
+Element:		TimingCode	
+Concept:		TBD
+Description:	"Timing abbreviation."
+Value:			CodedText
+// BALLOT: Timing.Code - insufficient documentation ("Timing abbreviation")
+			
 
 
 

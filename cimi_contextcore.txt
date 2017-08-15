@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalcontextcore
 Description:	"The Context Core Package defines the high-level clinical statement context classes. Three types of contexts are currently defined in CIMI: (1) Finding Contexts, (2) Action Contexts, and (3) Event Contexts. Finding contexts are used to specify whether a finding was observed to be present or absent. Action contexts are used to specify whether a clinical activity was performed, ordered, planned, or perhaps not performed."
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalassociation, cimi.clinicalentity, cimi.clinicalprovenance, cimi.clinicalevaluationresult, cimi.clinicalcommondatastructures
 
 Element:		StatementContext
 Based on:		VIRTUALCLUSTER
@@ -30,6 +30,7 @@ Description:	"The FindingContext class aligns with the SNOMED Situation with Exp
 Element:		CurrentStatus
 Concept:		TBD
 Description:	"Current state of the evaluation (e.g., pending, complete, partial)."
+Value:			CodedText
 // BALLOT: The name "CurrentStatus" could cause confusion because if refers to the time the record was written. However, when the record is read, the CurrentStatus is really a PastStatus - namely, the status when the information was last updated. Suggest changing to "FindingStatus", which has no unintended implications of time.
 // BALLOT: FindingContext.CurrentStatus has an inadequate defintion. What is the 'evaluation' whose state the CurrentStatus represents?
 
@@ -79,5 +80,166 @@ Concept:		TBD
 Description:	"Flag indicating whether a condition has abated when a specific date of, time period, or age at abatement is not known."
 Value:			YesNo
 
+Element:		ActionContext
+Based on:		StatementContext
+Concept:		TBD
+Description:	"The ActionContext class aligns with the SNOMED Situations with Explicit Context and provides the context for the Act topic of a clinical statement. For instance, a statement about a procedure may specify that the procedure has been proposed, ordered, planned, performed or possibly not performed."
+0..*			Justification
+0..1			CurrentStatus
+0..1			Category
+0..*			SupportingInformation
+// BALLOT: CurrentStatus is an attribute of both ActionContext and FindingContext, and could be moved up to the mutual parent class, StatementContext
 
-// TODO: fill in the rest of this
+Element:		SupportingInformation
+Concept:		TBD
+Description:	"Additional information (for example, patient height and weight) that supports the performance, non-performance, ordering, or proposing of the clinical action. E.g., documentation of heart rate before administering the medication in case medication needs to be held if heart rate falls in a specific range."
+Value:			ref(LOCATABLE)
+// TODO: Any class restriction?
+
+Element:		Performance
+Based on:		ActionContext
+Concept:		TBD
+Description:	"Context indicating actual performance or execution of a healthcare-related action, e.g., 3rd dose of Hepatitis B vaccine administered on Dec 4th 2012, appendectomy performed today."
+0..*			Performed
+0..1			EnactsPlan
+0..1			FulfillsOrder
+0..*			BasedOn
+0..1			PerformanceDuration
+// DELTA: Changed Performance.Duration to Performance.PerformanceDuration to avoid collision with the Duration datatype
+0..1			PartOf
+
+Element:		Performed
+Concept:		TBD
+Description:	"The party that performed the action."
+Value:			Attribution
+
+Element:		EnactsPlan
+Concept:		TBD
+Description:	"The plan that is partly or wholly enacted by the performance of this act."
+Value:			ref(Plan)
+// DELTA: Changed Performance.EnactsPlan.Value to type ref(Plan) from Class<T>
+
+Element:		FulfillsOrder
+Concept:		TBD
+Description:	"The order that is partly or wholly enacted by the performance of this act."
+Value:			ref(Order)
+
+Element:		BasedOn
+Concept:		TBD
+Description:	"The proposal that is partly or wholly fulfilled by the performance of this act."
+Value:			ref(Proposal)  
+// DELTA: Changed Performance.BasedOn.Value to type ref(Proposal) from Class<T>
+
+Element:		PerformanceDuration
+Concept:		TBD
+Description:	"The duration of time the action was performed."
+Value:			Quantity
+// BALLOT: Performance.Duration should use the Duration datatype, not Quantity.
+
+Element:		PartOf
+Concept:		TBD
+Description:	"A larger event of which this particular event is a component or step."
+Value:			ref(Performance)
+// DELTA: Changed Performance.PartOf to type ref(Performance) from Class<T>
+	
+Element:		Plan
+Based on:		ActionContext
+Concept:		TBD
+Description:	"Description of action that is planned to be performed. Typically, this would include a time at which the action is scheduled to be performed."
+0..1			FulfillsOrder
+0..*			BasedOn
+0..1			ExpectedPerformanceTime
+0..*			ExpectedPerformer
+
+Element:		ExpectedPerformanceTime
+Concept:		TBD
+Description:	"The time when the action is expected to be performed"
+Value:			DateTime
+
+Element:		ExpectedPerformer
+Concept:		TBD
+Description:	"Persons who are expected to or intended to perform this action, e.g., the person who will perform the surgery."
+Value:			ref(PARTICIPATION)
+
+Element:		Request
+Based on:		ActionContext
+Concept:		TBD
+Description:	"An request by a healthcare provider or system to another healthcare provider or system to perform some act."
+1..1			Type
+0..1			ExpectedPerformanceTime
+0..*			ExpectedPerformer
+0..1			ExpectedPerformerCode
+0..1			Priority
+0..1			Timing
+0..1			Duration
+0..1			DurationCode
+
+// BALLOT: Request.Duration is a length of time, not an interval. It should use the Duration datatype, not IntervalValue.
+
+// BALLOT: Request.ExpectedPerformerCode should be 0..* since multiple performers can be involved (also, to match ExpectedPerfomer)
+
+Element:		ExpectedPerformerCode
+Concept:		TBD
+Description:	"Persons who are expected to or intended to perform this action, e.g., the person who will perform the surgery."
+Value:			CodedText
+
+Element:		DurationCode
+Concept:		TBD
+Description:	"The anticipated duration for the action."
+Value:			CodedText
+
+
+Element:		Order
+Based on:		Request
+Concept:		TBD
+Description:	"An instruction by a healthcare provider to another healthcare provider to perform some act."
+0..1			GroupIdentifier
+0..*			BasedOn
+0..1			NeededNoLaterThan
+0..*			PatientInstructions
+0..1			StartDateTime
+0..1			StopDateTime
+0..1			PriorRequest
+// BALLOT: This is minor, but in Order, is there any reason to have a separate startDateTime and stopDateTime, as opposed to an Interval<DateTime>?
+
+Element:		GroupIdentifier
+Concept:		TBD
+Description:	"A shared identifier common to all requests that were authorized more or less simultaneously by a single author, representing the identifier of the requisition or prescription. E.g., an order set for a given patient contains a set of medication orderables. Each child orderable in the order set may contain a group identifier which is the identifier of the order set itself (the requisition)."
+Value:			Identifier
+
+Element:		NeededNoLaterThan
+Concept:		TBD
+Description:	"Point in time when order must be performed."
+Value:			DateTime
+
+Element:		PatientInstructions
+Concept:		TBD
+Description:	"Identifies the ordering provider's instructions to the patient or to the provider on how to deliver or comply with the ordered procedure."
+Value:			TEXT
+
+Element:		StartDateTime
+Concept:		TBD
+Description:	"When the activity should start."
+Value:			DateTime
+
+Element:		StopDateTime
+Concept:		TBD
+Description:	"When the activity should end."
+Value:			DateTime
+
+Element:		PriorRequest
+Concept:		TBD
+Description:	"A link to a resource representing an earlier order related order or prescription."
+Value:			ref(Request)
+
+
+Element:		Proposal
+Based on:		Request
+Concept:		TBD
+Description:	"An offer or a suggestion to perform a healthcare act. A recommendation to a provider is an example of proposal made by a CDS system. A proposal must be accepted by an entity in order for it to be performed."
+
+
+
+
+
+

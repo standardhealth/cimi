@@ -71,7 +71,8 @@ Element:			PARTYRELATIONSHIP
 Based on:			ASSOCIATIONCLASS
 Concept:			TBD
 Description:		"Association class relating two parties such as the association of an actor with one or more roles."
-1..1				PARTY
+//1..1				ref(PARTY)
+// DELTA: Changed to PARTYRELATIONSHIP.PARTY to ref(PARTY)
 // BALLOT: The definition of PARTY_RELATONSHIP is circular
 // BALLOT: It is odd that PARTYRELATIONSHIP (and ASSOCIATIONCLASS, for that matter) does not involve two parties. A relationship, by nature, connects two things.
 // BALLOT: PARTYRELATIONSHIP should have a reference to the second party, rather than an attribute that is that party. CIMI never seems to differentiate. Is that a problem? Presumably, the two parties involved in the relationship refer to eachother through the PARTYRELATIONSHIP, instead of being together in the same structure.

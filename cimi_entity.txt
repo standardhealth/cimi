@@ -52,16 +52,17 @@ Description:	"Sample for analysis"
 0..1			AccessionIdentifier
 0..1			Status
 0..1			SourceSpecimen
-0..1			TypeText
+0..1			SpecimenType
 0..1			Collection
 0..1			SpecimenContainer  // DELTA: Changed from Container to SpecimenContainer to prevent clash with MedicationPackage.Container
 0..*			Treatment
 0..1			HandlingRisk
 0..*			SpecialHandling
 0..1			ReceiveAction
+// BALLOT: Can we clarify the difference between SpecimenCode and SpecimenType? The former is defined as "The concept that represents this specimen" and the latter as "Kind of material that forms the specimen". Are these redundant? FHIR only has SpecimenType. Does FHIR need another attribute?
 // BALLOT: Specimen.HandlingRisk should be 0..* so hazards can be separately listed, e.g., radioactive, infectious, biohazard, inhalation hazard, combustible, corrosive, poison, etc.
 // BALLOT: Specimen.SourceSpecimen should be a reference to another specimen. In other words, the datatype should be ref(Specimen), not type Specimen
-// BALLOT: Renamed Specimen.Type to Specimen.TypeText because the datatype is TEXT, whereas other uses of Type data element are CodedText
+// BALLOT: Renamed Specimen.Type to Specimen.SpecimenType because the datatype is TEXT, whereas other uses of generic Type data element are CodedText
 // BALLOT: In Specimen, both Container and Treatment have information about additives in the specimen. There is Specimen.Container.Additive (and Specimen.Container.AdditiveCode) and Specimen.Treatment.Additive. With three places to look, it makes it hard to know what the additives are. Why not just Specimen.Additive? What's even more confusing is that Specimen.Container allows representing the additive as a CodedText, while Specimen.Treatment allows only a Substance.
 
 Element:		SpecimenCode
@@ -86,7 +87,7 @@ Description:	"Identifier for the source specimen from which this specimen was de
 Value:			Specimen
 // BALLOT: The definition of Specimen.SourceSpecimen says it is the "identifier for the source specimen" yet the datatype is not Identifier - it is Specimen. Which should it be, Identifier or Specimen -- or perhaps, Reference(Specimen)?
 
-Element:		TypeText
+Element:		SpecimenType
 Concept:		TBD
 Description:	"Kind of material that forms the specimen"
 Value:			TEXT
@@ -128,7 +129,7 @@ Concept:		TBD
 Description:	"Direct container of specimen (tube&#47;slide, etc.)"
 0..1			Identifier
 0..1			Description
-0..1			TypeText
+0..1			ContainerType
 0..1			Capacity
 0..1			SpecimenQuantity
 0..*			Additive
@@ -137,6 +138,11 @@ Description:	"Direct container of specimen (tube&#47;slide, etc.)"
 // BALLOT: SpecimenContainer should inherit from Entity. It is a physical object, and not only that, but if it inherited from Entity, it wouldn't have to define identifier and description again.		
 // BALLOT: SpecimenContainer.AdditiveCode should be 0..* to match Additive (0..* Substance). I think the idea is that there can be multiple additives. 
 // BALLOT: In SpecimenContainer, SpecimenQuantity (datatype Quantity) describes the amount of specimen. SpecimenCollection breaks out amount of specimen in a number of individual attributes: amount, volume, dimension, and size. Which is the best way to do this? Shouldn't we be consistent about how we refer to the size or amount of a specimen?
+
+Element:		ContainerType
+Concept:		TBD
+Description:	"Kind of container holding the specimen - e.g. a vial or well."
+Value:			TEXT
 
 Element:		Capacity
 Concept:		TBD
@@ -158,7 +164,7 @@ Concept:		TBD
 Description:	"Additive associated with container."
 Value:			TEXT
 // BALLOT: SpecimenContainer.Additive and SpecimenContainer.AdditiveCode have exactly the same description. The descriptions must distinguish them.
-// BALLOT: SpecimenContainer.AdditiveCode should be a CodedText (currently a TEXT). The name says it is a code, so it should be a code.
+// BALLOT: SpecimenContainer.AdditiveCode should be a CodedText (currently a TEXT). The name says code, so it should be a code.
 
 Element:		SequenceNumber
 Concept:		TBD
@@ -172,11 +178,11 @@ Based on:		CLUSTER
 Concept:		TBD
 Description:	"Treatment performed on the specimen."
 0..1			Description
-0..1			Procedure 
+0..1			ProcedureCode
 0..*			Additive
 // BALLOT: Why doesn't SpecimenTreatment inherit from ProcedureTopic? It is certainly a procedure. The only unusual aspect is that the subject of that procedure is a specimen. This illustrates a basic problem with modeling from a class hierarchy point of view, namely, it forces a committment to "what's what", while in fact, "what's what" looks different depending on your point of view. In this case, from the point of view of the user of a specimen, the treatment is an attribute of the specimen. From the point of view of the person preparing the specimen, the preparation is a procedure.
 
-Element:		Procedure  // rename ProcedureCode?
+Element:		ProcedureCode  // DELTA: renamed ProcedureCode to reflect the datatype
 Concept:		TBD
 Description:	"A coded value specifying the procedure used to process the specimen."
 Value:			CodedText
@@ -222,7 +228,7 @@ Description:	"A components that go to make up the described item."
 0..1			MedicationIngredient  // DELTA: Changed Ingredient.Medication to Ingredient.MedicationIngredient to avoid clash with Medication
 0..1			Amount
 0..1			IsActive
-// BALLOT: Substance.Ingredient is type Ingredient, which is different than substance. But an ingredient is a substance that happens to be in the company of other substances. There should only be one class, Substance.
+// BALLOT: Ingredient.Medication is confusing. A medication is made up of ingredients. But why does an ingredient have a medication? This doesn't seem to make sense.
 // BALLOT: Ingredient.Substance should be type Ref(Substance), not type Substance
 
 Element:		ItemCode
@@ -234,7 +240,7 @@ Element:		MedicationIngredient
 Concept:		TBD
 Description:	"The medication ingredient"
 Value:			Medication
-// BALLOT: Ingredient.Medication is confusing. A medication is a substance made up of ingredients, which are substances, and one or more of those substances can be active ingredients. But why does an ingredient have a medication? This doesn't seem to make any sense.
+
 
 // DELTA: Commented out Ingredient.Amount to not conflict with SpecimenCollection.Amount defined in the Procedure module
 //Element:		Amount
@@ -278,10 +284,10 @@ Description:	"Class representing a medication. It covers the ingredients and the
 0..1			IsBrand
 0..1			IsOverTheCounter
 0..1			Manufacturer
-//0..1			Form
-//0..*			Ingredient
+0..1			Form
+0..*			Ingredient
 // BALLOT: Medication.IsBrand and Medication.IsOverTheCounter should both be booleans, not CodedText
-// BALLOT: There is a circularity between Medication and MedicationPackage that needs to be undone. Currently, a Medication has a Package and Package has a Content and Content has a Medication. They can't all embed eachother as attributes. A solution would be to remove PackageContent.item (datatype Medication), and just use the item code.
+// BALLOT: There is a circularity between Medication and MedicationPackage that needs to be undone. Currently, a Medication has a Package and Package has a Content and Content has a Medication. They can't all embed eachother as attributes. A FHIR-compatible solution would be to remove PackageContent.item (datatype Medication), and just use the item code.
 
 Element:		MedicationCode
 Concept:		TBD
@@ -302,6 +308,12 @@ Element:		Manufacturer
 Concept:		TBD
 Description:	"Describes the details of the manufacturer of the medication product. This is not intended to represent the distributor of a medication product."
 Value:			Organization
+
+Element:		Form
+Concept:		TBD
+Description:	"The medication form such as tablet, capsule, ampoule, etc..."
+Value:			CodedText
+
 
 EntryElement:	Organization
 Based on:		Entity
@@ -355,4 +367,16 @@ Description:	"The assigned lot number of a batch of the specified product."
 Value:			TEXT
 // BALLOT: PackageContent.LotNumber is a TEXT, but why not Identifier or string? TEXT is specifically for things that might be mapped to coded values (not a possibility here).
 
-		
+Element:		Device		
+Based on:		Entity
+Concept:		TBD
+Description:	"This resource identifies an instance or a type of a manufactured item that is used in the provision of healthcare without being substantially changed through that activity. The device may be a medical or non-medical device. Medical devices includes durable (reusable) medical equipment, implantable devices, as well as disposable equipment used for diagnostic, treatment, and research for healthcare and public health. Non-medical devices may include items such as a machine, cellphone, computer, application, etc."
+1..1			DeviceCode
+// TODO: Fill in the rest of Device (Entity), and map it
+
+Element:		DeviceCode
+Concept:		TBD
+Description:	"The type of device."
+Value:			CodedText
+// TODO: Change to SpecificType for generic power
+

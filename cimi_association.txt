@@ -20,11 +20,13 @@ Based on:		ClinicalStatementAssociation
 Concept:		TBD
 Description:	"The interpretation provided by the containing type for the set of clinical statements that comprise the target of the relationship. For instance, Assertion.interpretation can be interpreted as follows: the assertion interprets the set of clinical statements specified as the range of Assertion.interpretation.target and the interpretation is specified by the Assertion.interpretation.hasInterpretation code."
 1..1			HasInterpretation
+// NOTE: EvaluationResult.Interpretation is an outward-pointing association -- it says this EvaluationResult has interpretation expressed by one or more ClinicalStatments
 
 Element:		HasInterpretation
 Concept:		TBD
 Description:	"The interpretation provided by the containing type for the set of clinical statements that comprise the target of the relationship. For instance, Assertion.interpretation can be interpreted as follows: the assertion interprets the set of clinical statements specified as the range of Assertion.interpretation.target and the interpretation is specified by the Assertion.interpretation.hasInterpretation code."
 Value:			TEXT
+// BALLOT: What is the difference between Interpretation.HasInterpretation and Interpretation.Type (inherited from ASSOCIATIONCLASS.Type)? I thought Type supposed to explain the relationship between the things at the two ends of the association? Better definitions are needed here.
 
 Element:		Justification
 Based on:		ClinicalStatementAssociation

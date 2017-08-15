@@ -27,55 +27,61 @@ Substance maps to Substance:
 // BALLOT: CIMI Substance.Description cannot be mapped to FHIR Substance.description because the former is 0..* and the latter is 0..1.
 // BALLOT: Infeasible mapping from Substance.Status (CodedText) to FHIR Substance.status (code)
 // BALLOT: Infeasible mapping from Substance.Ingredient.Amount (Quantity) to FHIR Substance.ingredient.quantity (Ratio)
-/*	
+
 Specimen maps to Specimen:
-	Identifier maps to identifer
-	//Description maps to
-	//Image maps to
-	SpecimenCode maps to 
+	Identifier maps to identifier
 	AccessionIdentifier maps to accessionIdentifier
-	Status maps to status
+	//Status maps to status
 	SourceSpecimen maps to parent
-	TypeText maps to type
-	Collection maps to collection
-	// ?? maps to collection.collector
-	// ?? maps to collection.collected[x].dateTime
-	// ?? maps to collection.collected[x].Period
-	//Collection.Description maps to
-	//Collection.Reason maps to
-	Collection.Method maps to collection.method
-	// Collection.CollectionSite maps to
-	Collection.CollectionSiteCode maps to collection.bodySite
-	Collection.Amount maps to collection.quantity
-	//Collection.Volume maps to
-	//Collection.Size maps to
-	//Collection.Dimension maps to	
+	// SpecimenType maps to type
+	Collection.Value.Method maps to collection.method
+	Collection.Value.CollectionSiteCode maps to collection.bodySite
+	Collection.Value.Amount maps to collection.quantity
 	SpecimenContainer.Identifier maps to container.identifier
 	SpecimenContainer.Description maps to container.description
-	SpecimenContainer.TypeText maps to container.type
+	// SpecimenContainer.ContainerType maps to container.type
 	SpecimenContainer.Capacity maps to container.capacity
 	SpecimenContainer.SpecimenQuantity maps to container.specimenQuantity
-	SpecimenContainer.AdditiveCode maps to container.additive[x].CodeableConcept
+	constrain container to 0..1
+	//SpecimenContainer.AdditiveCode maps to container.additive[x].CodeableConcept
 	SpecimenContainer.Additive maps to container.additive[x].Reference
-	Treatment.Value.Description maps to processing
-	Treatment.Value.Procedure maps to processing
-	Treatment.Value.Additive maps to processing
+	Treatment.Value.Description maps to processing.description
+	Treatment.Value.ProcedureCode maps to processing.procedure
+	Treatment.Value.Additive maps to processing.additive
+
+// BALLOT: FHIR has Specimen.collection.collector and collected[x].dateTime (time of collection). CIMI Specimen lacks analogous elements. They could potentially come from the Performance context, but that would require creation of a ClinicalStatement describing  SpecimenCollectionPerformance. I'm not sure that is the design intention here. If not, where would the specimen collector and collection time come from? 
+// BALLOT: Infeasible mapping between SpecimenContainer.AdditiveCode (TEXT) and container.additive[x].CodeableConcept (CodeableConcept) because of a type mismatch. As noted in a different comment, AdditiveCode should be changed to CodedText, then this will be solved.
+// BALLOT: Infeasible mapping between SpecimenContainer.ContainerType (TEXT) and container.type (CodeableConcept) because the types don't match. Recommend changing ContainerType to CodedText.
+// BALLOT: Infeasible mapping between Specimen.Status (CodedText) and FHIR Specimen.status (code) because the types don't match. (Information loss would result)
+// BALLOT: Infeasible mapping between Specimen.SpecimenType (TEXT) and FHIR Specimen.type (CodeableConcept) because the types don't match.
 	
-	
-	
-	HandlingRisk maps to 
-	SpecialHandling maps to 
-	ReceiveAction maps to 
-	// ?? maps to note
-*/
-// BALLOT: It is a problem that CIMI doesn't have a mapping to Specimen.collection.collector. I think it would come from the Performance context applied to SpecimenCollection but without making an explicit ClinicalStatement (e.g. SpecimenCollectionPerformance), it is difficult to see where the collector would come from, or how such a mapping would work.
-	
-/*
+
 Medication maps to Medication:
+	//Identifier maps to ??
+	//Description maps to ??
+	Image maps to image
+	MedicationCode maps to code
+	Status maps to status
+	MedicationPackage.Container maps to package.container
+	MedicationPackage.PackageContent.MedicationCode maps to package.content.item[x].CodeableConcept
+	MedicationPackage.PackageContent.Amount maps to package.content.amount
+	MedicationPackage.PackageBatch.LotNumber maps to package.batch.lotNumber
+	MedicationPackage.PackageBatch.Expiry maps to package.batch.expirationDate
+	IsBrand maps to isBrand
+	IsOverTheCounter maps to isOverTheCounter
+	Manufacturer maps to manufacturer
+	Form maps to form
+	Ingredient.ItemCode maps to ingredient.item[x].CodeableConcept
+	// Ingredient can be a substance or a medication. Reference(Substance|Medication)
+	Ingredient.Substance maps to ingredient.item[x].Reference
+	//Ingredient.Medication maps to ingredient.item[x].Reference
+	Ingredient.Amount maps to ingredient.amount
+	Ingredient.IsActive maps to ingredient.isActive
 
 
+/*
 Organization
-
+Device
 Package?
 
 */

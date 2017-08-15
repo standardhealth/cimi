@@ -7,6 +7,12 @@ Abstract Element:	CLUSTER
 Based on:			LOCATABLE
 Concept:			TBD
 Description:		"Abstract class representing a reusable structure in a model such as an address or an entity such as a device."
+/* BALLOT: The CIMI class hierarchy, as a whole, doesn't look right to me. The top-level classes in the Foundation module relate to each other in a very different way than the lower-level classes. At the top, things are divided according to their structural characteristics - CLUSTER, COMPOSITION, CONTENT. Further down, things are divided using a more conventional type-of relationship (e.g, Encounter has subtypes EmergencyEncounter, InPatientEncounter, LongTermCare). This leads to having two classification systems competing within one hierarchy. When this occurs, things that are conceptually related but structurally unrelated can end up far apart in the hierarchy, but things that are structurally related but conceptually unrelated are closer together. For example, Person is an Entity (a CLUSTER), but as such, it cannot be CONTENT. So, you can't have an ENTRY about an Entity, such as a Person...which seems strange. To be consistent, taxonomies must have ONE organizing principle. 
+
+In the CIMI class hierarchy, there is also an element of functional classification (along with organization by data structure and domain meaning). StatementTopic refers the function of a thing -- i.e., can that thing function as a topic of a clinical statement? The trouble is, things on different branches of the hierarchy could be statement topics. For example, Entities (devices, organizations, people) could be statement topics. But Entity is not a child of StatementTopic. ClinicalStatement could also be valid statement topic, but a ClinicalStatement is under Entry and CONTENT, not CLUSTER, where StatementTopic is located. CIMI's class hierarchy cannot serve three organizing priniciples simultaneously. The practical implication is you really don't know where to put something new, e.g., a hospital ward. Could hospital ward be a valid StatementTopic? Sure...if there were MRSA found on that ward. Is a ward an Entity? Certainty. Is it a COMPOSITION of hospital rooms? Absolutely. 
+
+So what to do? A more tractable question is: what data do we need to collect about a thing? Going down that path, the focus shifts from deciding on a class hierarchy, to data elements and how they combine into groups of data elements (CLUSTERS), and upward into CLUSTERS of CLUSTERS. Define reusable data elements, and build them up hierarchically to the logical structures you need to represent. Not so different than FHIR, and not so different from CIMI. 
+*/
 
 Abstract Element:	BASEENTITY
 Based on:			CLUSTER
@@ -25,6 +31,7 @@ Abstract Element:	CONTENT
 Based on:			LOCATABLE
 Concept:			TBD
 Description:		"Abstract ancestor of all concrete content types. A unit of content that makes up a composition - e.g., a clinical statement in a patient record, a simple or composite action is a knowledge document."
+
 
 Abstract Element:	ENTRY
 Based on:			CONTENT
@@ -58,10 +65,13 @@ Description:		"A party involved in an activity. PARTY has two specializations: A
 0..*				PARTYRELATIONSHIP
 0..*				Identifier
 // BALLOT: Definition of PARTY is circular. Additionally, the definition of PARTY should be self-contained, not defined in terms of its subclasses. 
+// BALLOT: Having LOCATABLE as the parent class of PARTY implies that PARTY is neither a CLUSTER, COMPOSITION, nor CONTENT. I don't think this is correct. PARTY, being a non-structural class, should not be at the same level of the other three high-level children of LOCATABLE that each describe a different structural characteristic of data (CLUSTER, COMPOSITION, CONTENT) 
 
 Element:			PARTYRELATIONSHIP
 Based on:			ASSOCIATIONCLASS
-//1..1				PARTY
+Concept:			TBD
+Description:		"Association class relating two parties such as the association of an actor with one or more roles."
+1..1				PARTY
 // BALLOT: The definition of PARTY_RELATONSHIP is circular
 // BALLOT: It is odd that PARTYRELATIONSHIP (and ASSOCIATIONCLASS, for that matter) does not involve two parties. A relationship, by nature, connects two things.
 // BALLOT: PARTYRELATIONSHIP should have a reference to the second party, rather than an attribute that is that party. CIMI never seems to differentiate. Is that a problem? Presumably, the two parties involved in the relationship refer to eachother through the PARTYRELATIONSHIP, instead of being together in the same structure.

@@ -1,4 +1,72 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalevaluationresult
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalentity, cimi.clinicalcommondatastructures, cimi.clinicalassociation, cimi.clinicalclinicalstatement
+
+Element:		EvaluationResult
+Based on:		FindingTopic
+Concept:		TBD
+Description:	"The outcome of an evaluation of a characteristic. This model holds a 'question' in the key and holds a value in the result. This value is further qualified through the model's properties. "
+0..1			ExceptionValue
+0..*			Method
+0..*			DeviceCode
+0..*			Device
+0..1			Priority
+0..1			Sequence
+0..1			DeltaFlag
+0..*			ReferenceRange
+0..1			EvaluationProcedureCode // aka method !
+0..1			EvaluationProcedure
+0..*			Interpretation
+0..1			InterpretationCode
+0..*			Precondition
+
+// BALLOT: EvalationResult.Interpretation is 0..* but EvaluationResult.InterpretationCode is 0..1. If you can have multiple interpretations, you should be able to have multiple interpretation codes. Change EvaluationResult.InterpretationCode to 0..*
+
+Element:		ExceptionValue
+Concept:		TBD
+Description:	"A code if the result cannot be provided."
+Value:			CodedText
+
+Element:		Priority
+Concept:		TBD
+Description:	"The urgency of the evaluation result. To reviewers: should we retain this attribute in the model."
+Value:			CodedText
+// BALLOT: EvaluationResult.Priority. The following question was asked (in the definition): "To reviewers: should we retain this attribute in the model. Answer is: Not in EvaluationResult. The priority should be part of the request or order for the evaluation, but not part of the result."
+
+Element:		Sequence
+Concept:		TBD
+Description:	"Sequence is a number placed onto the data which refers to the order it occurred in or needs to be retrieved by."
+Value:			CodedText
+// BALLOT: EvaluationResult.Sequence is type CodedText. There is a similar concept in SpecimenContainer.SpecimenNumber, which is type TEXT.  Neither datatype makes sense - it should be an number ("Sequence is a number ...") -- and CIMI should be consistent about it. There is something about reuse that CIMI could take a trick from Standard Health Record (SHR), where everything is compositional and maximal reuse and consistency is achieved. We should have a discussion of how CIMI might adopt a compositional approach to data element modeling.
+
+Element:		DeltaFlag
+Concept:		TBD
+Description:	"Flag indicating whether there was a significant change from previous results."
+Value:			CodedText
+
+Element:		EvaluationProcedureCode
+Concept:		TBD
+Description:	"The evaluation procedure that is the source of the evaluation result."
+Value:			CodedText
+
+Element:		EvaluationProcedure
+Concept:		TBD
+Description:	"The evaluation procedure that is the source of the evaluation result."
+Value:			ClinicalStatement
+// DELTA: Changed Class<T> to ClinicalStatement
+// BALLOT: What class(es) should EvaluationResult.EvaluationProcedure refer to? Possibly a ProcedureTopic, but it should really be a ProcedurePerformed (i.e., a combination of ProcedureTopic and the Performance context). That would be a ClinicalStatement. Should EvaluationResult.EvaluationProcedure be type ClinicalStatement? 
+
+
+Element:		InterpretationCode
+Concept:		TBD
+Description:	"A clinical judgment about the significance of an evaluation result. Interpretation is used to clarify data from measurements and other evaluations. For example, if a measured analyte is greater than a predetermined threshold the interpretation could be Positive, or if a measurement is lower than a normal physiological range the interpretation could be low or critical low. Some values include normal, abnormal, panic high, panic low, ... Interpretation may also be used to indicate whether or not the result is outside the range for the patient."
+Value:			CodedText
+		
+Element:		Precondition
+Concept:		TBD
+Description:	"Describes the previously existing conditions or states that could effect a measurement or assesment. For example; a patients weight taken while clothed, a patients height with or without shoes, a patients blood pressure taken while standing or lying down. Precondition aligns with the SNOMED CT Observable model attribute 704326004 |Precondition (attribute)| "
+Value:			CodedText
+
+
+			

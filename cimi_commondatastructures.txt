@@ -68,7 +68,36 @@ Based on:		ActorName
 
 // BALLOT: I have trouble understanding the thinking behind the hierarchy of organization names under ActorName. First there is BaseOrganizationName and then GenericOrganizationName. Is a GenericOrganizationName really a subtype of BaseOrganizationName? The only difference is that the former has a list of "parts". What is the use case for splitting an organization name into parts? Does having parts make an organization name more generic?
 
-// BALLOT: BasePersonName.PreferredFlag can probably be eliminated because that should be already captured in ActorName.Use. 
+// BALLOT: BasePersonName.PreferredFlag can probably be eliminated because that information should be captured in ActorName.Use. 
+
+Element:		ReferenceRange
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"A reference range for the specific instance after lookup from, say, a reference range table given specific criteria. Note that this reference range is not definitional in nature but rather refers to the reference range considered for the given observation for a subject."
+0..1			ReferenceCriterion
+0..1			Narrative
+0..*			Criteria
+
+Element:		ReferenceCriterion
+Concept:		TBD
+Description:	"Indicates whether the given range is normal, critically high, ..."
+Value:			CodedText
+
+Element:		Narrative
+Concept:		TBD
+Description:	"A human-oriented description of the reference range."
+Value:			TEXT
+// BALLOT: ReferenceRange.Narrative will never be coded, so it should be a string, not be TEXT. 
+
+Element:		Criteria
+Concept:		TBD
+Description:	"The specific criteria that apply for the given reference range. For instance, reference ranges may be specified in a lookup table based on a set of criteria. If a row in this table is selected as the applicable reference range for a measurement, 'criteria' lists the specific criteria for that row in the table. E.g., reference range for post-menopausal women."
+Value:			TEXT
+
+
+
+
+
 
 
 

@@ -65,7 +65,7 @@ Element:		Target
 Concept:		TBD
 Description:	"The target term of the mapping."  
 Value:			CodedText
-// BALLOT: Circular definition of TermMapping.Target
+// BALLOT: TermMapping.Target definition is circular  
 
 Element:		CodedText
 Based on:		TEXT
@@ -76,7 +76,7 @@ Description:		"A text item whose value must be the rubric from a controlled term
 1..1			TerminologyId
 0..1			TerminologyVersion  
 0..1			Uri
-// BALLOT: In the definition of CodedText, the word "rubric" should be avoided. It is not clear whether "rubric" means the fully specified name, the preferred term, the code, the definition, or maybe something else.  
+// BALLOT: In the definition of CodedText, the word "rubric" should be avoided. It is not clear whether "rubric" means the fully specified name, the preferred term, the code, the definition, or something else.  
 
 Element:		Uri
 Concept:		TBD
@@ -87,7 +87,7 @@ Value:			uri
 Element:		Code
 Concept:		MTH#C0805701
 Description:	"The identifier of a concept in a terminology."
-Value:			code  
+Value:			string 
 // BALLOT: CIMI's version of a code won't map to FHIR. In FHIR, a code is a string, but with additional restrictions (FHIR: "a code is restricted to a string which has at least one character and no leading or trailing whitespace, and where there is no whitespace other than single spaces in the contents"). In CIMI, any string can be a code, and thus, definition of "Code" in CIMI is wider than that of "code" in FHIR. In other words, CIMI can have codes that cannot map to a FHIR code. Therefore, an extension is needed to contain CIMI's wider definition of code. This creates a CIMI-code-extension which appears literally everywhere in FHIR profiles. There are two ways to address this problem: (1) Align CIMI's definition of code to the definition of code in FHIR, or (2) Leave the representation of codes up to the implementing physical systems, which means defining code as a CIMI primitive. Then, different physical systems could implement 'code' as they see fit. This solution is most consistent with CIMI being a logical model.
 
 Element:		Term

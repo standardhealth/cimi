@@ -16,7 +16,7 @@ ClinicalStatement maps to Resource
 	RecordStatus maps to
 */
 
-// BALLOT: ClinicalStatement should map to FHIR DomainResource, but there is very little correspondence. Nothing seems to map. A disconnect at this high level could cause havoc to implementers. This is something that CIMI and FHIR need to get closer on. 
+// BALLOT: ClinicalStatement should map to FHIR DomainResource, but there is very little correspondence. Essentially, nothing seems to map. A disconnect at this high level could cause havoc to implementers. This is something that CIMI and FHIR need to get closer on. 
 
 // BALLOT: ClinicalStatement.StatementIdentifier should map to FHIR Resource.id. However, StatementIdentifier is 0..* and Resource.id is 0..1. Therefore this is an infeasible mapping. Why does CIMI allow multiple StatementIdentifiers? If this is a valid requirement, CIMI should resolve hash it out with FHIR so the mapping will work.
 

@@ -1,4 +1,43 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicaladversereaction
 Description:	"Package for classes that pertain to AdverseReaction (green in diagram). An adverse reaction is an untoward finding that results from exposure to a substance and is typically a manifestation of an underlying adverse sensitivity to a substance."
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalassertion, cimi.clinicalprovenance
+
+EntryElement:	AdverseReaction
+Based on:		FindingSiteAssertion
+Concept:		TBD
+Description:	"An unintended physical injury resulting from exposure to a substance. Note that the manifestation of the adverse reaction is captured in FindingTopic.result attribute."
+0..*			Causality
+0..*			ExposureRoute
+
+
+EntryElement:	Causality
+Concept:		TBD
+Description:	"An exogenous physical substance or force that causes the disease. It does not include vectors, e.g. a mosquito that transmits malaria. The range of this attribute can be found in the following SNOMED CT hierarchies: | Organism | 410607006 (&lt;&lt;) | Substance | 105590001 (&lt;&lt;) | Physical object | 260787004 (&lt;&lt;) | Physical force | 78621006 (&lt;&lt;) | Pharmaceutical &#47; biologic product | 373873005 (&lt;&lt; Q only) | SNOMED CT Concept | 138875005 (==)"
+0..1			Confidence
+0..1			ProductRelatedness
+0..1			Asserter
+0..1			Method
+
+Element:		Confidence
+Concept:		TBD
+Description:	"An assessment of the confidence in the causal relationship - e.g., certain, likely, possible, unlikely, ..."
+Value:			CodedText
+
+Element:		ProductRelatedness
+Concept:		TBD
+Description:	"TBD - Need to validate definition with Patient Care."
+Value:			TEXT
+
+Element:		Asserter
+Concept:		TBD
+Description:	"Attribution information relating to the assessment of causality."
+Value:			Attribution
+	
+Element:		ExposureRoute
+Concept:		TBD
+Description:	"Identification of the route by which the subject was exposed to the substance."
+Value:			CodedText
+
+
+

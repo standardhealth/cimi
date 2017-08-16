@@ -7,4 +7,82 @@ CIMI currently defines two types of adverse event reporting entries:
 The first type focuses on an activity that represents a undesirable deviation from an accepted workflow and any adverse outcome(s) that may result from the breach. An example may consist of an administration of a wrong medication and an associated adverse reaction.
 The second type of adverse event represents an unusual or untoward finding that is recorded. A special case pertains to adverse findings documented in the course of a clinical trial, where causality associated with the study intervention is not assumed.
 The WorkflowBreach cluster is a reusable structure that may be shared across reports."
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalentity, cimi.clinicaltopiccore, cimi.clinicalclinicalstatement, cimi.clinicalinformationentry, cimi.clinicalprovenance
+
+Element:		ReportableEventEntry
+Based on:		InformationEntry
+Concept:		TBD
+Description:	"A reportable event may be an untoward or unexpected finding observed during the course of an activity or an activity that may result in harm to a subject and which must be documented."
+0..1			Description
+0..1			ReferenceDocumentation
+0..*			RelevantMedicalHistory
+0..1			ReportingContext
+
+Element:		ReferenceDocumentation
+Concept:		TBD
+Description:	"Any documentation supplied when documenting this event."
+Value:			COMPOSITION 
+
+Element:		RelevantMedicalHistory
+Concept:		TBD
+Description:	"Relevant medical history for documentation purposes."
+Value:			ClinicalStatement // DELTA: replaces Class<T> with ClinicalStatement
+
+Element:		ReportingContext
+Concept:		TBD
+Description:	"Attribution metadata relevant to the reporting of an act or finding not already captured in the associated act or finding statement."
+Value:			Attribution
+
+
+EntryElement:	AdverseFindingReportEntry
+Based on:		ReportableEventEntry
+Concept:		TBD
+Description:	"An AdverseFinding is any unexpected clinical finding in a patient in the course of care or clinical investigation subject which does not necessarily have a causal relationship with a specific intervention."
+1..1			ReportedFinding
+0..1			WorkflowBreachReportEntry // DELTA: Removed middleman attribute
+// BALLOT: Why focus on "workflow breach" (AdverseFindingReportEntry.WorkflowBreachReportEntry)? How do other types of adverse events (other than workflow breaches) fit into this architecture? 
+
+Element:		ReportedFinding
+Concept:		TBD
+Description:	"The adverse finding that is reported."
+Value:			ClinicalStatement
+
+Element:		WorkflowBreachReportEntry
+Based on:		ReportableEventEntry
+Concept:		TBD
+Description:	"The protocol breach associated with this adverse finding if known and documented."
+Value:			WorkflowBreach
+
+Element:		WorkflowBreach		
+Concept:		TBD
+Description:	"A workflow breach consists of an undesired event (e.g., the administration of a wrong medication), a set of possible documented outcomes (note that near misses may not have an associated outcome) and the activity that was expected to be performed as part of the workflow (e.g., the administration of the prescribed medication). Workflow breaches may be referenced by a number of different report entries."
+0..1			Seriousness
+0..1			Category
+1..1			ReportedActivity
+0..1			ExpectedActivity
+0..*			Outcome
+
+Element:		Seriousness
+Concept:		TBD
+Description:	"Assessment whether this event was of real importance."
+Value:			CodedText		
+
+Element:		ReportedActivity
+Concept:		TBD
+Description:	"The activity which represents a breach of protocol."
+Value:			ProcedurePerformance
+
+Element:		ExpectedActivity
+Concept:		TBD
+Description:	"The activity that should have been performed."
+Value:			ProcedureTopic  // DELTA: Changed WorkflowBreach.ExpectedActivity to ProcedureTopic
+// TODO: ExpectedActivity.Value should be a ClinicalStatement whose Topic must be a ProcedureTopic. I don't see a way to do that without creating explicit classes for ProcedurePerformed, ProcedureNoncompletion, ...
+
+Element:		Outcome
+Concept:		TBD
+Description:	"The finding that resulted from the reported activity."
+Value:			FindingTopic   // DELTA: Changed WorkflowBreach.Outcome to FindingTopic
+
+
+
+

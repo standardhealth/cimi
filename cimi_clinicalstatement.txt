@@ -46,7 +46,7 @@ Description:		"The component abstract class is used to represent dependent obser
 // BALLOT: The name "Component" should be in ALL CAPS to indicate it is an abstract class
 // BALLOT: In Component, why are both Topic and Context 1..1, while they are each 0..1 in ClinicalStatement?
 
-Element:		CompositeComponent
+EntryElement:	CompositeComponent
 Based on:		Component
 Concept:		TBD
 Description:	"A component that itself can contain sub-components - e.g., the dimensional features of a wound or wound tunneling."
@@ -54,7 +54,7 @@ Description:	"A component that itself can contain sub-components - e.g., the dim
 // BALLOT: Creating a list to hold the Components of a CompositeComponent means that the list will have to be sliced in order to define the particular contents of a composite. This is contrary to the architectural principles of CIMI. A composition should be created by adding elements to children in the BMM and not inserting them into a sliced list.
 // BALLOT: It is odd that CompositeComponent not inherit from COMPOSITION, since it is a composition. If there is a reason it inherits from Component in preference to Composition? Should multiple inheritance be used?
 
-Element:		CompoundCS
+EntryElement:	CompoundCS
 Based on:		ClinicalStatement
 Concept:		TBD
 Description:	"Clinical statement representing multiple units of information that are treated as a whole such as a panel. A compound clinical statement is a collection of independent clinical statement, whether indivisible or compound. Note that complex medications are indivisible clinical statements even though their structure may be a composite data structure. They are generally treated as an independent entry in a record and their parts do not constitute independent entries in a record."
@@ -62,7 +62,7 @@ Description:	"Clinical statement representing multiple units of information that
 // BALLOT: The type for the content of a CompoundClinicalStatement is given as List<Class<T>>. The range of T is not defined. 
 // BALLOT: CompoundClinicalStatement with namespace cimi.clinicalclinicalstatement generates too long a name for a FHIR StructureDefinition, so shortened to CompoundCS
 
-Element:		IndivisibleCS
+EntryElement:	IndivisibleCS
 Based on:		ClinicalStatement
 Concept:		TBD
 Description:	"The documentation of clinical information about a subject of information such as a patient or a relative of the patient, asserted by a particular source, recorded, and potentially verified. The ClinicalStatement class provides the core pattern for more specific clinical statement archetypes, such as a statement that a finding has been found in a patient or that a procedure has been proposed by a clinical decision support system. The ClinicalStatement pattern defines the core attributes common to most clinical statements and specifies a composition pattern that encourage model component reuse and better alignment with the SNOMED CT Concept Model. A clinical statement is composed of the StatementTopic class (grouping of attributes for capturing information about a procedure or a clinical finding) and the StatementContext class (grouping of attributes providing the context for the statement topic such as whether a procedure was performed, requested, not performed or whether a finding is suspected present or absent in the patient). At the archetype level, the topic and context components are coordinated to form the clinical statement. For instance, the composition of the ProcedureTopic with the NotPerformed context indicates that the given procedure was not performed."
@@ -76,5 +76,11 @@ Based on:		Component
 Concept:		TBD
 Description:	"A leaf-level component of a clinical statement such as a component for a complex medication that is ordered as a single unit or individual observation components associated with a wound assertion such as the diameter of a wound."
 // BALLOT: The attributes of SimpleComponent and Component are exactly the same. Why is the SimpleComponent class necessary? What makes it different?
+
+EntryElement:	ProcedurePerformance  // DELTA: Added this class as an example of combining ClinicalStatement, Topic, and Context
+Based on:		ClinicalStatement
+Based on:		ProcedureTopic
+Description:		""
+
 
 

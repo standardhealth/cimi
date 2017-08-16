@@ -9,6 +9,7 @@ Description:		"Most classes in the CIMI reference model inherit from the LOCATAB
 1..1				ArchetypeNodeId
 1..1				Name
 0..1				ArchetypeDetails
+// BALLOT:	The LOCATABLE class, ArchetypeNodeId, ArchetypeDetails, represent implementation and do not belong in a logical model of healthcare. They are evidence of the way we currently are storing CIMI models, which is subject to change. If we change the way the model is stored, it should not impact the attributes of BloodPressure or WoundAssertion. Additionally, the root class should not be called "LOCATABLE". So-called LOCATABLEs are not actually locatable (findable, retrievable) from a healthcare user point. Only ENTRYs are actually "locatable".
 
 Element:			ArchetypeNodeId
 Concept:			TBD
@@ -32,8 +33,7 @@ Description:		"Archetypes act as the configuration basis for the particular stru
 1..1				ArchetypeId
 1..1				RmVersion
 
-// BALLOT: The ARCHETYPED class doesn't seem to have a purpose. It has neither parents nor children. The hierarchy could be simplified by including two attributes of ARCHETYPED directly in LOCATABLE. 
-// BALLOT: It isn't indicated whether ARCHETYPED an abstract class, but the use of all caps indicates it may be. If so, it should be documented as such. Also, if this is an abstract class, where are its instantiable children?
+// BALLOT: The ARCHETYPED class doesn't seem to have a purpose. It has neither parents nor children. The hierarchy could be simplified by including two attributes of ARCHETYPED directly in LOCATABLE. Additionally, it isn't indicated whether ARCHETYPED an abstract class, but the use of all caps indicates it may be. If so, it should be documented as such. Also, if this is an abstract class, where are its instantiable children?
 
 Element:			ArchetypeId
 Concept:			TBD

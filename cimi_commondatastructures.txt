@@ -124,7 +124,8 @@ Concept:		TBD
 Description:	"Timing abbreviation."
 Value:			CodedText
 // BALLOT: Timing.Code - insufficient documentation ("Timing abbreviation")
-			
+
+		
 
 
 

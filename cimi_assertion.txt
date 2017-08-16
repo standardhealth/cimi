@@ -154,7 +154,7 @@ Description:	"An assertion of a wound."
 Element:		PeriwoundCondition
 Concept:		TBD
 Description:	"A description of the skin around the wound (periwound). (LOINC)"
-Value:			CodedText //from http://example.com/valueset/periwound_condition_range_vs.v0.0.1
+Value:			CodedText // from http://example.com/valueset/periwound_condition_range_vs.v0.0.1
 	
 Element:		WoundSize
 Concept:		TBD

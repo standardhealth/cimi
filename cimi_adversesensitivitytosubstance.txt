@@ -1,4 +1,35 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicaladversesensitivitytosubstance
 Description:	"Package for classes that pertain to Allergies and Intolerances (green in diagram). The AdverseSensitivityToSubstance is a CIMI class used to represent an allergy or intolerance to a substance. Note that it differs from an adverse reaction to a substance in that a patient may have an allergy to peanuts that may only manifest itself when exposed to peanuts or peanut-related products. If exposed, the resulting reaction is modeled using the AdverseReaction class. The predisposition for such adverse reactions when exposure to the substance occurs is captured by AdverseSensitivityToSubstance."
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaladversereaction, cimi.clinicalassertion, cimi.clinicalentity, cimi.clinicalclinicalstatement
+
+
+EntryElement:	AdverseSensitivityToSubstance
+Based on:		BaseAssertion
+Concept:		TBD
+Description:	"Estimate of the potential clinical harm, or seriousness, of the reaction to the identified substance."
+0..1		SubstanceCode
+0..1		Substance
+0..1		SensitivityType
+0..*		Category
+0..1		Criticality
+0..*		AdverseReaction  // DELTA: cut out the middleman
+0..*		SensitivityTest
+
+// BALLOT: 	AdverseSensitivityToSubstance.Substance is type Entity, but should be changed to Substance
+
+Element:		SensitivityType
+Concept:		TBD
+Description:	"A code that indicates whether this sensitivity is of an allergic nature or an intolerance to a substance."
+Value:			Entity
+
+Element:		Criticality
+Concept:		TBD
+Description:	"The potential seriousness of a future reaction. This represents a clinical judgment about the worst case scenario for a future reaction. It would be based on the severity of past reactions, the dose and route of exposure that produced past reactions, and the life-threatening or organ system threatening potential of the reaction type."
+Value:			CodedText
+
+Element:		SensitivityTest
+Concept:		TBD
+Description:	"Tests performed to assess sensitivity to the subject."
+Value:			ProcedurePerformance  // DELTA: Changed AdverseSensitivityToSubstance.Sensitivity test to type ProcedurePerformance
+

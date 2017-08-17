@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalcommondatastructures
 Description:	"The Common Data Structure Package holds a number of data structures used by other classes in the model."
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalprovenance
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalprovenance, cimi.clinicalentity
 
 Element:		Annotation
 Based on:		CLUSTER
@@ -147,6 +147,70 @@ Element:		ReferenceValue
 Concept:		TBD
 Description:	"Code representing the reference range."
 Value:			CodedText
+
+Element:		Registration
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"NEED DEFINITION FOR THIS FIELD."
+0..1			Identifier
+0..1			RegisteringOrganization		
+0..1			Status
+0..1			DateTimeRange 
+// BALLOT: Suggestion: Change Registration INTERVAL_VALUE<DATE_TIME> to change to INTERVAL_VALUE<DATE>
+
+
+Element:		RegisteringOrganization
+Concept:		TBD
+Description:	"NEED DEFINITION FOR THIS FIELD."
+Value:			TEXT
+// TODO: Synonym for IssuingOrganization -- combine into one data element
+
+// BALLOT: "NEED DEFINITION FOR THIS FIELD." Did not find too many of these, but there are some, e.g. HealthCareProviderIndividualRole.Registration
+
+Element:		Qualification
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"The qualifications conferred to the individual acting in this role."
+0..1			QualificationName  // DELTA: Changed from qualification to Name (could be title)
+0..1			Level
+0..1			IssuingInstitution
+1..1			IssuingCountry
+0..1			DateIssued
+0..*			AppliesToRole  // DELTA: Changed from Role to AppliesToRole
+//0..*			Employer   // DELTA: Commented out (see below for reason)
+// BALLOT: Qualification belongs to a person, a person works for an employer. Qualification.Employer should not exist
+// BALLOT: It would be clearer if Qualification.qualification were renamed Qualification.QualificationName
+
+Element:		QualificationName
+Concept:		TBD
+Description:	"The name of the qualification"
+Value:			TEXT
+
+Element:		Level
+Concept:		TBD
+Description:	"The level of the qualification"
+Value:			CodedText
+
+Element:		IssuingInstitution
+Concept:		TBD
+Description:	"The organization responsible for issuing the qualification."
+Value:			TEXT
+// BALLOT: Why would Qualification.IssuingInstitution be type TEXT, not type Organization? I feel we need a better way to handle levels of information, instead of just deciding arbitrarily what is ok as text, and what has to be a fully-fledged object. 
+
+Element:		IssuingCountry
+Concept:		TBD
+Description:	"The issuing country where the qualification is valid."
+Value:			CodedText
+
+Element:		DateIssued
+Concept:		TBD
+Description:	"The date the qualification was issued."
+Value:			Date
+
+Element:		AppliesToRole
+Concept:		TBD
+Description:	"The roles where the qualification applies - e.g. registered nurse, physician"
+Value:			TEXT
 
 
 // TODO: Finish this (many classes missing)

@@ -1,6 +1,126 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalparty
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalentity, cimi.clinicalrelationship, cimi.clinicalcommondatastructures
 
-// TODO: Finish this (many classes missing)
+Element:		Role
+Based on:		BASEROLE
+Concept:		TBD
+Description:	"A role in a participation."
+0..1			DateTimeRange // DELTA: cut out middleman
+0..*			ConfidentialityLevel
+0..1			Status
+
+Element:		ConfidentialityLevel
+Concept:		TBD
+Description:	"Confidentiality level conferred to the role."
+Value:			CodedText
+// BALLOT: Role.ConfidentialityLevel: circular definition "Confidentiality level conferred to the role."
+
+Element:		HealthCareConsumerRole
+Based on:		Role
+Concept:		TBD
+Description:	"Role assumed by an entity acting as a health care consumer."
+0..1			Importance
+0..1			PaperRecord
+0..1			OrganDonorType
+0..*			Diet
+0..*			HealthCareProvider
+0..*			NextOfKin
+0..1			PreferredWrittenCommunicationFormat
+0..1			PreferredContactMethod
+0..1			PreferredContactTime
+
+// BALLOT: HealthCareConsumerRole contains some questionable attributes. (1) Diet is a valid item in a Plan of Care (including when the patient is receives food as an inpatient), but just because a party assumes a HealthCareConsumerRole, doesn't mean that their diet immediately comes into play. (2) OrganDonorType is associated with a person, not the HealthCareConsumerRole. This class confuses information needed in a specific workflow or use case context (ADT?), with information instrinsically associated with the healthcare consumer role. 
+
+Element:		Importance
+Concept:		TBD
+Description:	"Importance associated with the given role such as VIP, etc..."
+Value:			TEXT
+
+Element:		PaperRecord
+Concept:		TBD
+Description:	"NEED DEFINITION."
+Value:			TEXT
+
+Element:		OrganDonorType
+Concept:		TBD
+Description:	"Type of organ donor."
+Value:			CodedText
+
+Element:		Diet
+Concept:		TBD
+Description:	"Diet preferred or requested by entity acting in this role (e.g., a patient diabetic diet)."
+Value:			TEXT
+
+Element:		HealthCareProvider
+Concept:		TBD
+Description:	"The health care provider associated with this role such as the primary provider for a patient."
+Value:			HealthCareProviderRelationship
+// BALLOT: HealthCareConsumerRole.HealthCareProvider (datatype HealthCareProviderRelationship) is self-inconsistent. Either it is a Provider or it is a Relationship, but it can't be both. Since we link roles with relationships, it should a relationship. Same comment applies to HealthCareConsumerRole.NextOfKin. For comparison, see HealthCareProviderRole.OrganizationRelationship
+
+Element:		NextOfKin
+Concept:		TBD
+Description:	"The next of kin for the health care consumer."
+Value:			NextOfKinRelationship
+
+Element:		PreferredWrittenCommunicationFormat
+Concept:		TBD
+Description:	"Preferred format for written communication."
+Value:			TEXT
+
+Element:		PreferredContactMethod
+Concept:		TBD
+Description:	"Preferred contact methods."
+Value:			CodedText
+		
+Element:		PreferredContactTime
+Concept:		TBD
+Description:	"Preferred time to contact entity acting in this role."
+Value:			DateTimeRange
+// BALLOT: HealthCareConsumerRole.PreferredContactTime should not be an Inter_Value<Date_Time>. It should be a time of day, i.e., Interval_Value<Time>. Additionally, consider changing the cardinality to 0..*, not 0..1, since someone might want to be reached at various times of day, e.g., either before work, during lunch, or after work.
+
+Element:		HealthCareProviderRole		
+Based on:		Role
+Concept:		TBD
+Description:	"Role associated with the delivery of health care as opposed to a consumer of health care."
+Value:			CodedText
+0..*			FieldOfPractice
+0..1			PrimaryIndicator
+0..1			ProviderType
+0..1			ProviderClassification
+0..*			OrganizationRelationship
+
+Element:		FieldOfPractice
+Concept:		TBD
+Description:	"The field of practice for the given provider."
+Value:			CodedText
+
+Element:		PrimaryIndicator
+Concept:		TBD
+Description:	"NEED DEFINITION FOR THIS FIELD"
+Value:			CodedText
+// BALLOT: HealthCareProviderRole.PrimaryIndicator is type CodedText, but probably should be a boolean.
+
+Element:		ProviderType
+Concept:		TBD
+Description:	"Code indication the type of health care provider role."
+Value:			TEXT
+// BALLOT: HealthCareProviderRole.ProviderType is type TEXT, but defined as "Code indication the type of health care provider role." If the defintion is accurate, it should be type CodedText.
+
+Element:		ProviderClassification
+Concept:		TBD
+Description:	"Classification for this role."
+Value:			TEXT
+
+Element:		HealthCareProviderIndividualRole
+Based on:		HealthCareProviderRole
+Concept:		TBD
+Description:	"A healthcare provider role associated with a person."
+0..*			Registration
+0..*			Qualification
+//0..*			Role  // DELTA: commented out (see comment below)
+0..*			EmployerRelationship  // DELTA: Eliminated middleman
+// Already noted: HealthCareProviderIndividualRole.Role is extraneous. There is already a 'type' attribute
+	
+

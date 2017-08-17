@@ -7,7 +7,7 @@ Abstract Element:	LOCATABLE
 Concept:			TBD
 Description:		"Most classes in the CIMI reference model inherit from the LOCATABLE class, which defines the idea of 'locatability in an archetyped structure'. LOCATABLE defines a runtime name and an archetype_node_id. The archetype_node_id is the standardised semantic code for a node and comes from the corresponding node in the archetype used to create the data. The only exception is at archetype root points in data, where archetype_node_id carries the archetype identifier in string form rather than an interior node id from an archetype. LOCATABLE also provides the attribute archetype_details, which is non-Void for archetype root points in data, and carries meta-data relevant to root points. The name attribute carries a name created at runtime. The 'meaning' of any node is derived formally from the archetype by obtaining the text value for the archetype_node_id code from the archetype ontology section, in the language required."
 1..1				ArchetypeNodeId
-1..1				Name
+1..1				ArchetypeRuntimeName  // DELTA: Changed from 'name' to ArchetypeRuntimeName, so that Name can be used elsewhere
 0..1				ArchetypeDetails
 // BALLOT:	The LOCATABLE class, ArchetypeNodeId, ArchetypeDetails, represent implementation and do not belong in a logical model of healthcare. They are evidence of the way we currently are storing CIMI models, which is subject to change. If we change the way the model is stored, it should not impact the attributes of BloodPressure or WoundAssertion. Additionally, the root class should not be called "LOCATABLE". So-called LOCATABLEs are not actually locatable (findable, retrievable) from a healthcare user point. Only ENTRYs are actually "locatable".
 
@@ -16,7 +16,7 @@ Concept:			TBD
 Description:		"The standardised semantic code for a node and comes from the corresponding node in the archetype used to create the data. The only exception is at archetype root points in data, where archetype_node_id carries the archetype identifier in string form rather than an interior node id from an archetype."
 Value:				string
 
-Element:			Name
+Element:			ArchetypeRuntimeName  
 Concept:			TBD
 Description:		"A name created at runtime."  
 Value:				string

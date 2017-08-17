@@ -212,6 +212,12 @@ Description:	"Base class for the act of prescribing, documenting, administering,
 0..*			Device
 0..*			Dosage
 
+Element:		SubstitutionBase
+Based on:		VIRTUALCLUSTER
+Concept:		TBD
+Description:	"Base class for prospective and retrospective medication substitution information."
+0..*			Reason
+
 Element:		MedicationDispensePerformance  // TODO: CLI error -- if we change this to an EntryElement, we get a stack overflow 
 Based on:		Performance
 Concept:		TBD
@@ -229,6 +235,7 @@ Description:	"Context for a medication order."
 0..1			PharmacyOrderSetting
 
 Element:		SubstitutionInstruction
+Based on:		SubstitutionBase
 Concept:		TBD
 Description:	"Medication substitution instructions - primarily whether substitutions are allowed."
 0..1			WasSubstituted
@@ -326,6 +333,7 @@ Description:	"'This describes the type of schedule for the dispensing of the med
 Value:			CodedText
 
 Element:		SubstitutionInformation
+Based on:		SubstitutionBase
 Concept:		TBD
 Description:	"If the Pharmacist has changed the kind of medication to be dispensed to the patient from the one originally ordered by the prescriber, this property provides a categorization of the kind of substitution that was made. 'Refer to HL7 Table 0167 - Substitution Status in Chapter 2C for suggested values.' - HL7 Version 2.8, RXD-11. 'Refer to HL7 Table 0167 - Substitution Status in Chapter 2C for suggested values.' - HL7 Version 2.8, RXE-9. 'Product&#47;Service Substitution, coded' - NCPDP Script (Field 4457, Data Dictionary 201104) 'Code indicating whether or not the prescriber’s instructions regarding generic substitution were followed.' - NCPDP Telecommunication (Field 408-D8, Data Dictionary 201104). ----- Possible values include (from HL7 Table 167): No substitute was dispensed. This is equivalent to the default (null) value; A generic substitution was dispensed; A therapeutic substitution was dispensed; No product selection indicated; Substitution not allowed by prescriber; Substitution allowed - patient requested product dispensed; Substitution allowed - pharmacist selected product dispensed; Substitution allowed - generic drug not in stock; Substitution allowed - brand drug dispensed as a generic; Substitution not allowed - brand drug mandated by law; Substitution allowed - generic drug not available in marketplace. ----- Possible values include (From NCPDP ECL): No Product Selection Indicated Substitution Not Allowed by Prescriber Substitution Allowed - Patient Requested Product Dispensed Substitution Allowed - Pharmacist Selected Product Dispensed Substitution Allowed - Generic Drug Not in Stock Substitution Allowed - Brand Drug Dispensed as a Generic Override Substitution Not Allowed - Brand Drug Mandated by Law Substitution Allowed - Generic Drug Not Available in Marketplace Substitution Allowed By Prescriber but Plan Requests Brand - Patient's Plan Requested Brand Product To Be Dispensed"
 0..1			WasSubstituted
@@ -348,6 +356,7 @@ Element:		TotalDailyDose
 Concept:		TBD
 Description:	"The total daily dose for this particular pharmaceutical as expressed in terms of actual dispense units.' - HL7 Version 2.8, RXE-19."
 Value:			Quantity
+
 
 
 

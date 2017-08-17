@@ -2,3 +2,5 @@ Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalparty
 Description:	""
 Uses:			cimi.datatypes, cimi.foundation
+
+// TODO: Finish this (many classes missing)

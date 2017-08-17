@@ -1,4 +1,353 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalpharmacy
-Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Description:	"The Pharmacy package contains classes related to the administration and dispense of medications. Pharmacy classes can be used to represent Medication Administration, Medication Statement, Medication Request, and Medication Dispense. They are derived from archetypes on the following clinical statements, topics, and contexts:
+Medication Administration: ClinicalStatement<MedicationAct,(Non)Performance>
+Medication Dispense: ClinicalStatement<MedicationAct,MedicationDispensePerformance>
+Medication Request: ClinicalStatement<MedicationAct,MedicationOrder>
+Medication Statement: ClinicalStatement<MedicationAct,(Non)Performance>"
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalcommondatastructures, cimi.clinicaltopiccore, cimi.clinicalentity, cimi.clinicalcontextcore
+
+Element:		DispenseBase
+Based on:		VIRTUALCLUSTER
+Concept:		TBD
+Description:	"Base class for dispense contexts."
+1..1			Quantity
+
+EntryElement:	DispenseEvent
+Based on:		DispenseBase
+Concept:		TBD
+Description:	"Record of the dispensing event."
+0..1			Type
+0..1			DaysSupply
+0..1			WhenPrepared
+0..1			WhenHandedOver
+0..1			Destination
+0..*			Receiver
+// BALLOT: The cardinality of DispenseEvent.Receiver is currently 0..*. How can a single dispense go to multiple receivers? Is there a use case for this? If not, it should be changed to 0..1
+// BALLOT: DispenseEvent should inherit from ActionTopic (or ProcedureTopic). Currently it inherits from VIRTUAL_CLUSTER.
+
+
+Element:		DaysSupply
+Concept:		TBD
+Description:	"Amount of medication expressed as a timing amount"
+Value:			Quantity
+
+Element:		WhenPrepared
+Concept:		TBD
+Description:	"The time when the dispensed product was packaged and reviewed."
+Value:			DateTime
+
+Element:		WhenHandedOver
+Concept:		TBD
+Description:	"The time the dispensed product was provided to the patient or their representative."
+Value:			DateTime
+
+Element:		Destination
+Concept:		TBD
+Description:	"Identification of the facility&#47;location where the medication was shipped to, as part of the dispense event."
+Value:			PARTICIPATION
+// BALLOT: DispenseEvent.Destination is the wrong datatype. It should be a Location, not a PARTICIPATION
+
+Element:		Receiver
+Concept:		TBD
+Description:	"Identifies the person who picked up the medication. This will usually be a patient or their caregiver, but some cases exist where it can be a healthcare professional."
+Value:			PARTICIPATION
+// BALLOT: DispenseEvent.Receiver is the wrong datatype. It should be a PARTY, not a PARTICIPATION
+
+EntryElement:	DispenseInstructions
+Based on:		DispenseBase
+Concept:		TBD
+Description:	"Medication dispensing instructions for prospective clinical statements."
+0..1			AreRefillsAuthorizedAsNeeded
+0..1			ValidityPeriod
+0..1			NumberOfRepeatsAllowed
+0..1			ExpectedSupplyDuration
+
+Element:		AreRefillsAuthorizedAsNeeded
+Concept:		TBD
+Description:	"Indicates whether the prescriber has authorized additional fills of this order as needed."
+Value:			YesNo
+
+Element:		ValidityPeriod
+Concept:		TBD
+Description:	"The period when this dispense request is valid."
+Value:			DateRange
+
+Element:		NumberOfRepeatsAllowed
+Concept:		TBD
+Description:	"Defines the number of times the requested dispense amount can be given to the patient, subject to local regulation. Refers to outpatient only.' - HL7 Version 2.8, RXO-13. 'The total original number of refills. Outpatient only' - HL7 Version 2.8, RXE-12. 'An integer indicating the number of times, in addition to the original dispense, (aka refills or repeats) that the patient can receive the prescribed medication. Usage Notes: This integer does NOT include the original order dispense. This means that if an order indicates dispense 30 tablets plus '3 repeats', then the order can be dispensed a total of 4 times and the patient can receive a total of 120 tablets.' - HL7 FHIR, MedicationOrder.dispenseRequest.numberOfRepeatsAllowed 'Number of refills authorized by the prescriber.' - NCPDP Telecommunication (Field 415-DF, Data Dictionary 201104). Note that while the NCPDP Telecommunication structure treats this field as a code, it contains a number from 0-99, where zero means no refills authorized, and 1-98 are the number of refills authorized, and 99 means unlimited refills authorized."
+Value:			Count
+
+Element:		ExpectedSupplyDuration
+Concept:		TBD
+Description:	"Identifies the period time over which the supplied product is expected to be used, or the length of time the dispense is expected to last."
+Value:			Quantity
+// BALLOT: DispenseInstructions.ExpectedSupplyDuration should be datatype Duration, not Quantity.
+
+EntryElement:	Dosage
+Concept:		TBD
+Description:	"Base class for medication dosage instruction and dosage event."
+0..1			DosageAsText
+0..*			AdministrationBodySite  // DELTA: Changed to AdministrationBodySite to distinguish from general BodySite in entity
+0..*			BodySiteCode
+0..1			Route
+0..1			Method
+0..1			Dose
+0..1			Rate
+0..1			RateRatio
+// Dosage is a class without a parent class. I can't think of another class in CIMI that doesn't somehow descend from LOCATABLE. I think this must be a mistake. Should the parent be CLUSTER?
+
+Element:		DosageAsText
+Concept:		TBD
+Description:	"How the medication is&#47;was taken or should be taken"
+Value:			PlainText
+
+Element:		AdministrationBodySite
+Concept:		TBD
+Description:	"Body site to administer to"
+Value:			AnatomicalLocation
+
+Element:		BodySiteCode
+Concept:		TBD
+Description:	"Body site to administer to as a precoordinated code."
+Value:			CodedText
+// BALLOT: CIMI recognizes isosemantic forms, in particular, the Analysis Normal Form (ANF) and Clinical Entry Form (CEF). Are the classes in CIMI supposed to be one or the other, or are they supposed to be both simultaneously? I see cases (I'm looking at Dosage right now, but there are many others) where there is a specific spot for a pre-coordinated code (e.g., Dosage.BodySiteCode) and at the same time, there is a place for a post coordinated form (Dosage.BodySite which is an AnatomicalLocation with separate laterality, direction, etc.). If it is the intended design that the CIMI classes are "unions" of ANF and CEF forms, then how will we designate the portion of the structure that should be used for ANF, as opposed to the different portion of the structure that should be used for CEF? Are we going down a path that is going to require layering profiles on top of CIMI classes (one ANF profile, and one or more CEF profiles)? My recommendation is to create structures for ANF only. Transforms can do the rest.
+
+Element:		Route
+Concept:		TBD
+Description:	"How drug should enter body"
+Value:			CodedText
+
+Element:		Dose
+Concept:		TBD
+Description:	"Amount of medication per dose"
+Value:			Quantity
+
+Element:		Rate
+Concept:		TBD
+Description:	"Technique for administering medication"
+Value:			Quantity
+
+Element:		RateRatio
+Concept:		TBD
+Description:	"Amount of medication per dose"
+Value:			Proportion // DELTA: changed Class<T> to Proportion
+// BALLOT: Dosage.RateRatio is incorrect; should be datatype Proportion, not Class<T>
+
+Element:		DosageEvent
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Pattern for the dosing of a medication. Describes the medication dosage information details e.g. dose, rate, site, route, etc."
+// BALLOT: The class DosageEvent seems to be devoid of purpose. It descends from CLUSTER, has no additional attributes, and no descendants. Should be removed.
+
+EntryElement:	DosageInstruction
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Pattern for the dosing of a medication. Describes how medication is to be administered or how it should be taken."
+1..1			Sequence
+0..*			AdditionalInstructions
+0..*			PatientInstruction
+0..1			Timing
+0..1			AsNeeded
+0..1			DoseRange
+0..1			RateRange
+0..1			MaxDosePerPeriod
+0..1			MaxDosePerAdministration
+0..1			MaxDosePerLifetime
+
+Element:		Sequence
+Concept:		TBD
+Description:	"The order of the dosage instructions"
+Value:			Count
+
+Element:		AdditionalInstructions
+Concept:		TBD
+Description:	"Supplemental instruction - e.g. 'with meals'"
+Value:			CodedText
+
+Element:		PatientInstruction
+Concept:		TBD
+Description:	"Supplemental instruction - e.g. 'with meals'"
+Value:			TEXT
+// BALLOT: DosageInstruction.AdditionalInstructions and DosageInstruction.PatientInstruction have exactly the same definition ("Supplemental instruction - e.g. 'with meals'"). Certainly, the two definitions should not be identical. Additionally, the former is type CodedText, the latter is TEXT. Is there a reason for that?
+
+Element:		AsNeeded
+Concept:		TBD
+Description:	"Take 'as needed' (for x)"
+Value:			CodedText
+
+Element:		DoseRange
+Concept:		TBD
+Description:	"Amount of medication per dose"
+Value:			QuantitativeReferenceRange
+// BALLOT: DoseRange.DosageInstruction datatype should be IntervalValue<Quantity>. Defining the attribute as a QuantitativeReferenceRange, which is of type IntervalValue<Quantity>, has little added value, and just adds a level of unneeded complexity and indirection. (For comparison, look at DoseRange.RateRange -- it is a simple IntervalValue, no need for a "middleman" class.)
+
+Element:		RateRange
+Concept:		TBD
+Description:	"Amount of medication per unit of time"
+Value:			IntervalValue
+
+Element:		MaxDosePerPeriod
+Concept:		TBD
+Description:	"Upper limit on medication per unit of time"
+Value:			Quantity // DELTA: Changed DosageInstruction.MaxDosePerPeriod to Quantity
+// BALLOT: DosageInstruction.MaxDosePerPeriod should be datatype Quantity, not Class<T>
+
+Element:		MaxDosePerAdministration
+Concept:		TBD
+Description:	"Upper limit on medication per administration"
+Value:			Quantity
+
+Element:		MaxDosePerLifetime
+Concept:		TBD
+Description:	"Upper limit on medication per lifetime of the patient"
+Value:			Quantity
+
+Element:		MedicationAct
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Base class for the act of prescribing, documenting, administering, or dispensing a medication."
+0..1			Medication
+0..1			MedicationCode
+0..*			Device
+0..*			Dosage
+
+Element:		MedicationDispensePerformance  // TODO: CLI error -- if we change this to an EntryElement, we get a stack overflow 
+Based on:		Performance
+Concept:		TBD
+Description:	"Context for the documentation of a medication dispense event."
+1..1			DispenseEvent // DELTA: cut out middleman
+0..1			SubstitutionInformation // DELTA: cut out middleman
+
+EntryElement:	MedicationOrder	
+Based on:		Order
+Concept:		TBD
+Description:	"Context for a medication order."
+0..1			DispenseInstructions
+0..1			SubstitutionInstruction
+0..1			PharmacyOrderCategory
+0..1			PharmacyOrderSetting
+
+Element:		SubstitutionInstruction
+Concept:		TBD
+Description:	"Medication substitution instructions - primarily whether substitutions are allowed."
+0..1			WasSubstituted
+0..1			Type
+0..1			ResponsibleParty
+
+// BALLOT:  SubstitutionInstruction.WasSubstituted should be eliminated. There is another class, SubstitutionInformation, to record whether a substitution was actually made. The instruction is just a directive, not a record of how the instruction was followed. 
+
+Element:		PharmacyOrderCategory
+Concept:		TBD
+Description:	"This optional property is used to group related medication orders. It is included for compatibility with HL7 version 2. 'Defines the general category of pharmacy order which may be used to determine the processing path the order will take.... This field may also be used for grouping of related orders for processing and&#47;or reports. For example, Medication Administration Records often group large volume solutions, medications and small volume solutions differently based upon site-specific workflow.' - HL7 Version 2.8, RXA-26, RXD-32, and RXO-27. Valid values (from HL7 Table 0480) include: Medication; IV Large Volume Solutions; Other solution as medication orders."
+Value:			CodedText
+
+Element:		PharmacyOrderSetting
+Concept:		TBD
+Description:	"'Indicates where type of medication order and where the medication is expected to be consumed or administered.' - HL7 FHIR, MedicationOrder.category Possible values include: Inpatient, Outpatient, Community"
+Value:			CodedText
+
+
+Element:		PharmacyPromise	
+Based on:		Promise
+Concept:		TBD
+Description:	"This class represents the prescription context from the perspective of the filling system (i.e., the pharmacy) whereas the Pharmacy Request represents the prescription from the ordering system (i.e., the prescriber). This class is a subtype of the more general Healthcare Promise, which describes properties common to all types or Orders from the filling system perspective– this class adds those properties which are specific to medication orders. This class is called Pharmacy Promise rather than Pharmacy Order following the HL7 V3 convention to use the term Promise to indicate that it is from the filling system’s perspective. There are many properties which are identical to the Order; this is because the pharmacy may change the order, within prescribed limits, for example substituting a generic drug for a brand-named one."
+0..1			AppointmentTime
+0..1			ExpirationDate
+0..1			IsHospitalSuppliedSelfAdministered
+0..1			IsSelfAdministered
+0..1			LastDispenseDate
+0..1			NeedsHumanReview
+0..1			NumberOfRefillsOrDosesDispensed
+0..1			NumberOfRefillsRemaining
+0..*			RequestedAdministrationTime
+0..1			RequestedDuration
+0..1			ScheduleType
+0..1			SubstitutionInformation // DELTA: removed middleman
+0..1			TotalDailyDose
+
+Element:		AppointmentTime
+Concept:		TBD
+Description:	"Date and time of the appointment for this clinic location."
+Value:			DateTime
+
+Element:		ExpirationDate
+Concept:		TBD
+Description:	"The date after which the order may no longer be filled."
+Value:			DateTime
+
+Element:		IsHospitalSuppliedSelfAdministered
+Concept:		TBD
+Description:	"A flag indicating that the medication given to the patient is to be self administered and is to be supplied by the hospitals pharmacy while they are an inpatient."
+Value:			YesNo
+// BALLOT: Change PharmacyPromise.IsHospitalSuppliedSelfAdministered from YesNo to boolean
+
+Element:		IsSelfAdministered
+Concept:		TBD
+Description:	"A flag indicating that the medication given to the patient is to be self administered."
+Value:			YesNo
+// BALLOT: Change PharmacyPromise.IsSelfAdministered from YesNo to boolean
+
+Element:		LastDispenseDate
+Concept:		TBD
+Description:	"The most recent date (and optionally time) that the medication was distributed to a patient, patient care-giver, or the location at which the patient is receiving care. 'Date&#47;time of the most recent refill or dose dispensed.' - HL7 Version 2.8, RXE-18."
+Value:			DateTime
+
+Element:		NeedsHumanReview
+Concept:		TBD
+Description:	"This optional property is included for compatibility with HL7 version 2. It is used in version 2 messaging to convey that a warning is present in the dispensing instructions field and that downstream applications are expected to alert the human user to the presence of the warning. 'Yes - Indicates that a warning is present. The application receiving the encoded order needs to warn the person administering the drug or treatment to pay attention to the text in RXE-21-pharmacy&#47;treatment special dispensing instructions. No - Indicates no warning ' - HL7 Version 2.8, RXE-20."
+Value:			YesNo
+// BALLOT: Change PharmacyPromise.NeedsHumanReview from YesNo to boolean
+
+Element:		NumberOfRefillsOrDosesDispensed
+Concept:		TBD
+Description:	"Number of refills remaining.' - HL7 Version 2.8, RXE-17."
+Value:			Count
+
+Element:		NumberOfRefillsRemaining
+Concept:		TBD
+Description:	"Indicates the number of times the order may be filled without additional authorization. It is calculated by substracting the number of fills already completed from the number of fills authorized by the prescriber. 'This field is conditional because it is required when a prescription is dispensed to an outpatient. It is not relevant to inpatient treatment orders.' - HL7 Version 2.8, RXD-8. 'Number of refills remaining.' - HL7 Version 2.8, RXE-16."
+Value:			Count
+
+Element:		RequestedAdministrationTime
+Concept:		TBD
+Description:	"Specifies when the service is to be performed and how frequently. Note that this is a complex data type that may indicate specific times or intervals (e.g., 10:00 AM, MWF, etc)."
+Value:			IntervalValue
+
+Element:		RequestedDuration
+Concept:		TBD
+Description:	"The duration of an order as requested by the ordering clinician. The duration would be expressed as a number of days, weeks, hours, etc. Note that this length of time might be determined by a business rule of the facilty. For example, most facilties will have a limit of 7 days for antibiotics, and 3 days for schedule 1 drugs."
+Value:			Quantity
+// BALLOT: PharmacyPromise.RequestedDuration should be datatype Duration, not Quantity
+
+Element:		ScheduleType
+Concept:		TBD
+Description:	"'This describes the type of schedule for the dispensing of the medication(s) that make up the order. PRE-OP orders are usually considered to be ON-CALL orders, and orders dispensed as MULTI-DOSE CONTAINERS are usually considered to be FILL ON REQUEST orders. C=Continuous, O=One Time, P=PRN, R=Fill On Request, OC=On Call.' (VistA)"
+Value:			CodedText
+
+Element:		SubstitutionInformation
+Concept:		TBD
+Description:	"If the Pharmacist has changed the kind of medication to be dispensed to the patient from the one originally ordered by the prescriber, this property provides a categorization of the kind of substitution that was made. 'Refer to HL7 Table 0167 - Substitution Status in Chapter 2C for suggested values.' - HL7 Version 2.8, RXD-11. 'Refer to HL7 Table 0167 - Substitution Status in Chapter 2C for suggested values.' - HL7 Version 2.8, RXE-9. 'Product&#47;Service Substitution, coded' - NCPDP Script (Field 4457, Data Dictionary 201104) 'Code indicating whether or not the prescriber’s instructions regarding generic substitution were followed.' - NCPDP Telecommunication (Field 408-D8, Data Dictionary 201104). ----- Possible values include (from HL7 Table 167): No substitute was dispensed. This is equivalent to the default (null) value; A generic substitution was dispensed; A therapeutic substitution was dispensed; No product selection indicated; Substitution not allowed by prescriber; Substitution allowed - patient requested product dispensed; Substitution allowed - pharmacist selected product dispensed; Substitution allowed - generic drug not in stock; Substitution allowed - brand drug dispensed as a generic; Substitution not allowed - brand drug mandated by law; Substitution allowed - generic drug not available in marketplace. ----- Possible values include (From NCPDP ECL): No Product Selection Indicated Substitution Not Allowed by Prescriber Substitution Allowed - Patient Requested Product Dispensed Substitution Allowed - Pharmacist Selected Product Dispensed Substitution Allowed - Generic Drug Not in Stock Substitution Allowed - Brand Drug Dispensed as a Generic Override Substitution Not Allowed - Brand Drug Mandated by Law Substitution Allowed - Generic Drug Not Available in Marketplace Substitution Allowed By Prescriber but Plan Requests Brand - Patient's Plan Requested Brand Product To Be Dispensed"
+0..1			WasSubstituted
+0..1			Type
+0..*			ResponsibleParty
+
+Element:		WasSubstituted
+Concept:		TBD
+Description:	"Whether a substitution was or was not performed on the dispense"
+Value:			YesNo
+// BALLOT: Change SubstitutionInformation.WasSubstituted from YesNo to boolean
+
+Element:		ResponsibleParty
+Concept:		TBD
+Description:	"Who is responsible for the substitution"
+Value:			PARTICIPATION
+// BALLOT: SubstitutionInformation.ResponsibleParty should be a PARTY, not a PARTICIPATION
+
+Element:		TotalDailyDose
+Concept:		TBD
+Description:	"The total daily dose for this particular pharmaceutical as expressed in terms of actual dispense units.' - HL7 Version 2.8, RXE-19."
+Value:			Quantity
+
+
+

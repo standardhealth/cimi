@@ -112,6 +112,7 @@ Element:		Performed
 Concept:		TBD
 Description:	"The party that performed the action."
 Value:			Attribution
+// BALLOT: Performance.Performed is defined as "The party that performed the action."  Should this be changed to Performance.Performer?
 
 Element:		EnactsPlan
 Concept:		TBD
@@ -266,105 +267,3 @@ Element:		OrderDiscontinueDate
 Concept:		TBD
 Description:	"This is the date the order was discontinued."
 Value:			DateTime
-
-Element:		PharmacyPromise	
-Based on:		Promise
-Concept:		TBD
-Description:	"This class represents the prescription context from the perspective of the filling system (i.e., the pharmacy) whereas the Pharmacy Request represents the prescription from the ordering system (i.e., the prescriber). This class is a subtype of the more general Healthcare Promise, which describes properties common to all types or Orders from the filling system perspective– this class adds those properties which are specific to medication orders. This class is called Pharmacy Promise rather than Pharmacy Order following the HL7 V3 convention to use the term Promise to indicate that it is from the filling system’s perspective. There are many properties which are identical to the Order; this is because the pharmacy may change the order, within prescribed limits, for example substituting a generic drug for a brand-named one."
-0..1			AppointmentTime
-0..1			ExpirationDate
-0..1			IsHospitalSuppliedSelfAdministered
-0..1			IsSelfAdministered
-0..1			LastDispenseDate
-0..1			NeedsHumanReview
-0..1			NumberOfRefillsOrDosesDispensed
-0..1			NumberOfRefillsRemaining
-0..*			RequestedAdministrationTime
-0..1			RequestedDuration
-0..1			ScheduleType
-0..1			SubstitutionInformation // DELTA: removed middleman
-0..1			TotalDailyDose
-
-Element:		AppointmentTime
-Concept:		TBD
-Description:	"Date and time of the appointment for this clinic location."
-Value:			DateTime
-
-Element:		ExpirationDate
-Concept:		TBD
-Description:	"The date after which the order may no longer be filled."
-Value:			DateTime
-
-Element:		IsHospitalSuppliedSelfAdministered
-Concept:		TBD
-Description:	"A flag indicating that the medication given to the patient is to be self administered and is to be supplied by the hospitals pharmacy while they are an inpatient."
-Value:			YesNo
-// BALLOT: Change PharmacyPromise.IsHospitalSuppliedSelfAdministered from YesNo to boolean
-
-Element:		IsSelfAdministered
-Concept:		TBD
-Description:	"A flag indicating that the medication given to the patient is to be self administered."
-Value:			YesNo
-// BALLOT: Change PharmacyPromise.IsSelfAdministered from YesNo to boolean
-
-Element:		LastDispenseDate
-Concept:		TBD
-Description:	"The most recent date (and optionally time) that the medication was distributed to a patient, patient care-giver, or the location at which the patient is receiving care. 'Date&#47;time of the most recent refill or dose dispensed.' - HL7 Version 2.8, RXE-18."
-Value:			DateTime
-
-Element:		NeedsHumanReview
-Concept:		TBD
-Description:	"This optional property is included for compatibility with HL7 version 2. It is used in version 2 messaging to convey that a warning is present in the dispensing instructions field and that downstream applications are expected to alert the human user to the presence of the warning. 'Yes - Indicates that a warning is present. The application receiving the encoded order needs to warn the person administering the drug or treatment to pay attention to the text in RXE-21-pharmacy&#47;treatment special dispensing instructions. No - Indicates no warning ' - HL7 Version 2.8, RXE-20."
-Value:			YesNo
-// BALLOT: Change PharmacyPromise.NeedsHumanReview from YesNo to boolean
-
-Element:		NumberOfRefillsOrDosesDispensed
-Concept:		TBD
-Description:	"Number of refills remaining.' - HL7 Version 2.8, RXE-17."
-Value:			Count
-
-Element:		NumberOfRefillsRemaining
-Concept:		TBD
-Description:	"Indicates the number of times the order may be filled without additional authorization. It is calculated by substracting the number of fills already completed from the number of fills authorized by the prescriber. 'This field is conditional because it is required when a prescription is dispensed to an outpatient. It is not relevant to inpatient treatment orders.' - HL7 Version 2.8, RXD-8. 'Number of refills remaining.' - HL7 Version 2.8, RXE-16."
-Value:			Count
-
-Element:		RequestedAdministrationTime
-Concept:		TBD
-Description:	"Specifies when the service is to be performed and how frequently. Note that this is a complex data type that may indicate specific times or intervals (e.g., 10:00 AM, MWF, etc)."
-Value:			IntervalValue
-
-Element:		RequestedDuration
-Concept:		TBD
-Description:	"The duration of an order as requested by the ordering clinician. The duration would be expressed as a number of days, weeks, hours, etc. Note that this length of time might be determined by a business rule of the facilty. For example, most facilties will have a limit of 7 days for antibiotics, and 3 days for schedule 1 drugs."
-Value:			Quantity
-// BALLOT: PharmacyPromise.RequestedDuration should be datatype Duration, not Quantity
-
-Element:		ScheduleType
-Concept:		TBD
-Description:	"'This describes the type of schedule for the dispensing of the medication(s) that make up the order. PRE-OP orders are usually considered to be ON-CALL orders, and orders dispensed as MULTI-DOSE CONTAINERS are usually considered to be FILL ON REQUEST orders. C=Continuous, O=One Time, P=PRN, R=Fill On Request, OC=On Call.' (VistA)"
-Value:			CodedText
-
-Element:		SubstitutionInformation
-Concept:		TBD
-Description:	"If the Pharmacist has changed the kind of medication to be dispensed to the patient from the one originally ordered by the prescriber, this property provides a categorization of the kind of substitution that was made. 'Refer to HL7 Table 0167 - Substitution Status in Chapter 2C for suggested values.' - HL7 Version 2.8, RXD-11. 'Refer to HL7 Table 0167 - Substitution Status in Chapter 2C for suggested values.' - HL7 Version 2.8, RXE-9. 'Product&#47;Service Substitution, coded' - NCPDP Script (Field 4457, Data Dictionary 201104) 'Code indicating whether or not the prescriber’s instructions regarding generic substitution were followed.' - NCPDP Telecommunication (Field 408-D8, Data Dictionary 201104). ----- Possible values include (from HL7 Table 167): No substitute was dispensed. This is equivalent to the default (null) value; A generic substitution was dispensed; A therapeutic substitution was dispensed; No product selection indicated; Substitution not allowed by prescriber; Substitution allowed - patient requested product dispensed; Substitution allowed - pharmacist selected product dispensed; Substitution allowed - generic drug not in stock; Substitution allowed - brand drug dispensed as a generic; Substitution not allowed - brand drug mandated by law; Substitution allowed - generic drug not available in marketplace. ----- Possible values include (From NCPDP ECL): No Product Selection Indicated Substitution Not Allowed by Prescriber Substitution Allowed - Patient Requested Product Dispensed Substitution Allowed - Pharmacist Selected Product Dispensed Substitution Allowed - Generic Drug Not in Stock Substitution Allowed - Brand Drug Dispensed as a Generic Override Substitution Not Allowed - Brand Drug Mandated by Law Substitution Allowed - Generic Drug Not Available in Marketplace Substitution Allowed By Prescriber but Plan Requests Brand - Patient's Plan Requested Brand Product To Be Dispensed"
-0..1			WasSubstituted
-0..1			Type
-0..*			ResponsibleParty
-
-Element:		WasSubstituted
-Concept:		TBD
-Description:	"Whether a substitution was or was not performed on the dispense"
-Value:			YesNo
-// BALLOT: Change SubstitutionInformation.WasSubstituted from YesNo to boolean
-
-Element:		ResponsibleParty
-Concept:		TBD
-Description:	"Who is responsible for the substitution"
-Value:			PARTICIPATION
-// BALLOT: SubstitutionInformation.ResponsibleParty should be a PARTY, not a PARTICIPATION
-
-Element:		TotalDailyDose
-Concept:		TBD
-Description:	"The total daily dose for this particular pharmaceutical as expressed in terms of actual dispense units.' - HL7 Version 2.8, RXE-19."
-Value:			Quantity
-

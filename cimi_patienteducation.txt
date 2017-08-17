@@ -1,4 +1,38 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalpatienteducation
-Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Description:	"Package for classes that pertain to Patient Education."
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalprovenance, cimi.clinicaltopiccore
+
+Element:		PatientRelatedEducation
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"This class captures information about counselling or education provided to (or an attempt to provide to) the Patient or to the Patient's representative and provides a means to note how well the Patient understood the information provided. Patient Education may be in the form of written instructions – either pre-defined materials, or personalized instructions – as well as oral counseling. In the case of pre-defined written materials, the educationalMaterialsProvided property may be used to identify the kind of material provided rather than reproducing the text of that material in this class. When personalized written instructions are provided, the text of such instructions can be placed in the textProvided property. The textProvided property may also be used to store a summary of an oral conversation with the Patient."
+0..1			EducationBarrier
+0..1			EducationMethod
+0..1			PredefinedEducationalMaterial
+0..*			PersonalizedEducationMaterial
+0..1			Location
+
+// BALLOT: The cardinality of PatientRelatedEducation.PredefinedEducationalMaterial should be changed to 0..* to match the definition as plural "pre-defined written materials" and also to match the cardinality of PersonalizedEducationMaterial.
+
+// BALLOT: PatientRelatedEducation: Also relevant is the providing organization.
+
+Element:		EducationBarrier
+Concept:		TBD
+Description:	"Cognitive or sensory barriers to receiving counseling."
+Value:			CodedText
+
+Element:		EducationMethod
+Concept:		TBD
+Description:	"The communication method used to provide the patient counseling."
+Value:			CodedText
+
+Element:		PredefinedEducationalMaterial
+Concept:		TBD
+Description:	"This property identifies any pre-defined written materials provided to the Patient. In many cases, Patient Education is accomplished by the provision of standardized materials produced based on the Patient's condition or based on a Procedure that the Patient has undergone. For example, there is a standardized Discharge Instructions for Diverticulitis. Use this property to identify any pre-printed materials provided to the patient. Use the textProvided property to identify any other personalized instructions."
+Value:			CodedText
+
+Element:		PersonalizedEducationMaterial
+Concept:		TBD
+Description:	"This property contains the contents of any written materials (usually personalized materials) provided to the Patient."
+Value:			CodedText

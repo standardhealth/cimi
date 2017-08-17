@@ -3,6 +3,7 @@ Namespace:		cimi.clinicalevaluationresult
 Description:	""
 Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalentity, cimi.clinicalcommondatastructures, cimi.clinicalassociation, cimi.clinicalclinicalstatement
 
+
 Element:		EvaluationResult
 Based on:		FindingTopic
 Concept:		TBD
@@ -56,7 +57,6 @@ Description:	"The evaluation procedure that is the source of the evaluation resu
 Value:			ClinicalStatement
 // DELTA: Changed Class<T> to ClinicalStatement
 // BALLOT: What class(es) should EvaluationResult.EvaluationProcedure refer to? Possibly a ProcedureTopic, but it should really be a ProcedurePerformed (i.e., a combination of ProcedureTopic and the Performance context). That would be a ClinicalStatement. Should EvaluationResult.EvaluationProcedure be type ClinicalStatement? 
-
 
 Element:		InterpretationCode
 Concept:		TBD

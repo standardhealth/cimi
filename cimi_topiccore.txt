@@ -3,6 +3,8 @@ Namespace:		cimi.clinicaltopiccore
 Description:	"The Topic Core package contains the top-level specializations of the Statement Topic class, namely, the FindingTopic, ActionTopic, and EventTopic classes."
 Uses:			cimi.datatypes, cimi.foundation
 
+// The TopicCore package is missing the class ActionTopic. ("The Topic Core package contains ... the FindingTopic, ActionTopic, and EventTopic classes.") It doesn't exist anywhere in CIMI. There is a ProcedureTopic class, so is it the case that all actions are considered Procedures? Or, are there actions that are not procedures? If the former, the word "Action" should be replaced by the "Procedure" everywhere it appears in CIMI.
+
 Element:		StatementTopic
 Based on:		VIRTUALCLUSTER
 Concept:		TBD

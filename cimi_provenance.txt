@@ -48,7 +48,7 @@ Element:		Location
 Concept:		TBD
 Description:	"Where the activity occurred, if relevant."
 Value:			PARTICIPATION
-// BALLOT:  Attribution.Location datatype (PARTICIPATION) is incorrect. It should refer to a physical location, perhaps an address.
+// BALLOT:  The data type for Attribution.Location (currently PARTICIPATION) is incorrect. It should refer to a physical location, perhaps an address.
 
 Element:		Policy
 Concept:		TBD

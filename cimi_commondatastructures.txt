@@ -126,9 +126,27 @@ Value:			CodedText
 // BALLOT: Timing.Code - insufficient documentation ("Timing abbreviation")
 
 		
+Element:		QuantitativeReferenceRange
+Based on:		ReferenceRange
+Concept:		TBD
+Description:	"A reference range specifying a quantity interval."
+1..1			Range
 
+Element:		Range
+Concept:		TBD
+Description:	"The specified reference range."
+Value:			IntervalValue 
 
+Element:		QualitativeReferenceRange
+Based on:		ReferenceRange
+Concept:		TBD
+Description:	"A reference range specifying a quantity interval."
+1..*			ReferenceValue
 
+Element:		ReferenceValue
+Concept:		TBD
+Description:	"Code representing the reference range."
+Value:			CodedText
 
 
 // TODO: Finish this (many classes missing)

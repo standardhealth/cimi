@@ -1,4 +1,91 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalrelationship
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalevaluationresult, cimi.clinicalprovenance, cimi.clinicalentity
+
+// BALLOT: In Clinical.Relationship module, the Status and DateRange attributes apply to practically any relationship. They should be introduced at the level of PARTY_RELATIONSHIP, instead into several lower-level classes. 
+
+
+Element:		PartyRelationship
+Based on:		PARTYRELATIONSHIP
+Concept:		TBD
+Description:	"A relationship between two parties."
+1..1			ScopingStatus
+0..*			Location
+// BALLOT: CIMI has two distinct classes, PARTY_RELATIONSHIP and PartyRelationship. This is probably not a great idea.
+
+// BALLOT: PartyRelationship.Location: Why do relationships have location(s)? Employment relationships, NextOfKin relationships, HealthcareProvider relationships... these are not physical things that possess locations. Eliminate.
+
+Element:		ScopingStatus
+Concept:		TBD
+Description:	"Code representing the scope when the relationship holds."
+Value:			CodedText
+
+// BALLOT: PartyRelationship.ScopingStatus (defined as "Code representing the scope when the relationship holds.") -- what is this?
+
+Element:		EmployerRelationship
+Based on:		OrganizationRelationship
+Concept:		TBD
+Description:	"An employee relationship between a party and an organization."
+0..1			Role
+0..1			Rank
+0..1			Occupation
+0..1			SalaryType
+0..1			SalaryQuantity
+
+Element:		Role
+Concept:		TBD
+Description:	"The role of the employee within the context of the relationship."
+Value:			TEXT
+
+Element:		Rank
+Concept:		TBD
+Description:	"The rank of the employee."
+Value:			TEXT
+
+Element:		Occupation
+Concept:		TBD
+Description:	"The occupation relevant to this role."
+Value:			TEXT
+
+Element:		SalaryType
+Concept:		TBD
+Description:	"The salary code for the employee relationship - e.g., salaried, hourly, ..."
+Value:			TEXT
+
+Element:		SalaryQuantity
+Concept:		TBD
+Description:	"The salary of the employee."
+Value:			Quantity
+
+// BALLOT:  There doesn't appear to be healthcare logic behind the attributes of EmployerRelationship (SalaryType, SalaryQuantity, Role, Rank, Occupation). There is an HL7 group (can't recall which one) that recently created a Domain Analysis Model for occupational health and safety. We should use it because it covers on-the-job exposures to stress, hazardous substances, physical injury, industry, role, etc. My recollection is that they put information about employment into social history. If the person has worked in the asbestos mining industry or is chronically unemployed, those are findings. Using findings would make this type of information easier to locate, compared to making them properties of relationships.
+
+Element:		HealthCareProviderRelationship
+Based on:		PartyRelationship
+Concept:		TBD
+Description:	"A relationship between an actor and a healthcare provider."
+0..1			DateRange // DELTA: Changed HealthCareProviderRelationship.DatetimeRange to DateRange.
+0..1			Status
+0..*			Identifier
+0..1			Priority
+
+
+Element:		NextOfKinRelationship
+Based on:		PartyRelationship
+Concept:		TBD
+Description:	"Relationship to specify the next of kin relationship between two parties."
+0..1			DateRange // DELTA: Changed HealthCareProviderRelationship.DatetimeRange to DateRange.
+0..1			Status
+0..*			Identifier
+0..*			Priority
+
+// BALLOT: NextOfKinRelationship.Priority should be 0..1, not 0..*. Additionally, Identifier is appropriate in HealthCareProviderRelationship because that is a member number or something similar, but why is it needed here?
+
+Element:		OrganizationRelationship
+Based on:		PartyRelationship
+Concept:		TBD
+Description:	"The relationship between an actor and an organization."
+// BALLOT: OrganizationRelationship lacks a Status and DateRange.
+		
+	
+

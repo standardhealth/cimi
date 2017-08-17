@@ -163,7 +163,7 @@ Element:		RegisteringOrganization
 Concept:		TBD
 Description:	"NEED DEFINITION FOR THIS FIELD."
 Value:			TEXT
-// TODO: RegisteringOrganization and AccreditationOrganization and IssuingOrganization -- combine into one data element
+// TODO: RegisteringOrganization and AccreditationOrganization and IssuingInstitution -- combine into one data element
 
 // BALLOT: "NEED DEFINITION FOR THIS FIELD." Did not find too many of these, but there are some, e.g. HealthCareProviderIndividualRole.Registration
 
@@ -299,5 +299,10 @@ Element:		Medium
 Concept:		TBD
 Description:	"NEED A DEFINITION: The mime type for the communication."
 Value:			CodedText
+
+Element:		ResearchStudy
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Class representing a clinical trial or other research study. Class is a placeholder and will be further defined for the next ballot cycle."
 
 

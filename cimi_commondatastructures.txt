@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.clinicalcommondatastructures
 Description:	"The Common Data Structure Package holds a number of data structures used by other classes in the model."
-Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalprovenance, cimi.clinicalentity
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalprovenance, cimi.clinicalentity, cimi.clinicalrelationship, cimi.clinicalparty
 
 Element:		Annotation
 Based on:		CLUSTER
@@ -66,9 +66,9 @@ Value:			TEXT
 Element:		BaseOrganizationName
 Based on:		ActorName
 
-// BALLOT: I have trouble understanding the thinking behind the hierarchy of organization names under ActorName. First there is BaseOrganizationName and then GenericOrganizationName. Is a GenericOrganizationName really a subtype of BaseOrganizationName? The only difference is that the former has a list of "parts". What is the use case for splitting an organization name into parts? Does having parts make an organization name more generic?
+// BALLOT: I have trouble understanding the hierarchy of organization names under ActorName. First there is BaseOrganizationName and then GenericOrganizationName. What is a GenericOrganizationName and why is it a subtype of BaseOrganizationName? GenericOrganizationName has a list of "parts". What is the use case for splitting an organization name into parts? Does having parts make an organization name more generic?
 
-// BALLOT: BasePersonName.PreferredFlag can probably be eliminated because that information should be captured in ActorName.Use. 
+// BALLOT: BasePersonName.PreferredFlag probably can be eliminated because that information should be captured in ActorName.Use. 
 
 Element:		ReferenceRange
 Based on:		CLUSTER
@@ -163,7 +163,7 @@ Element:		RegisteringOrganization
 Concept:		TBD
 Description:	"NEED DEFINITION FOR THIS FIELD."
 Value:			TEXT
-// TODO: Synonym for IssuingOrganization -- combine into one data element
+// TODO: RegisteringOrganization and AccreditationOrganization and IssuingOrganization -- combine into one data element
 
 // BALLOT: "NEED DEFINITION FOR THIS FIELD." Did not find too many of these, but there are some, e.g. HealthCareProviderIndividualRole.Registration
 
@@ -212,5 +212,92 @@ Concept:		TBD
 Description:	"The roles where the qualification applies - e.g. registered nurse, physician"
 Value:			TEXT
 
+Element:		Accreditation
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Type supporting the capture of accreditation information"
+0..1			Identifier
+0..1			Type
+0..1			ValidityPeriod
+0..1			AccreditationOrganization
 
-// TODO: Finish this (many classes missing)
+Element:		ValidityPeriod
+Concept:		TBD
+Description:	"The period when this dispense request is valid."
+Value:			DateRange
+
+Element:		AccreditationOrganization
+Concept:		TBD
+Description:	"The organization that supplies the accreditation."
+Value:			HealthCareProviderRelationship
+// BALLOT: Accreditation.AccreditationOrganization should be type Organization, not type HealthCareProviderRelationship
+
+Element:		BaseAddress
+Concept:		TBD
+Description:	"Base class for addresses to be specialized based on regional and realm-specific needs."
+1..1			UseCode  // DELTA: Changed BaseAddress.Use to UseCode to prevent collision with Use data element
+0..1			PreferenceIndicator
+0..1			NoFixedAddressIndicator
+0..1			AddressAsText
+
+Element:		UseCode		
+Concept:		TBD
+Description:	"Code indicating use preference for this address."
+Value:			CodedText
+
+Element:		PreferenceIndicator
+Concept:		TBD
+Description:	"Code indicating whether this address is preferred."
+Value:			CodedText
+
+Element:		NoFixedAddressIndicator
+Concept:		TBD
+Description:	"Code indicating if person has no fixed address."
+Value:			CodedText
+
+Element:		AddressAsText
+Concept:		TBD
+Description:	"Unstructured address when a structured address is not obtainable or for system that cannot process structured addresses"
+Value:			PlainText
+
+Element:		GenericAddress
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"A generic address pattern that can be assembled from address parts. Note that this pattern will likely be deprecated in the future in favor of more expressive and extensible address specifications."
+0..*			Part  // DELTA: cut out middleman
+
+Element:		Part
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"A component of a name or an address."
+Value:			0..1 TEXT
+0..1			PartNumber
+0..1			Type
+
+Element:		PartNumber		
+Concept:		TBD
+Description:	"The position of the part in the overall structure."
+Value:			Count
+
+Element:		ElectronicContact
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Data structure representing an electronic contact such as an email address."
+Value:			0..1 TEXT
+0..1			Protocol
+0..1			Status
+0..1			Medium
+0..1			UseCode
+0..1			PreferredContactTime  // DELTA: Changed PreferredTiming to PreferredContactTime (same semantics)
+
+Element:		Protocol
+Concept:		TBD
+Description:	"Telecommunications form for contact point - what communications system is required to make use of the contact."
+Value:			CodedText
+
+Element:		Medium
+Concept:		TBD
+Description:	"NEED A DEFINITION: The mime type for the communication."
+Value:			CodedText
+
+

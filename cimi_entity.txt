@@ -319,16 +319,24 @@ Value:			CodedText
 EntryElement:	Organization
 Based on:		Entity
 Concept:		TBD
-0..1			BaseOrganizationName
-//0..*			Address
-//0..*			ElectronicContact
-//0..1			DepartmentOrUnit
-//0..1			Industry
+0..1			BaseOrganizationName  // DELTA: Eliminated middleman
+0..*			BaseAddress  // DELTA: Eliminated middleman
+0..*			ElectronicContact
+0..1			DepartmentOrUnit
+0..1			Industry
 0..1			Status
-//0..*			Accreditation
+0..*			Accreditation
 0..1			DateRange
-// TO DO: Finish the attributes of Organization
 
+Element:		DepartmentOrUnit
+Concept:		TBD
+Description:	"The department or unit in question."
+Value:			TEXT
+
+Element:		Industry
+Concept:		TBD
+Description:	"The industry code associated with this organization."
+Value:			TEXT 
 
 Element:		MedicationPackage
 Based on:		UnitOfDistribution

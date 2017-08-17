@@ -68,11 +68,6 @@ Concept:		TBD
 Description:	"Indicates whether the prescriber has authorized additional fills of this order as needed."
 Value:			YesNo
 
-Element:		ValidityPeriod
-Concept:		TBD
-Description:	"The period when this dispense request is valid."
-Value:			DateRange
-
 Element:		NumberOfRepeatsAllowed
 Concept:		TBD
 Description:	"Defines the number of times the requested dispense amount can be given to the patient, subject to local regulation. Refers to outpatient only.' - HL7 Version 2.8, RXO-13. 'The total original number of refills. Outpatient only' - HL7 Version 2.8, RXE-12. 'An integer indicating the number of times, in addition to the original dispense, (aka refills or repeats) that the patient can receive the prescribed medication. Usage Notes: This integer does NOT include the original order dispense. This means that if an order indicates dispense 30 tablets plus '3 repeats', then the order can be dispensed a total of 4 times and the patient can receive a total of 120 tablets.' - HL7 FHIR, MedicationOrder.dispenseRequest.numberOfRepeatsAllowed 'Number of refills authorized by the prescriber.' - NCPDP Telecommunication (Field 415-DF, Data Dictionary 201104). Note that while the NCPDP Telecommunication structure treats this field as a code, it contains a number from 0-99, where zero means no refills authorized, and 1-98 are the number of refills authorized, and 99 means unlimited refills authorized."

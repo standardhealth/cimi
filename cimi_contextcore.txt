@@ -267,3 +267,6 @@ Element:		OrderDiscontinueDate
 Concept:		TBD
 Description:	"This is the date the order was discontinued."
 Value:			DateTime
+
+
+// TODO: Finish GoalContext, NoKnown

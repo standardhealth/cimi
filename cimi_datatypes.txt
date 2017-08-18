@@ -6,7 +6,7 @@ Description:	"Complex data types in CIMI."
 CodeSystem:     MTH = http://ncimeta.nci.nih.gov
 
 Abstract Element: 	DATAVALUE
-Concept:			MTH#C1704610  // TODO BALLOT: All CIMI classes and attributes should be anchored to semantic definitions
+Concept:			MTH#C1704610
 Description:		"Root for data value types."
 //BALLOT: FHIR does not permit underscores (_) in the names of StructureDefinitions. To reduce mapping headaches, CIMI should not use names with underscores (such as DATA_VALUE). If underscores are retained, any conversions, maps, and validations become more difficult (after you strip them, it is hard to know where they were). This suggestion will not affect CIMI's functionality in any way.
 
@@ -65,7 +65,6 @@ Element:		Target
 Concept:		TBD
 Description:	"The target term of the mapping."  
 Value:			CodedText
-// BALLOT: TermMapping.Target definition is circular  
 
 Element:		CodedText
 Based on:		TEXT
@@ -117,7 +116,6 @@ Element:		Language
 Concept:		MTH#C0023008
 Description:	"The text's language"  
 Value:			CodedText
-// BALLOT: Language has a circular definition
 
 Abstract Element:	ORDEREDVALUE
 Based on:			DATAVALUE
@@ -152,10 +150,10 @@ Description:	"Optional status of magnitude with values:
 =   magnitude is a point value, <   value is < magnitude, >   value is > magnitude,  <=  value is <= magnitude, >=  value is >= magnitude, ~ value is approximately magnitude. If not present, meaning is = "
 Value:			string 
 // BALLOT: The current set of choices for ValueStatus.Value breaks mapping of CIMI QUANTITY to FHIR Quantity, because FHIR requires the value set http://hl7.org/fhir/ValueSet/quantity-comparator, which has only the 4 inequality values. If CIMI insists on having all six values, then it will be necessary to add an extension to Quantity to hold the CIMI ValueStatus.
-// BALLOT: ValueStatus has an unclear, circular definition: "< value is < magnitude"
+// BALLOT: ValueStatus has an unclear definition: "< value is < magnitude"
 // BALLOT: ValueStatus definition includes a value set, which is a constraint and therefore should be in the ADL, not the BMM. 
 // BALLOT: In the definition of ValueStatus, the word "optional" should be removed. It is not part of the definition but rather the cardinality.
-// TODO BALLOT: TEXT is the incorrect datatype for ValueStatus.value. In this case there is a defined set of permissible values, so the right data type is Code or CodedText.
+// BALLOT: TEXT is the incorrect datatype for ValueStatus.value. In this case there is a defined set of permissible values, so the right data type is Code or CodedText.
 
 Abstract Element:	AMOUNT   
 Based on:			QUANTIFIED
@@ -211,7 +209,6 @@ Value:			decimal
 Element:		Precision
 Concept:		MTH#C1706245
 Description:	"Precision to which the value of the quantity is expressed, in terms of number of decimal places. The value 0 implies an integral quantity. The value -1 implies no limit, i.e. any number of decimal places."
-// BALLOT: Circular definition
 Value:			integer
 // BALLOT: Incorrect definition and data type. The given definition is close to that of significant figures, i.e., the number of digits that carry real information about a measurement. But sig fig is NOT the number of decimal places; a number like 123000 could have 1, 2, 3, 4, 5, 6 significant figures. But - this is not a general way to define quantify precision, which is defined in statistics as is the reciprocal of the variance (a decimal number).
 
@@ -239,7 +236,7 @@ Concept:		MTH#C1264639
 Description:	"Represents an absolute point in time, specified to the second. Semantics defined by ISO 8601. Used for recording a precise point in real world time, and for approximate time stamps, e.g. the origin of a HISTORY in an OBSERVATION which is only partially known. Value: ISO8601 date/time string."
 // BALLOT: Unicode characters are showing through in documentation, e.g. / is rendering as &#47;
 Value:			string 
-// TODO BALLOT: DateTime.Value has to map to the primitive FHIR dateTime, but string cannot map to dateTime.
+// BALLOT: DateTime.Value has to map to the primitive FHIR dateTime, but string cannot map to dateTime.
 // BALLOT: CIMI definitions should not specify physical formats. As a logical model, CIMI should define the semantics of things, not the formatting. CIMI should not define DATE_TIME as an ISO8601 date/time string. That is a physical implementation, which is the responsibility of the physical layer. In target systems, a DateTime might not be an ISO8601 string, but some other semantic equivalent. Assuming the semantics are the same, we can use FHIR dateTime anywhere a CIMI DATE_TIME is specified, and disregard CIMI’s requirement of using an ISO8601 string.
 
 
@@ -247,20 +244,20 @@ Element:		Date
 Based on:		DateTime
 Concept:		MTH#C0011008 "Date in Time"
 Description:	"Represents an absolute point in time, as measured on the Gregorian calendar, and specified only to the day. Semantics defined by ISO 8601. Used for recording dates in real world time. The partial form is used for approximate birth dates, dates of death, etc."
-// TODO BALLOT: Value has to map to the primitive FHIR date
+// BALLOT: In Date, value has to map to the primitive FHIR date
 
 
 Element:		Instant
 Based on:		DateTime
 Concept:		MTH#C1442880  "Point in time"
 Description:	"An instant in time - known at least to the second and always includes a time zone. Note: This is intended for precisely observed times (typically system logs etc.), and not human-reported times - for them, use date and dateTime. instant is a more constrained dateTime"
-// TODO BALLOT: Value has to map to the primitive FHIR instant
+// BALLOT: Value has to map to the primitive FHIR instant
 
 Element:		Time
 Based on:		DateTime
 Concept:		TBD
 Description:	"Represents an absolute point in time from an origin usually interpreted as meaning the start of the current day, specified to a fraction of a second. Semantics defined by ISO 8601. Used for recording real world times, rather than scientifically measured fine amounts of time. The partial form is used for approximate times of events and substance administrations."
-// TODO BALLOT: Value has to map to the primitive FHIR time
+// BALLOT: Value has to map to the primitive FHIR time
 
 Element:		Proportion
 Based on:		AMOUNT
@@ -271,23 +268,23 @@ Description:	"Models a ratio of values, i.e. where the numerator and denominator
 0..1			Precision
 1..1			Type 
 
-//  BALLOT: The class RATIO is still present in the 0.0.3 version. I think it is vestigial and has been replaced by Proportion
+//  BALLOT: The class RATIO is still present in the 0.0.3 version cimi doc. I think it is vestigial and has been replaced by Proportion
 
 Element:		Numerator
 Concept:		MTH#C2825219
-Description:	"Numerator of ratio."  // BALLOT: circular definition
-Value:			decimal // BALLOT: should be Quantity so there can be units
+Description:	"Numerator of ratio."  
+Value:			decimal 
+// BALLOT: Proportation.Numerator and Proportion.Denominator should be Quantity so there can be units
 
 Element:		Denominator
 Concept:		MTH#C2825218
-Description:	"Denominator of ratio."  // BALLOT: circular definition
-Value:			decimal // BALLOT: should be Quantity so there can be units
+Description:	"Denominator of ratio." 
+Value:			decimal
 	
-Element:		Type   // BALLOT: type is too broad a name, cannot be reused 
+Element:		Type
 Concept:		TBD
 Description:	"Indicates semantic type of proportion, including percent, unitary, etc."  
 Value:			CodedText
-// BALLOT: Definition of Proportion.type is partly circular, and partly a definition by examples drawn from a value set (percent, unitary, etc.), which should not leak from the ADL into the BMM. 
 
 Element:		UriValue  
 Based on:		DATAVALUE
@@ -321,14 +318,15 @@ Description:	"The purpose of this identifier. Use is considered a modifying attr
 Value:			CodedText
 // BALLOT: Contrast Identifier.Use with ActorName.Use. The latter has a DateRange, which seems like a good addition.
 
-Element:		Issuer   // BALLOT: Recommend renaming to Publisher for max reuse
+Element:		Issuer   
 Concept:		MTH#C1709767  "Publisher" 
 Description:	"Optional organisation that assigned the id to the item being identified."
-Value:			string  // BALLOT: is this the correct data type?
+Value:			string  
+// BALLOT: Is string the correct data type for Identifier.issuer (might be organization)?
 
 Element:		Namespace
 Concept:		MTH#C1709146
-Description:	"The namespace in which the id is unique."  // BALLOT: circular definition
+Description:	"The namespace in which the id is unique."  
 Value:			UriValue  // should just be uri primitive
 
 Element:		YesNo
@@ -350,13 +348,12 @@ Description:	"Generic class defining an interval (i.e. range) of a comparable ty
 1..1			UpperUnbounded
 0..1			Lower
 0..1			Upper 
-// BALLOT: IntervalValue<OrderedValue> is unworkable in terms of FHIR mapping.
+// BALLOT: Parameterized version of IntervalValue<OrderedValue> is unworkable in terms of FHIR mapping.
 
 Element:		LowerIncluded
 Concept:		TBD
 Description:	"True if the lower bound of the interval is included. False otherwise."  
 Value:			boolean 
-// BALLOT: The definition of IntervalValue.LowerIncluded is circular 
 // BALLOT: The Value of IntervalValue.LowerIncluded is a boolean, which is appropriate. But CIMI defined YesNo. If YesNo is not used in a case such as this, why was it defined at all? 
 
 Element:		LowerUnbounded
@@ -366,9 +363,8 @@ Value:			boolean
 
 Element:		UpperIncluded
 Concept:		TBD
-Description:	"True if the upper bound of the interval is included. False otherwise."  // BALLOT: circular definition
+Description:	"True if the upper bound of the interval is included. False otherwise."
 Value:			boolean  
-// BALLOT: The definition of IntervalValue.UpperIncluded is circular 
 // BALLOT: The Value of IntervalValue.UpperIncluded is a boolean, which is appropriate. But CIMI defined YesNo. If YesNo is not used in a case such as this, why was it defined at all? 
 
 Element:		UpperUnbounded
@@ -379,14 +375,13 @@ Value:			boolean
 Element:		Lower 
 Concept:		TBD
 Description:	"The interval's lower bound. Values outside the lower bound lie outside the range specified by this interval."
-Value:			Quantity //????? BALLOT: The type in CIMI Doc is "T"
-// BALLOT: Poorly named, unspecific. Should be LowerBound
+Value:			Quantity 
+// BALLOT: In IntervalValue, Upper and Lower are poorly named, unspecific. Should be LowerBound and UpperBound.
 
 Element:		Upper  
 Concept:		TBD
 Description:	"The reference range's upper bound. Values outside the upper bound lie outside the range specified by this interval."
-Value:			Quantity //???? BALLOT: The type in CIMI Doc is "T"
-// BALLOT: Poorly named, unspecific. Should be UpperBound
+Value:			Quantity
 
 // DELTA: Added DateRange as placeholder
 Element:		DateRange

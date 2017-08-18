@@ -39,5 +39,5 @@ Concept:		TBD
 Description:	"Identification of the route by which the subject was exposed to the substance."
 Value:			CodedText
 
-
-
+// BALLOT: Regarding adverse reaction, and adverse event reporting, the key thing to know is that an adverse reaction is an adverse event with a causal relationship to an intervention. It should be a subclass of AdverseEvent. If you compare the two classes, AdverseReaction has everything that AdverseEvent has plus 0..* AdverseReactionAttribution, ActionTakenWithMedication, and OtherActionTaken.
+	

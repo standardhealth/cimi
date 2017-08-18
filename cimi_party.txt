@@ -15,7 +15,6 @@ Element:		ConfidentialityLevel
 Concept:		TBD
 Description:	"Confidentiality level conferred to the role."
 Value:			CodedText
-// BALLOT: Role.ConfidentialityLevel: circular definition "Confidentiality level conferred to the role."
 
 Element:		HealthCareConsumerRole
 Based on:		Role

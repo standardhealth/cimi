@@ -149,7 +149,6 @@ Description:	"An assertion of a wound."
 0..1			WoundBedAndEdge
 0..1			Exudate
 0..*			VisibleInternalStructure
-// BALLOT: WoundAssertion definition is circular
 
 Element:		PeriwoundCondition
 Concept:		TBD
@@ -176,7 +175,6 @@ Concept:		TBD
 Description:	"whether undermining is present"
 0..1			Direction //from http://example.com/valueset/undermining_direction_range_vs.v0.0.1
 0..1			Length
-// BALLOT: The definition of undermining is circular
 
 Element:		Exudate
 Concept:		TBD
@@ -286,8 +284,6 @@ Concept:		MTH#C0406830
 Description:	"whether tunneling is present"
 0..1			Direction
 0..1			Length
-// BALLOT: The definition of Tunneling ("whether tunneling is present") is inadequate and circular. Suggest: "The existence and properties of a discharging blind-ended track that extends from the surface of an organ to an underlying area or abscess cavity."
-
 
 Element:		DimensionalFeature
 Based on:		CLUSTER

@@ -34,7 +34,7 @@ Element:			OriginatingFrom
 Concept:			TBD
 Description:		"The encounter or episode of care from which this statement originates."
 Value:				ref(Encounter)
-// BALLOT: The range of ClinicalStatement.OriginatingFrom is unclear. Given as Class<T>, but what it T? Any Topic? Any Encounter or EpisodeOfCare
+// BALLOT: The range of ClinicalStatement.OriginatingFrom is unclear. Given as Class<T>, but what it T? Any Class? Any Topic? Any Encounter or EpisodeOfCare
 
 
 Abstract Element:	Component

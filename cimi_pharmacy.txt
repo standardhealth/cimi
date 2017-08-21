@@ -1,11 +1,11 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalpharmacy
+Namespace:		cimi.pharmacy
 Description:	"The Pharmacy package contains classes related to the administration and dispense of medications. Pharmacy classes can be used to represent Medication Administration, Medication Statement, Medication Request, and Medication Dispense. They are derived from archetypes on the following clinical statements, topics, and contexts:
 Medication Administration: ClinicalStatement<MedicationAct,(Non)Performance>
 Medication Dispense: ClinicalStatement<MedicationAct,MedicationDispensePerformance>
 Medication Request: ClinicalStatement<MedicationAct,MedicationOrder>
 Medication Statement: ClinicalStatement<MedicationAct,(Non)Performance>"
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalcommondatastructures, cimi.clinicaltopiccore, cimi.clinicalentity, cimi.clinicalcontextcore
+Uses:			cimi.datatypes, cimi.foundation, cimi.commondatastructures, cimi.topiccore, cimi.entity, cimi.contextcore
 
 Element:		DispenseBase
 Based on:		VIRTUALCLUSTER
@@ -106,7 +106,7 @@ Element:		BodySiteCode
 Concept:		TBD
 Description:	"Body site to administer to as a precoordinated code."
 Value:			CodedText
-// BALLOT: CIMI recognizes isosemantic forms, in particular, the Analysis Normal Form (ANF) and Clinical Entry Form (CEF). Are the classes in CIMI supposed to be one or the other, or are they supposed to be both simultaneously? I see cases (I'm looking at Dosage right now, but there are many others) where there is a specific spot for a pre-coordinated code (e.g., Dosage.BodySiteCode) and at the same time, there is a place for a post coordinated form (Dosage.BodySite which is an AnatomicalLocation with separate laterality, direction, etc.). If it is the intended design that the CIMI classes are "unions" of ANF and CEF forms, then how will we designate the portion of the structure that should be used for ANF, as opposed to the different portion of the structure that should be used for CEF? Are we going down a path that is going to require layering profiles on top of CIMI classes (one ANF profile, and one or more CEF profiles)? My recommendation is to create structures for ANF only. Transforms can do the rest.
+// BALLOT: CIMI recognizes isosemantic forms, in particular, the Analysis Normal Form (ANF) and Clinical Entry Form (CEF). Are the classes in CIMI supposed to be one or the other, or are they supposed to be both simultaneously? I see cases (I'm looking at Dosage right now, but there are many others) where there is a specific spot for a pre-coordinated code (e.g., Dosage.BodySiteCode) and at the same time, there is a place for a post coordinated form (Dosage.BodySite which is an AnatomicalLocation with separate laterality, direction, etc.). If it is the intended design that the CIMI classes are "unions" of ANF and CEF forms, then how will we designate the portion of the structure that should be used for ANF, as opposed to the different portion of the structure that should be used for CEF? Are we going down a path that is going to require layering profiles on top of CIMI classes (one ANF profile, and one or more CEF profiles)? 
 
 Element:		Route
 Concept:		TBD

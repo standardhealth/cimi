@@ -1,5 +1,5 @@
 Grammar:	Map 5.0
-Namespace:	cimi.clinicalassertion
+Namespace:	cimi.assertion
 Target:		FHIR_STU_3
 
 // Assertion is a finding topic, not a complete clinical statement. Some elements have to come from 

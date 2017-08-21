@@ -1,5 +1,5 @@
 Grammar:	Map 5.0
-Namespace:	cimi.clinicalentity
+Namespace:	cimi.entity
 Target:		FHIR_STU_3
 
 

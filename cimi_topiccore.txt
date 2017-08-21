@@ -1,5 +1,5 @@
 Grammar: 		DataElement 5.0
-Namespace:		cimi.clinicaltopiccore
+Namespace:		cimi.topiccore
 Description:	"The Topic Core package contains the top-level specializations of the Statement Topic class, namely, the FindingTopic, ActionTopic, and EventTopic classes."
 Uses:			cimi.datatypes, cimi.foundation
 

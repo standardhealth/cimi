@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalrelationship
+Namespace:		cimi.relationship
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalevaluationresult, cimi.clinicalprovenance, cimi.clinicalentity
+Uses:			cimi.datatypes, cimi.foundation, cimi.evaluationresult, cimi.provenance, cimi.entity
 
 // BALLOT: In Clinical.Relationship module, the Status and DateRange attributes apply to practically any relationship. They should be introduced at the level of PARTY_RELATIONSHIP, instead into several lower-level classes. 
 
@@ -27,7 +27,7 @@ Element:		EmployerRelationship
 Based on:		OrganizationRelationship
 Concept:		TBD
 Description:	"An employee relationship between a party and an organization."
-0..1			EmployeeRole  // DELTA: changed from Role to EmployeeRole to deconflict with Role element defined in cimi.clinical.party
+0..1			EmployeeRole  // DELTA: changed from Role to EmployeeRole to deconflict with Role element defined in cimi..party
 0..1			Rank
 0..1			Occupation
 0..1			SalaryType

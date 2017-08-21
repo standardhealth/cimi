@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalcontextcore
+Namespace:		cimi.contextcore
 Description:	"The Context Core Package defines the high-level clinical statement context classes. Three types of contexts are currently defined in CIMI: (1) Finding Contexts, (2) Action Contexts, and (3) Event Contexts. Finding contexts are used to specify whether a finding was observed to be present or absent. Action contexts are used to specify whether a clinical activity was performed, ordered, planned, or perhaps not performed."
-Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalassociation, cimi.clinicalentity, cimi.clinicalprovenance, cimi.clinicalevaluationresult, cimi.clinicalcommondatastructures
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.association, cimi.entity, cimi.provenance, cimi.evaluationresult, cimi.commondatastructures
 
 Element:		StatementContext
 Based on:		VIRTUALCLUSTER

@@ -1,5 +1,5 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalparticipation
+Namespace:		cimi.participation
 Description:	"The Participation package currently contains a single specialization of the Foundation PARTICIPATION class, the class SubjectOfInformation."
 Uses:			cimi.datatypes, cimi.foundation
 
@@ -8,10 +8,9 @@ Element:		SubjectOfInformation
 Based on:		PARTICIPATION
 Concept:		TBD
 Description:	"The entity being described by this statement. The entity may be animate (a patient, a relative of the patient, a veterinary patient, a cohort) or inanimate (a well, a geographical location). The subject of information is constrained in archetypes. This attribute aligns with the SNOMED CT Situation with Explicit Context (SWEC) and is bound to the SNOMED attribute: 'Subject relationship context (attribute)' (SCTID: 408732007)"
-1..1			RelationshipToSOR
-//BALLOT: SubjectOfInformation.RelationshipToSubjectOfRecord results in a FHIR StructureDefinition name that exceeds FHIR's length limit on names. Change it to RelationshipToSOR and FHIR is happy again. Please make it possible to map to FHIR as simply as possible, without special rules and transformations.
+1..1			RelationshipToSubjectOfRecord
 
-Element:		RelationshipToSOR
+Element:		RelationshipToSubjectOfRecord
 Concept:		TBD
 Description:	"Indicates the statement's subject relationship to the subject of record. For instance, the statement maybe about the subject of record in which case the relationship is self or the subject of the statement may be a relative to the subject of record such as is the case with family history statements."
 Value:			CodedText

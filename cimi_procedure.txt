@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalprocedure
+Namespace:		cimi.procedure
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalentity
+Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.entity
 
 
 EntryElement:	SpecimenCollection
@@ -48,4 +48,6 @@ Concept:		TBD
 Description:	"The dimension of the collected specimen."
 Value:			Quantity
 
+// TODO: Finish SurgicalProcedure and descendants
+// e.g. ModifyTargetAction
 

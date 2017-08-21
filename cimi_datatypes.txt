@@ -183,11 +183,11 @@ Description:	"Countable quantities. Used for countable types such as pregnancies
 Value:			integer
 
 Element:		UnsignedIntegerCount
-//Based on:		Count  
+//Based on:		Count  // DELTA: removed inheritance from UnsignedIntegerCount because we can't override the integer value
 Concept:		TBD
 Description:	"An integer whose value is greater or equal to zero." 
 Value:			unsignedInt
-// BALLOT: UnsignedIntegerCount cannot inherit from Count because the value, an unsignedInt, cannot override the parent value, integer. unsignedInt is a primitive, not a subclass of integer. This breaks FHIR mappings.
+// TODO: UnsignedIntegerCount cannot inherit from Count because the value, an unsignedInt, cannot override the parent value, integer. unsignedInt is a primitive, not a subclass of integer. This breaks FHIR mappings.
 // BALLOT: The definition of UnsignedIntegerCount is too general. All integers >= 0 are not counts (unsigned ints might represent priorities, disease stages, etc.) 
 
 Element:		PositiveIntegerCount
@@ -195,7 +195,7 @@ Element:		PositiveIntegerCount
 Concept:		TBD
 Description:	"An integer whose value is greater than zero."  
 Value:			positiveInt
-// BALLOT: The definition of PositiveIntegerCount is too general. All integers > 0 are not counts (postitive ints might represent priorities, disease stages, etc.) 
+// TODO: The definition of PositiveIntegerCount is too general. All integers > 0 are not counts (postitive ints might represent priorities, disease stages, etc.) 
 // BALLOT: PositiveIntegerCount cannot inherit from UnsignedIntegerCount because the value, a positiveInt, cannot override the parent value, an unsignedInt. positiveInt This breaks FHIR mappings. 
 
 Element:		Quantity

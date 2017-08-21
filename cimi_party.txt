@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalparty
+Namespace:		cimi.party
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalentity, cimi.clinicalrelationship, cimi.clinicalcommondatastructures
+Uses:			cimi.datatypes, cimi.foundation, cimi.entity, cimi.relationship, cimi.commondatastructures
 
 Element:		Role
 Based on:		BASEROLE

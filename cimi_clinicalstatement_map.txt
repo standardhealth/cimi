@@ -1,5 +1,5 @@
 Grammar:	Map 5.0
-Namespace:	cimi.clinicalclinicalstatement
+Namespace:	cimi.clinicalstatement
 Target:		FHIR_STU_3
 
 /*

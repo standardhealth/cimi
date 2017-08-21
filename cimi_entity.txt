@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalentity
+Namespace:		cimi.entity
 Description:	"The Entity package contains classes representing common clinical entities and their related structures. Entities may include material entities such as people or medications. They may include other entity types such as organizations."
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalprocedure, cimi.clinicalprovenance, cimi.clinicalcommondatastructures
+Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.procedure, cimi.provenance, cimi.commondatastructures
 
 // BALLOT: There are numerous circular, inaccurate, and low quality definitions in CIMI. Someone needs to walk through every definition and make sure they are accurate, non-circular, and descriptive. Some examples: Specimen.Dimension "The dimension of the collected specimen." Role.ConfidentialityLevel: "Confidentiality level conferred to the role." WoundAssertion.tunneling: "whether tunneling is present". Numerator: "Numerator of ratio."   An example of a better definition, WoundAssertion.tunneling could be defined as "The existence and properties of a discharging blind-ended track that extends from the surface of an organ to an underlying area or abscess cavity." 
 
@@ -391,3 +391,4 @@ Description:	"The type of device."
 Value:			CodedText
 // TODO: Change to SpecificType for generic power
 
+// TODO: Finish Person, DetailedPerson, etc.

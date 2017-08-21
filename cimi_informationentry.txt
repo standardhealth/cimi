@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalinformationentry 
+Namespace:		cimi.informationentry 
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalprovenance, cimi.clinicalcommondatastructures, cimi.clinicalparticipation
+Uses:			cimi.datatypes, cimi.foundation, cimi.provenance, cimi.commondatastructures, cimi.participation
 
 // BALLOT: (General comment) The granularity of modules varies widely. Some modules contain a large number of classes, and some contain just one class. Not high priority, but at the risk of channelling Goldilocks, can CIMI be refactored so modules are not too big, not too small, but "just right"?
 

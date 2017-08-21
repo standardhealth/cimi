@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalprovenance
+Namespace:		cimi.provenance
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalassociation
+Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.association
 // BALLOT: Provenance is very basic
 
 Element:		Attribution
@@ -109,7 +109,7 @@ Element:		SignatureContent
 Concept:		TBD
 Description:	"The base64 encoding of the Signature content. When signature is not recorded electronically this element would be empty."
 Value:			ENCAPSULATED
-// BALLOT: Signature.SignatureContent datatype is too wide. It can only be a base64encoded string. Change to base64Binary. Can share the same data element with Multimedia.Data. But interestingly, that element is given as List<Byte>, not ENCAPSULATED. It seems something is disjointed here.
+// BALLOT: Signature.SignatureContent datatype (ENCAPSULATED) is too wide. It can only be a base64encoded string. Change to base64Binary. Can share the same data element with Multimedia.Data. But interestingly, that element is given as List<Byte>, not ENCAPSULATED. It seems something is disjointed here.
 
 
 Element:		Provenance

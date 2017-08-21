@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicaladversesensitivitytosubstance
+Namespace:		cimi.adversesensitivitytosubstance
 Description:	"Package for classes that pertain to Allergies and Intolerances (green in diagram). The AdverseSensitivityToSubstance is a CIMI class used to represent an allergy or intolerance to a substance. Note that it differs from an adverse reaction to a substance in that a patient may have an allergy to peanuts that may only manifest itself when exposed to peanuts or peanut-related products. If exposed, the resulting reaction is modeled using the AdverseReaction class. The predisposition for such adverse reactions when exposure to the substance occurs is captured by AdverseSensitivityToSubstance."
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaladversereaction, cimi.clinicalassertion, cimi.clinicalentity, cimi.clinicalclinicalstatement
+Uses:			cimi.datatypes, cimi.foundation, cimi.adversereaction, cimi.assertion, cimi.entity, cimi.clinicalstatement
 
 
 EntryElement:	AdverseSensitivityToSubstance

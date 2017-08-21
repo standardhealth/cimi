@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalcommondatastructures
+Namespace:		cimi.commondatastructures
 Description:	"The Common Data Structure Package holds a number of data structures used by other classes in the model."
-Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalprovenance, cimi.clinicalentity, cimi.clinicalrelationship, cimi.clinicalparty
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.provenance, cimi.entity, cimi.relationship, cimi.party
 
 Element:		Annotation
 Based on:		CLUSTER

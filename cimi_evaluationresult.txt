@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalevaluationresult
+Namespace:		cimi.evaluationresult
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicaltopiccore, cimi.clinicalentity, cimi.clinicalcommondatastructures, cimi.clinicalassociation, cimi.clinicalclinicalstatement
+Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.entity, cimi.commondatastructures, cimi.association, cimi.clinicalstatement
 
 
 Element:		EvaluationResult

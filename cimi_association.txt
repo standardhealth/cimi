@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalassociation
+Namespace:		cimi.association
 Description:	"Association classes are utilized when an association between two classes needs to be further qualified. The Association package introduces the ClinicalStatementAssociation which relates two clinical statements and further qualifies the relation. The source statement is the statement containing the association class. The target statement is the statement referenced by the target attribute of the association class. CIMI defines two specializations of the ClinicalStatementAssociation class: (1) Justification and (2) Interpretation. Justification qualifies the association through the type and justificationCode attributes. Interpretation qualifies the association through the type and hasInterpretation attributes."
-Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalclinicalstatement
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.clinicalstatement
 
 Element:		ClinicalStatementAssociation
 Based on:		ASSOCIATIONCLASS

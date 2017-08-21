@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
-Namespace:		cimi.clinicalpatienteducation
+Namespace:		cimi.patienteducation
 Description:	"Package for classes that pertain to Patient Education."
-Uses:			cimi.datatypes, cimi.foundation, cimi.clinicalprovenance, cimi.clinicaltopiccore
+Uses:			cimi.datatypes, cimi.foundation, cimi.provenance, cimi.topiccore
 
 Element:		PatientRelatedEducation
 Based on:		ProcedureTopic

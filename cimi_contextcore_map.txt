@@ -1,5 +1,5 @@
 Grammar:	Map 5.0
-Namespace:	cimi.clinicalcontextcore
+Namespace:	cimi.contextcore
 Target:		FHIR_STU_3
 
 

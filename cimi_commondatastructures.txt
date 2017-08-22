@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.commondatastructures
 Description:	"The Common Data Structure Package holds a number of data structures used by other classes in the model."
-Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.provenance, cimi.entity, cimi.relationship, cimi.party
+Uses:			cimi.datatypes, cimi.foundation, cimi.core, cimi.provenance, cimi.entity, cimi.relationship, cimi.party, cimi.informationentry
 
 Element:		Annotation
 Based on:		CLUSTER
@@ -62,6 +62,17 @@ Value:			TEXT
 0..*			Identifier
 // BALLOT: Why does Use (ActorName.Use) require an Identifier? PartyName already has an Identifier, so now we have two sets of identifiers associated with the name of an Actor: ActorName.Identifer and ActorName.Use.Identifier. ActorName.Use has a code which tells you how the name is used, and that should be sufficient.
 // BALLOT: Change ActorName.Use.DateTimeRange to DateRange. We just need effectives dates, not times (Organization.DateRange establishes the precedent).
+
+Element:		BasePersonName
+Based on:		ActorName
+Concept:		TBD
+Description:	"The base type for the name of a person. The name of a person can vary greatly across cultures and countries. Naming format variations are left to specializations of this class"
+0..1			PreferredFlag
+
+Element:		PreferredFlag
+Concept:		TBD
+Description:	"Code indicating the preference associated with the use of this name."
+Value:			CodedText
 
 Element:		BaseOrganizationName
 Based on:		ActorName
@@ -233,6 +244,7 @@ Value:			HealthCareProviderRelationship
 // BALLOT: Accreditation.AccreditationOrganization should be type Organization, not type HealthCareProviderRelationship
 
 Element:		BaseAddress
+Based on:		CLUSTER
 Concept:		TBD
 Description:	"Base class for addresses to be specialized based on regional and realm-specific needs."
 1..1			UseCode  // DELTA: Changed BaseAddress.Use to UseCode to prevent collision with Use data element
@@ -304,5 +316,239 @@ Element:		ResearchStudy
 Based on:		CLUSTER
 Concept:		TBD
 Description:	"Class representing a clinical trial or other research study. Class is a placeholder and will be further defined for the next ballot cycle."
+
+Element:		BirthData
+Based on:		CLUSTER   // Actually a stand-alone panel
+Concept:		TBD
+Description:	"Type supporting the capture of birth-related information"
+0..1			BirthDateTime
+0..1			BirthAddress
+0..1			MultipleBirthIndicator
+0..1			BirthPlurality
+0..1			BirthOrder
+0..1			BirthCertificateNumber
+
+Element:		BirthDateTime
+Concept:		TBD
+Description:	"When the birth occurred."
+Value:			DateTime
+
+Element:		BirthAddress
+Concept:		TBD
+Description:	"Address where birth occurred."
+Value:			BaseAddress
+
+Element:		MultipleBirthIndicator
+Concept:		TBD
+Description:	"Indicates whether the birth event was a multiple birth event."
+Value:			CodedText
+
+Element:		BirthPlurality
+Concept:		TBD
+Description:	"The number of babies resulting from a single pregnancy"
+Value:			Count
+
+Element:		BirthOrder
+Concept:		TBD
+Description:	"Integer indicating the sequence number of this birth."
+Value:			Count
+
+Element:		BirthCertificateNumber
+Concept:		TBD
+Description:	"The birth certificate number associated with this birth."
+Value:			PlainText
+	
+Element:		DeathData
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Information of about a death event."
+0..1			DeceasedIndicator
+0..1			DeathDateTime
+0..1			AgeAtDeath
+0..1			Recorded
+0..*			DeathAddress
+0..1			DeathCertificateNumber
+
+Element:		DeceasedIndicator
+Concept:		TBD
+Description:	"Code indicating whether the patient is deceased."
+Value:			CodedText
+
+Element:		DeathDateTime
+Concept:		TBD
+Description:	"The time of death to the level of granularity known."
+Value:			DateTime
+	
+Element:		AgeAtDeath
+Concept:		TBD
+Description:	"The age of the person at death"
+Value:			Duration
+
+Element:		DeathAddress
+Concept:		TBD
+Description:	"Address where the patient expired."
+Value:			BaseAddress
+
+Element:		DeathCertificateNumber
+Concept:		TBD
+Description:	"The death certificate number."
+Value:			PlainText  // TODO: why not string?
+
+
+Element:		LanguageCapability
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Type representing proficiency in a language."
+1..1			LanguageCode
+0..1			Mode
+0..1			Proficiency
+0..1			TranslatorRequired
+0..1			PreferenceIndicator
+
+Element:		LanguageCode
+Concept:		TBD
+Description:	"ISO code representing the language name."
+Value:			CodedText
+
+Element:		Mode
+Concept:		TBD
+Description:	"The channel of communication evaluated; e.g., spoken, written, heard."
+Value:			CodedText
+
+Element:		Proficiency
+Concept:		TBD
+Description:	"Degree of fluency in the language."
+Value:			TEXT
+
+Element:		TranslatorRequired
+Concept:		TBD
+Description:	"Code indicating need for translator."
+Value:			CodedText
+
+Element:		PreferenceIndicator
+Concept:		TBD
+Description:	"Code indicating whether the language is preferred for communication."
+Value:			CodedText
+
+Element:		ContactInformation
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Represents contact details such as an emergency contact or contact information for a next-of-kin."
+0..1			Type  // DELTA: using CodedText
+0..1			ContactName
+0..*			ElectronicContact // DELTA: cut out middleman
+
+Element:		ContactName
+Concept:		TBD
+Description:	"The name of the person to contact."
+Value:			BasePersonName
+
+Element:		Citizenship
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Type supporting the capture of citizenship information."
+Value:			CodedText
+0..1			DateRange
+
+Element:		Residency
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Type supporting the capture of residency information."
+Value:			CodedText
+0..1			DateRange
+
+Element:		BiometricData
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Type supporting the capture of biometric information."
+0..1			Type
+0..1			DataTemplate
+0..1			Quality
+0..1			CreatingAuthority
+0..*			LocationOfBiometricIdentifier
+0..1			Schema
+0..1			BiometricDeviceIdentification
+0..1			CreationDate
+
+Element:		DataTemplate
+Concept:		TBD
+Description:	"Electronic persistence algorithm for this biometric pattern. WE SOLICIT COMMENTS FOR A BETTER DEFINITION."
+Value:			TEXT
+
+Element:		Quality
+Concept:		TBD
+Description:	"The quality of the biometric information capture"
+Value:			CodedText
+
+Element:		CreatingAuthority
+Concept:		TBD
+Description:	"The creating authority."
+Value:			TEXT
+
+Element:		LocationOfBiometricIdentifier
+Concept:		TBD
+Description:	"NEED DEFINITION"
+Value:			TEXT
+
+Element:		Schema
+Concept:		TBD
+Description:	"NEED DEFINITION"
+Value:			TEXT
+
+Element:		BiometricDeviceIdentification
+Concept:		TBD
+Description:	"Identifier for the device used in the capture of the biometric information."
+Value:			Identifier
+
+Element:		CreationDate
+Concept:		TBD
+Description:	"The date the biometric data was captured."
+Value:			Date
+
+Element:		Industry
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Industry where this person works."
+Value:			TEXT
+0..*			Qualifier
+
+Element:		Qualifier
+Concept:		TBD
+Description:	"Additional description or further refinement for the industry"
+Value:			TEXT
+
+
+Element:		AdvanceDirective
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"Advance directive associated with the person if it exists."
+0..1			Category   // DELTA: Changed from TEXT to CodedText
+0..*			Comment  // DELTA: Changed from Comments to Comment
+0..1			DateRange
+0..1			DirectiveDocument
+0..1			PaperLocation
+0..1			Status
+
+Element:		Comment
+Concept:		TBD
+Description:	"Additional notes or instructions concerning the directive."
+Value:			TEXT
+
+Element:		DirectiveDocument
+Concept:		TBD
+Description:	"The physical advance directive document such as an image of the document or the document in PDF form."
+Value:			Multimedia
+
+Element:		PaperLocation
+Concept:		TBD
+Description:	"Where the physically signed copy of the directive can be found."
+Value:			TEXT
+
+Element:		Entitlement
+Concept:		TBD
+Description:	"Indicates characteristic of patient that may requires special consideration in handling or information disclosure - e.g., royalty, celebrity, felon, etc..."
+0..1			Identifier  // DELTA: Eliminated "number" as middleman
+0..1			Type // DELTA: Changed from TEXT to CodedText
+0..1			DateRange
 
 

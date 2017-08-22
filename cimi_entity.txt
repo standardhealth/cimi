@@ -1,8 +1,9 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.entity
 Description:	"The Entity package contains classes representing common clinical entities and their related structures. Entities may include material entities such as people or medications. They may include other entity types such as organizations."
-Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.procedure, cimi.provenance, cimi.commondatastructures
+Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.procedure, cimi.provenance, cimi.commondatastructures, cimi.relationship, cimi.informationentry, cimi.party
 
+// BALLOT: There are numerous circular, inaccurate, and low quality definitions in CIMI. Someone needs to walk through every definition and make sure they are accurate, non-circular, and descriptive. Some examples: Specimen.Dimension "The dimension of the collected specimen." Role.ConfidentialityLevel: "Confidentiality level conferred to the role." WoundAssertion.tunneling: "whether tunneling is present". Numerator: "Numerator of ratio."   An example of a better definition, WoundAssertion.tunneling could be defined as "The existence and properties of a discharging blind-ended track that extends from the surface of an organ to an underlying area or abscess cavity." 
 // BALLOT: There are numerous circular, inaccurate, and low quality definitions in CIMI. Someone needs to walk through every definition and make sure they are accurate, non-circular, and descriptive. Some examples: Specimen.Dimension "The dimension of the collected specimen." Role.ConfidentialityLevel: "Confidentiality level conferred to the role." WoundAssertion.tunneling: "whether tunneling is present". Numerator: "Numerator of ratio."   An example of a better definition, WoundAssertion.tunneling could be defined as "The existence and properties of a discharging blind-ended track that extends from the surface of an organ to an underlying area or abscess cavity." 
 
 
@@ -335,11 +336,6 @@ Concept:		TBD
 Description:	"The department or unit in question."
 Value:			TEXT
 
-Element:		Industry
-Concept:		TBD
-Description:	"The industry code associated with this organization."
-Value:			TEXT 
-
 Element:		MedicationPackage
 Based on:		UnitOfDistribution
 Concept:		TBD
@@ -391,4 +387,123 @@ Description:	"The type of device."
 Value:			CodedText
 // TODO: Change to SpecificType for generic power
 
-// TODO: Finish Person, DetailedPerson, etc.
+
+Element:		Person
+Based on:		Entity
+Concept:		TBD
+Description:	"Base person class."
+0..1			BasePersonName   // DELTA: cut out middleman
+0..1			AdministrativeGender
+0..*			BaseAddress   // DELTA: cut out middleman
+0..*			ElectronicContact
+0..1			MaritalStatus
+0..1			BirthData
+0..1			DeathData
+0..*			LanguageCapability  // DELTA: cut out middleman
+
+Element:		AdministrativeGender
+Concept:		TBD
+Description:	"The administrative gender of the person."
+Value:			CodedText
+
+Element:		MaritalStatus
+Concept:		TBD
+Description:	"The person's marital status."
+Value:			TEXT
+
+
+Element:		DetailedPerson
+Based on:		Person
+Concept:		TBD
+Description:	"An entity representing a person."
+0..*			ContactPerson
+0..1			MothersIdentifier
+0..1			MothersFamilyName
+0..1			FathersName
+0..1			SpouseName
+0..*			Race
+0..*			Ethnicity
+0..*			Citizenship
+0..*			Residency
+0..1			Religion
+0..1			OrganDonorType
+0..*			BiometricData
+0..1			TranslatorRequired
+0..1			EducationLevel
+0..*			QualificationX
+0..*			Disability
+0..*			Occupation
+0..*			Industry
+0..1			StudentCategory
+0..*			AdvanceDirective
+0..*			Entitlement
+0..*			IdentificationComment
+0..*			HealthCareProvider
+
+Element:		ContactPerson
+Concept:		TBD
+Description:	"Contacts for this person."
+Value:			ContactInformation
+
+Element:		MothersIdentifier
+Concept:		TBD
+Description:	"Identifier for the mother of the patient."
+Value:			Identifier
+
+Element:		MothersFamilyName
+Concept:		TBD
+Description:	"The mother's family name."
+Value:			PlainText
+
+Element:		FathersName
+Concept:		TBD
+Description:	"The father's family name."
+Value:			PlainText
+
+Element:		SpouseName
+Concept:		TBD
+Description:	"The spouse's name"
+Value:			PlainText
+
+Element:		Race
+Concept:		TBD
+Description:	"The race code associated with this person."
+Value:			TEXT
+
+Element:		Ethnicity
+Concept:		TBD
+Description:	"The ethnicity of the person."
+Value:			TEXT
+
+Element:		Religion
+Concept:		TBD
+Description:	"The religion of the person"
+Value:			TEXT
+
+Element:		EducationLevel
+Concept:		TBD
+Description:	"The education level of the person."
+Value:			TEXT
+
+Element:		QualificationX   // DELTA: Changed to QualificationX to deconflict with Qualification element in CommonDataStructures
+Concept:		TBD
+Description:	"Qualification"
+Value:			TEXT
+
+Element:		Disability
+Concept:		TBD
+Description:	"Disability status"
+Value:			TEXT
+
+Element:		StudentCategory
+Concept:		TBD
+Description:	"Student category if person is a student."
+Value:			TEXT
+
+Element:		IdentificationComment
+Concept:		TBD
+Description:	"Comments to help identifier the person such as mole on left cheek."
+Value:			TEXT
+
+
+

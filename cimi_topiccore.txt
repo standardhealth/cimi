@@ -30,7 +30,7 @@ Description: 	"The characteristics looked for in medical investigations or diagn
 0..1			Description  //TODO: This should be 0..1, but doing so generates an CLI error
 0..*			Multimedia
 
-Element:		Result
+Element:		Result  // TODO: change to FindingCode?
 Concept:		TBD
 Description:	"The unqualified value of the evaluation or assertion."
 Value:			DATAVALUE

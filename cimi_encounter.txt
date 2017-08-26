@@ -1,12 +1,420 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.encounter
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation
+Uses:			cimi.datatypes, cimi.foundation, cimi.informationentry, cimi.provenance, cimi.entity, cimi.procedure, cimi.party, cimi.topiccore, cimi.clinicalstatement, cimi.evaluationresult
+
+Abstract Element:	BaseEncounter	
+Based on:		InformationEntry
+Concept:		TBD
+Description:	"An abstract class that represents an encounter class."
+0..1			ConfidentialityCode
+//0..1			PartOf   TODO: Commented out to prevent recursive definition stack overflow (shr-cli issue #22)
+
+Element:		ConfidentialityCode
+Concept:		TBD
+Description:	"Contains a set of values that control the disclosure of information about this patient"
+Value:			CodedText
+
+Element:		PartOf
+Concept:		TBD
+Description:	"An encounter under which this encounter occurred. For instance, an encounter with a clinician while this patient was hospitalized."
+Value:			BaseEncounter
+
 
 EntryElement:	Encounter
-//Based on: 
+Based on: 		BaseEncounter
 Concept:		MTH#C1947978
 Description:	"An interaction between a patient and a practitioner under the auspices of a given organization for the purpose of providing healthcare-related service(s). It is important to understand that if the there is a change in provider or organization, by definition a new encounter will be generated. For example, if a patient is moved from Surgery to Post-Op, a new encounter is generated. Similarly, if a patient receives care from 2 nurses while in Post-Op, there will be 2 encounters."
+0..1			AccountId
+0..1			AccountStatus
+0..*			AlternateVisitId
+0..1			AmbulatoryStatus
+0..1			ChargePriceIndicator
+0..1			ChiefComplaint
+0..1			EncounterBillingType
+0..1			FinancialClass
+0..1			HospitalService
+0..1			IsEmploymentRelated
+0..1			ModeOfArrival
+0..1			PatientClass
+0..1			PatientType
+0..1			PreviousServiceDate
+0..1			PublicityCode
+0..*			ReasonForVisit
+0..1			ReferralSource
+0..1			ServicingFacility
+0..*			SpecialArrangements  // BALLOT: Should be singular
+0..*			SpecialCourtesy
+0..1			TriageNotes  // BALLOT: Cardinatlity wrong
+0..1			AssignedPatientLocation
+0..1			PendingLocation
+0..1			ServiceDeliveryLocation
+0..1			TemporaryLocation
+0..*			PriorTemporaryLocation
+0..1			Origin
+0..1			ServiceProvider
 
-// TODO: fill in the rest of this 
-// Admission, Hospice, Referral, Transfer and more
+Element:		AccountId
+Concept:		TBD
+Description:	"'Contains the account status.' - HL7 Version 2.8, PV1-41. Note that HL7 does not suggest any values for this code (in User-defined Table 117)."
+Value:			Identifier
+
+Element:		AccountStatus
+Concept:		TBD
+Description:	"'Contains the account status.' - HL7 Version 2.8, PV1-41. Note that HL7 does not suggest any values for this code (in User-defined Table 117)"
+Value:			CodedText
+
+Element:		AlternateVisitId
+Concept:		TBD
+Description:	"'Contains the alternative, temporary, or pending optional visit ID number to be used if needed. Multiple alternate identifiers may be sent.' - HL7 Version 2.8, PV1-50 Uniquely identifies this patient visit using an identification scheme other than the one used for the 'id' property. This allows for different systems or organizations to assign different identifiers to the same visit."
+Value:			Identifier
+
+Element:		AmbulatoryStatus
+Concept:		TBD
+Description:	"'Indicates any permanent or transient handicapped conditions.' - HL7 Version 2.8, PV1-15. Possible values include (from HL7 V2 Table 9): No functional limitations; Ambulates with assistive device; Wheelchair&#47;stretcher bound; Comatose - non-responsive; Disoriented; Vision impaired; Hearing impaired; Speech impaired; Non-English speaking; Functional level unknown; Oxygen therapy; Special equipment (tubes, IVs, catheters); Amputee; Mastectomy; Paraplegic; Pregnant."
+Value:			TEXT
+
+Element:		ChargePriceIndicator
+Concept:		TBD
+Description:	"'Contains the code used to determine which price schedule is to be used for room and bed charges.' - HL7 Version 2.8, PV1-21. Note that HL7 does not suggest any values for this code (in User-defined Table 32)."
+Value:			CodedText
+
+Element:		ChiefComplaint
+Concept:		TBD
+Description:	"Describes the primary reason, in the patient's words, for the encounter&#47;visit. This field contrasts with the reasonForVisit, which is the clinician's assessment of the reason for the encounter&#47;visit. Notice that this field is a string, while the reasonForVisit is a code."
+Value:			TEXT
+
+Element:		EncounterBillingType
+Concept:		TBD
+Description:	"Describes the encounter in terms of evaluation and management (e.g., diagnosis or procedure associated with the encounter). For example, Maintenance visit, 5 minutes or less. Uses CPT-4 codes 99200 - 99299."
+Value:			CodedText
+
+Element:		FinancialClass
+Concept:		TBD
+Description:	"'Contains the financial class(es) assigned to the patient for the purpose of identifying sources of reimbursement.' - HL7 Version 2.8, PV1-20 Note that HL7 does not suggest any values for this code (in User-defined Table 64)."
+Value:			CodedText
+
+Element:		HospitalService
+Concept:		TBD
+Description:	"'Contains the treatment or type of surgery that the patient is scheduled to receive.' - HL7 Version 2.8, PV1-10. Possible Values (from HL7 Table 69) include: Cardiac Service, Medical Service, Pulmonary Service, Surgical Service, Urology Service."
+Value:			CodedText
+
+Element:		IsEmploymentRelated
+Concept:		TBD
+Description:	"'Specifies whether a patient's illness was job-related.' - HL7 Version 2.8, PV2-15"
+Value:			YesNo
+
+Element:		ModeOfArrival
+Concept:		TBD
+Description:	"'Identifies how the patient was brought to the healthcare facility.' - HL7 Version 2.8, PV2-38. Possible values include (from HL7 Table 430): Ambulance; Car; On foot; Helicopter; Public Transport; Other; Unknown."
+Value:			CodedText
+
+Element:		PatientClass
+Concept:		TBD
+Description:	"'This field is used by systems to categorize patients by site. It does not have a consistent industry-wide definition. It is subject to site specific variations.' - HL7 Version 2.8, PV1-2. HL7 Version 2 has the following suggested values (table 4): Emergency; Inpatient; Outpatient; Preadmit; Recurring patient; Obstetrics; Commercial Account; Not Applicable; Unknown."
+Value:			TEXT
+
+Element:		PatientType
+Concept:		TBD
+Description:	"'Contains site-specific values that identify the patient type.' - HL7 Version 2.8, PV1-18 Note that HL7 does not suggest any values for this code (in User-defined Table 18)."
+Value:			TEXT
+
+Element:		PreviousServiceDate
+Concept:		TBD
+Description:	"'Contains the date of previous service for the same recurring condition. This may be a required field for billing certain illnesses (e.g., accident related) to a third party.' - HL7 Version 2.8, PV2-14."
+Value:			DateTime // BALLOT - should be DATE
+
+Element:		PublicityCode
+Concept:		TBD
+Description:	"'Contains a user-defined code indicating what level of publicity is allowed for a specific visit.' - HL7 Version 2.8, PV2-21. Possible values include (from HL7 V2 Table 215): Family only; No Publicity; Other; Unknown."
+Value:			CodedText
+
+Element:		ReasonForVisit
+Concept:		TBD
+Description:	"The reason for the encounter&#47;visit from the clinician's point of view. This field contrasts with the chiefComplaint, which is the patient's description of the reason for the encounter&#47;visit. Notice that this field is a code, while the chiefComplaint is a string."
+Value:			CodedText
+
+Element:		ReferralSource
+Concept:		TBD
+Description:	"Identifies the source of the admission or encounter. In other words, identified where the patient was before being sent for this encounter. Possible values include: Community, Other facility, etc."
+Value:			CodedText
+
+Element:		ServicingFacility
+Concept:		TBD
+Description:	"'This field is used in a multiple facility environment, e.g., multiple campuses or buildings, to indicate the healthcare facility with which this visit is associated.' - HL7 Version 2.8, PV1-39. Note that HL7 does not suggest any values for this code (in User-defined Table 115)."
+Value:			CodedText
+
+Element:		SpecialArrangements
+Concept:		TBD
+Description:	"A set of values representing the types of special arrangements provided or to be provided for this patient encounter (e.g., wheelchair, stretcher, interpreter, attendant, seeing eye dog)"
+Value:			CodedText
+
+Element:		SpecialCourtesy
+Concept:		TBD
+Description:	"'Indicates whether the patient will be extended certain special courtesies.' - HL7 Version 2.8, PV1-22. Note that HL7 does not suggest any values for this code (in User-defined Table 45)."
+Value:			CodedText
+
+Element:		TriageNotes
+Concept:		TBD
+Description:	"Triage notes for the patient visit. Added for Public Health Reporting Initiative."
+Value:			CodedText
+
+Element:		AssignedPatientLocation
+Concept:		TBD
+Description:	"'This field contains the patient's initial assigned location or the location to which the patient is being moved. The first component may be the nursing station for inpatient locations, or clinic or department, for locations other than inpatient. For canceling a transaction or discharging a patient, the current location (after the cancellation event or before the discharge event) should be in this field.' - HL7 Version 2.8, PV1-3"
+Value:			Location
+
+Element:		PendingLocation
+Concept:		TBD
+Description:	"'Indicates the point of care, room, bed, healthcare facility ID, and bed status to which the patient may be moved. The first component may be the nursing station for inpatient locations, or the clinic, department, or home for locations other than inpatient.' - HL7 Version 2.8, PV1-42"
+Value:			Location
+
+Element:		ServiceDeliveryLocation
+Concept:		TBD
+Description:	"'The location to which the patient is assigned. It is a role played by a place at which services may be provided. Note that a single physical place can play multiple service delivery location roles each with its own attributes. For example, a Podiatry clinic and Research clinic may meet on alternate days in the same physical location; each clinic uses its own mailing address and telephone number.' (HL7)"
+Value:			Location
+
+Element:		TemporaryLocation
+Concept:		TBD
+Description:	"'Contains a location other than the assigned location required for a temporary period of time (e.g., OR, operating theatre, etc.).' - HL7 Version 2.8, PV1-11"
+Value:			Location
+
+Element:		PriorTemporaryLocation
+Concept:		TBD
+Description:	"'This field is used to reflect the patient's temporary location (such as the operating room&#47;theatre or x-ray) prior to a transfer from a temporary location to an actual location, or from a temporary location to another temporary location. The first component may be the nursing station for inpatient locations, or the clinic, department, or home for locations other than inpatient.' - HL7 Version 2.8, PV1-43"
+Value:			Location
+
+Element:		Origin
+Concept:		TBD
+Description:	"The location from which the patient came before admission"
+Value:			Location
+
+Element:		ServiceProvider
+Concept:		TBD
+Description:	"An organization that is in charge of maintaining the information of this Encounter (e.g. who maintains the report or the master service catalog item, etc.). This MAY be the same as the organization on the Patient record, however it could be different. This MAY not be not the Service Delivery Location's Organization."
+Value:			Organization
+
+
+Element:		AbstractDurableEncounter
+Based on:		Encounter
+Concept:		TBD
+Description:	"Contains properties common to multiple kinds of Encounters which last more than a few hours. Such encounters typically include an admission and discharge process."
+0..1			Admission   // DELTA: Changed PatientAdmission to Admission, PatientTransfer to Transfer, etc.
+0..*			Transfer	// DELTA: Changed data type from Class<T> (ClinicalStatement to Admission, Transfer, Discharge)
+0..1			Discharge
+0..1			PatientCondition
+0..1			PatientStatus
+
+EntryElement:	Admission
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"A record about the admission of a patient to a facility generally for the provision of care."
+0..1			LevelOfCare
+0..1			Source
+0..*			DietType
+0..1			NeedsPreAdmitTest
+0..1			PreAdmitAccount
+0..1			PrecautionCode
+0..1			ReAdmissionIndicator
+0..*			AdmissionDiagnosis
+0..1			PreAdmissionIdentifier
+
+Element:		LevelOfCare
+Concept:		TBD
+Description:	"'Indicates the acuity level assigned to the patient at the time of admission.' - HL7 Version 2.8, PV2-40. Possible values include (from HL7 Table 432): Acute; Chronic; Comatose; Critical; Improved; Moribund."
+Value:			CodedText
+
+Element:		Source
+Concept:		TBD
+Description:	"'Indicates where the patient was admitted.... In the US, this field should use the Official Uniform Billing (UB) 04 2008 numeric codes found on form locator 15 [which is] the Point of Origin for Admission or Visit.' - HL7 Version 2.8, PV1-14."
+Value:			CodedText
+
+Element:		DietType
+Concept:		TBD
+Description:	"'Indicates a special diet type for a patient.' - HL7 Version 2.8, PV1-38. Note that HL7 does not suggest any values for this code (in User-defined Table 114)."
+Value:			CodedText
+
+Element:		NeedsPreAdmitTest
+Concept:		TBD
+Description:	"'Indicates whether the patient must have pre admission testing done in order to be admitted.' - HL7 Version 2.8, PV1-12"
+Value:			YesNo
+
+Element:		PreAdmitAccount
+Concept:		TBD
+Description:	"'Uniquely identifies the patient's pre admit account. Some systems will continue to use the pre admit number as the billing number after the patient has been admitted.' - HL7 Version 2.8, PV1-5"
+Value:			YesNo
+
+Element:		PrecautionCode
+Concept:		TBD
+Description:	"'Indicates non-clinical precautions that need to be taken with the patient.' - HL7 Version 2.8, PV2-41. Possible values include (from HL7 Table 433): Aggressive; Blind; Confused; Deaf; On IV; 'No-code' (i.e. Do not resuscitate); Paraplegic; Other; Unknown."
+Value:			CodedText
+
+Element:		ReAdmissionIndicator
+Concept:		TBD
+Description:	"'Indicates that a patient is being re admitted to the healthcare facility and gives the circumstances.' - HL7 Version 2.8, PV1-13."
+Value:			CodedText
+
+Element:		AdmissionDiagnosis
+Concept:		TBD
+Description:	"The diagnosis(es) that was the reason for hospitalization at the time of hospitalization (added for Transition of Care)."
+Value:			Diagnosis
+
+Element:		PreAdmissionIdentifier
+Concept:		TBD
+Description:	"Pre-admission identifier"
+Value:			Identifier
+
+Element:		AdmissionDiagnosis  // DELTA: was called 'diagnosis'
+//Based on:		BALLOT: missing parent class
+Concept:		TBD
+Description:	"The list of diagnosis relevant to this encounter where a diagnosis is defined as 'a.The act or process of identifying or determining the nature and cause of a disease or injury through evaluation of patient history, examination, and&#47;or review of laboratory data. b.The opinion derived from such an evaluation' American Heritage Dictionary"  // BALLOT: it is not a list!
+0..1			Priority  // DELTA: changed from rank, means the same thing
+0..1			DiagnosisCode  // TODO: merge with FindingTopic.result, the code for an assertion
+0..1			Diagnosis
+0..1			DiagnosisRole  // DELTA: changed from "role" to deconflict from actor role 
+
+Element:		DiagnosisCode
+Concept:		TBD
+Description:	"Contains a code that most closely identifies the condition or the diagnosis. This code will come from one of several commonly used coding systems, depending on the branch of medicine involved (e.g., clinical medicine, dentistry, mental health), and on the purpose (e.g., clinical, billing). The code will likely come from one of the following: Structured Nomenclature for Medicine (SNOMED), International Classifications of Diseases (ICD), Diagnostic and Statistical Manual of Mental Disorders (DSM)."
+Value:			CodedText
+
+Element:		Diagnosis
+Concept:		TBD
+Description:	"Contains a pointer to the finding clinical statement that most closely identifies the condition or the diagnosis."
+Value:			ClinicalStatement // TODO: Must be a clinical statement with a finding topic
+
+Element:		DiagnosisRole
+Concept:		TBD
+Description:	"Role that this diagnosis has within the encounter (e.g. admission, billing, discharge …)."
+Value:			CodedText
+
+Element:		Transfer
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"The act of transferring a patient from one location or responsible organization to another. Note that a transfer from organization to another will, by definition, trigger a new encounter. Note that a transfer from one location to another may trigger a new encounter depending on whether the responsible organization has changed. A movement from one bed within the same ward to another probably will not, but a movement from one ward to another probably would."
+1..1			Category
+0..1			TransferFromLocation
+0..1			TransferToLocation
+
+Element:		TransferFromLocation
+Concept:		TBD
+Description:	"'Contains the prior patient location if the patient is being transferred. The old location is null if the patient is new.' - HL7 Version 2.8, PV1-6"
+Value:			Location
+
+Element:		TransferToLocation
+Concept:		TBD
+Description:	"'Contains the prior patient location if the patient is being transferred. The old location is null if the patient is new.' - HL7 Version 2.8, PV1-6"
+Value:			Location
+
+Element:		Discharge
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"A record pertaining to the discharge of a patient from an institution."
+0..1			Disposition
+0..1			NeedOutpatientFollowup
+0..*			DischargeInstructionsStatement
+0..1			DischargeInstructions
+0..*			DischargeFromLocation
+0..1			DischargeToLocation
+0..*			DischargeDiagnosis
+
+Element:		Disposition
+Concept:		TBD
+Description:	"'Contains the disposition of the patient at time of discharge (i.e., discharged to home, expired, etc.). ...use the Official Uniform Billing (UB) 04 2008 numeric codes found on form locator 17.' - HL7 Version 2.8, PV1-36 Note that while the encounter is still 'active' (i.e., the encounter does not have an end date yet) this attribute should be interpreted as the expected discharge disposition. When the encounter is 'completed' this attribute contains the actual discharge disposition."
+Value:			CodedText
+
+Element:		NeedOutpatientFollowup
+Concept:		TBD
+Description:	"Flag indicating whether patient follow is required post-discharge."
+Value:			YesNo
+
+Element:		DischargeInstructionsStatement
+Concept:		TBD
+Description:	"Pointer to a Patient Education record which documents the Act of the provision of instructions to the Patient upon the completion of an Encounter. These instructions may be in the form of a pre-defined document that is specific to the Patient's condition or the Procedure which has undergone, or it may be in the form of free-form text, or both. We point to the Patient Education class rather than simply having a discharge instructions string property so that data can be collected regarding who provided the instructions and when, as well as an indication of the patient's level of understanding."
+Value:			ClinicalStatement // DELTA: Because I have no idea what Class<T> limits this to, but it says ClinicalStatement in the class diagram
+
+Element:		DischargeInstructions
+Concept:		TBD
+Description:	"Pointer to a Patient Education record which documents the Act of the provision of instructions to the Patient upon the completion of an Encounter. These instructions may be in the form of a pre-defined document that is specific to the Patient's condition or the Procedure which has undergone, or it may be in the form of free-form text, or both. We point to the Patient Education class rather than simply having a discharge instructions string property so that data can be collected regarding who provided the instructions and when, as well as an indication of the patient's level of understanding."
+Value:			TEXT
+
+Element:		DischargeFromLocation
+Concept:		TBD
+Description:	"'The location to which the patient is assigned. It is a role played by a place at which services may be provided. Note that a single physical place can play multiple service delivery location roles each with its own attributes. For example, a Podiatry clinic and Research clinic may meet on alternate days in the same physical location; each clinic uses its own mailing address and telephone number.' (HL7)"
+Value:			Location
+
+Element:		DischargeToLocation
+Concept:		TBD
+Description:	"'Indicates the healthcare facility to which the patient was discharged and the date.' - HL7 Version 2.8, PV1-37"
+Value:			Location
+
+Element:		DischargeDiagnosis
+Concept:		TBD
+Description:	"The diagnosis(es) determined to be the reason for hospitalization at the time of discharge (this may be the same or different from the hospital admission diagnosis (added for Transition of Care)."
+Value:			Diagnosis
+
+Element:		PatientCondition
+Concept:		TBD
+Description:	"'Indicates the patient's current medical condition for the purpose of communicating to non-medical outside parties, e.g., family, employer, religious minister, media, etc.' - HL7 Version 2.8, PV2-42. Possible values include (from HL7 Table 434): Satisfactory; Critical; Poor; Stable; Other; Unknown."
+Value:			CodedText
+
+Element:		PatientStatus
+Concept:		TBD
+Description:	"'Indicates the status of the episode of care.' - HL7 Version 2.8, PV2-24. Possible values include (from HL7 Table 216): Active Inpatient; Discharged Inpatient."
+Value:			CodedText
+
+
+EntryElement:	EmergencyEncounter
+Based on:		Encounter
+Concept:		TBD
+Description:	"Emergency is an encounter without a scheduled appointment and urgent clinical services are required."
+0..1			ActivityTime
+0..1			ArrivedBy
+0..1			Discharge
+
+Element:		ActivityTime
+Concept:		TBD
+Description:	"'The time interval starting with the administrative onset of the encounter (e.g. admission, registration, patient arrival) and ending with the patient's departure (e.g. discharge). (HL7)."
+Value:			DateTime
+
+Element:		ArrivedBy
+Concept:		TBD
+Description:	"Identifies the mode of transportation. ie. ambulance, car, walking etc."
+Value:			CodedText
+
+Element:		HomeBasedPrimaryCareEncounter
+Based on:		AbstractDurableEncounter
+Concept:		TBD
+Description:	"Patient is being treated 'In-Home' for this encounter."
+
+Element:		Hospice
+Based on:		AbstractDurableEncounter
+Concept:		TBD
+Description:	"A hospice encounter."
+
+Element:		Hospice
+Based on:		AbstractDurableEncounter
+Concept:		TBD
+Description:	"A hospice encounter."
+
+Element:		InpatientEncounter
+Based on:		AbstractDurableEncounter
+Concept:		TBD
+Description:	"Patient has been admitted to the facility and assigned a bed."
+0..1			LengthOfStay
+
+Element:		LengthOfStay
+Concept:		TBD
+Description:	"Will contain the actual, calculated quantity (the actual days quantity cannot be simply calculated from the admission and discharge dates because of possible leaves of absence) instead of the expected length of stay."
+Value:			Quantity  // BALLOT: Change to Duration
+
+Element:		LongTermCare
+Based on:		AbstractDurableEncounter
+Concept:		TBD
+Description:	"A long term care encounter."
+
+Element:		ShortStay
+Based on:		AbstractDurableEncounter
+Concept:		TBD
+Description:	"An encounter that is similar to outpatient but the patient is admitted to a bed."
+0..1			LengthOfStay

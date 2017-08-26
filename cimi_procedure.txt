@@ -47,7 +47,3 @@ Element:		Dimension
 Concept:		TBD
 Description:	"The dimension of the collected specimen."
 Value:			Quantity
-
-// TODO: Finish SurgicalProcedure and descendants
-// e.g. ModifyTargetAction
-

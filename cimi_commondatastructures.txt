@@ -122,13 +122,85 @@ Element:		TimingRepeat
 Concept:		TBD
 Description:	"When the event is to occur + If there's an offset, there must be a when (and not C, CM, CD, CV) + period SHALL be a non-negative value + If there's a periodMax, there must be a period + If there's a durationMax, there must be a duration + If there's a countMax, there must be a count + if there's a duration, there needs to be duration units + If there's a timeOfDay, there cannot be be a when, or vice versa + if there's a period, there needs to be period units + duration SHALL be a non-negative value"
 0..1			BoundsDuration
-// TODO: Finish filling out TimingRepeat
+0..1			BoundsRange
+0..1			BoundsPeriod
+0..1			Count
+0..1			CountMax
+0..1			Duration
+0..1			DurationMax
+0..1			Frequency
+0..1			FrequencyMax
+0..1			Period
+0..1			PeriodMax
+0..*			DayOfWeek
+0..*			TimeOfDay
+0..*			QuotidianEvent // DELTA: Renamed from When to QuotidianEvent
+0..1			Offset
 
 Element:		BoundsDuration
 Concept:		TBD
 Description:	"Repeat duration."
 Value:			Quantity
 
+Element:		BoundsRange
+Concept:		TBD
+Description:	"Repeat range."
+Value:			IntervalValue
+
+Element:		BoundsPeriod
+Concept:		TBD
+Description:	"Start and&#47;or end limits"
+Value:			DateTimeRange
+
+Element:		CountMax
+Concept:		TBD
+Description:	"Maximum number of times to repeat"
+Value:			Count
+
+Element:		DurationMax
+Concept:		TBD
+Description:	"How long when it happens (Max)"
+Value:			Duration
+
+Element:		Frequency
+Concept:		TBD
+Description:	"Event occurs frequency times per period"
+Value:			Count
+
+Element:		FrequencyMax
+Concept:		TBD
+Description:	""
+Value:			Count
+
+Element:		Period
+Concept:		TBD
+Description:	"Event occurs frequency times per period"
+Value:			Quantity
+
+Element:		PeriodMax
+Concept:		TBD
+Description:	"Upper limit of period (3-4 hours)"
+Value:			Quantity
+
+Element:		DayOfWeek
+Concept:		TBD
+Description:	"A day of the week such as Monday, Sunday."
+Value:			CodedText
+
+Element:		TimeOfDay
+Concept:		TBD
+Description:	"Time of day for action"
+Value:			Time
+
+Element:		QuotidianEvent
+Concept:		TBD
+Description:	"Regular life events the event is tied to"
+Value:			CodedText
+
+Element:		Offset
+Concept:		TBD
+Description:	"Minutes from event (before or after)"
+Value:			Count
 
 Element:		TimingCode	
 Concept:		TBD
@@ -136,7 +208,6 @@ Description:	"Timing abbreviation."
 Value:			CodedText
 // BALLOT: Timing.Code - insufficient documentation ("Timing abbreviation")
 
-		
 Element:		QuantitativeReferenceRange
 Based on:		ReferenceRange
 Concept:		TBD

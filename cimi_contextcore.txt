@@ -269,4 +269,72 @@ Description:	"This is the date the order was discontinued."
 Value:			DateTime
 
 
-// TODO: Finish GoalContext, NoKnown
+Element:		NoKnown
+Based on:		FindingContext
+Concept:		TBD
+Description:	"Context to express an assertion of absence within an open world context. Typically used for allergy and intolerance statements where the statement of no known drug allergy implies that there might be a medication the patient is allergic to but it is not known and has not been encountered at this time."
+
+Element:		GoalContext
+Based on:		FindingContext
+Concept:		TBD
+Description:	"Clinical statement context for a goal."
+1..1			Status
+0..1			StatusDate
+0..1			StatusReason
+0..1			Priority
+0..1			StartDateTime // DELTA: Change from "Start" to "StartDateTime" to reuse previous definition
+0..1			ExpressedBy
+0..1			Category
+0..1			ObjectiveOfCare
+0..1			TargetDate
+0..*			Addresses
+0..*			OutcomeCode
+0..*			OutcomeReference
+
+Element:		StatusDate
+Concept:		TBD
+Description:	"Identifies when the current status. I.e. When initially created, when achieved, when cancelled, etc."
+Value:			DateTime
+
+Element:		StatusReason
+Concept:		TBD
+Description:	"Captures the reason for the current status."
+Value:			CodedText
+
+Element:		ExpressedBy
+Concept:		TBD
+Description:	"Indicates whose goal this is - patient goal, practitioner goal, etc."
+Value:			PARTICIPATION
+// BALLOT: Again, the role in the participation is explicit in the name of the attribute. Therefore, only the name of the person is needed
+
+Element:		ObjectiveOfCare
+Concept:		TBD
+Description:	"Human-readable and&#47;or coded description of a specific desired objective of care, such as 'control blood pressure' or 'negotiate an obstacle course' or 'dance with child at wedding'."
+Value:			TEXT
+
+Element:		TargetDate
+Concept:		TBD
+Description:	"Indicates when goal should be reached."
+Value:			DATAVALUE
+
+Element:		Addresses
+Concept:		TBD
+Description:	"The identified conditions and other health record elements that are intended to be addressed by the goal"
+Value:			LOCATABLE // DELTA: Changed from Class<T> to LOCATABLE because no idea what is meant!
+
+Element:		OutcomeCode
+Concept:		TBD
+Description:	"Identifies the change (or lack of change) at the point when the status of the goal is assessed."
+Value:			CodedText
+
+Element:		OutcomeReference
+Concept:		TBD
+Description:	"Details of what's changed (or not changed)."
+Value:			LOCATABLE // DELTA: Changed from Class<T> to LOCATABLE because no idea what is meant!
+
+
+
+
+
+
+

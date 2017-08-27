@@ -11,8 +11,8 @@ EntryElement:	AssociationTest
 EntryElement:	ClinicalStatementTest
 1..1			ClinicalStatement
 1..1			CompositeComponent
-1..1			CompoundCS
-1..1			IndivisibleCS
+1..1			CompoundClinicalStatement
+1..1			IndivisibleClinicalStatement
 1..1			SimpleComponent
 
 EntryElement:	CommonDataStructuresTest

@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.procedure
 Description:	""
-Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.entity
+Uses:			cimi.datatypes, cimi.foundation, cimi.topiccore, cimi.entity, cimi.clinicalstatement
 
 
 EntryElement:	SpecimenCollection
@@ -47,3 +47,121 @@ Element:		Dimension
 Concept:		TBD
 Description:	"The dimension of the collected specimen."
 Value:			Quantity
+
+
+Element:		ImagingProcedure
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Experimental class for an imaging procedure. Note that this class is still incomplete at this time."
+0..*			DirectSite
+0..*			DirectSiteCode
+0..*			UsingSubstance
+
+Element:		DirectSite
+Concept:		TBD
+Description:	"The site where the procedure is applied."
+Value:			AnatomicalLocation
+
+Element:		DirectSiteCode
+Concept:		TBD
+Description:	"Site where the procedure is applied."
+Value:			CodedText
+
+Element:		UsingSubstance
+Concept:		TBD
+Description:	"Substance used for this imaging procedure such as a contrast agent."
+Value:			CodedText
+
+Element:		LaboratoryProcedure
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Specialization of Procedure that represents a procedure performed on a collected specimen such as a blood panel or a biopsy."
+1..1			Specimen
+0..*			ClinicalStatement
+
+Element:		ModifyTargetAction
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Action intended to modify an existing action such as a request to discontinue the administration of a medication or a proposal to cancel an existing order. Experimental"
+1..*			ClinicalStatement
+
+Element:		SurgicalProcedure
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Description of a healthcare action, independent of action context."
+0..*			DirectSite
+0..*			DirectSiteCode
+0..*			IndirectSite
+0..*			IndirectSiteCode
+0..*			SurgicalApproach
+0..*			Access
+0..*			UsingDevice
+0..*			UsingDeviceCode
+0..*			UsingAccessDevice
+0..*			UsingAccessDeviceCode
+0..*			IndirectDevice
+0..*			IndirectDeviceCode
+
+Element:		DirectSite
+Concept:		TBD
+Description:	"The site where the procedure is performed."
+Value:			AnatomicalLocation
+
+Element:		DirectSiteCode
+Concept:		TBD
+Description:	"The site where the procedure is performed."
+Value:			CodedText
+
+Element:		IndirectSite
+Concept:		TBD
+Description:	"The indirect site for this procedure."
+Value:			AnatomicalLocation
+
+Element:		IndirectSiteCode
+Concept:		TBD
+Description:	"The indirect site for this procedure."
+Value:			CodedText
+
+Element:		SurgicalApproach
+Concept:		TBD
+Description:	"The technique used to reach the site of the procedure. Approaches may be through the skin or mucous membrane, through an orifice or external."
+Value:			CodedText
+
+Element:		Access
+Concept:		TBD
+Description:	"The route used to access the site of a procedure. It is used to distinguish open, closed, and percutaneous procedures."
+Value:			CodedText
+
+Element:		UsingDevice
+Concept:		TBD
+Description:	"The device used to perform the procedure."
+Value:			Device
+
+Element:		UsingDeviceCode
+Concept:		TBD
+Description:	"The device used to perform the procedure."
+Value:			CodedText
+
+Element:		UsingAccessDevice
+Concept:		TBD
+Description:	"The access device used to perform the procedure."
+Value:			Device
+
+Element:		UsingAccessDeviceCode
+Concept:		TBD
+Description:	"The access device used to perform the procedure."
+Value:			CodedText
+
+Element:		IndirectDevice
+Concept:		TBD
+Description:	"An indirect device used for this procedure."
+Value:			Device
+
+Element:		IndirectDeviceCode
+Concept:		TBD
+Description:	"An indirect device used for this procedure."
+Value:			CodedText
+
+
+
+

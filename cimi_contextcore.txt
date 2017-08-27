@@ -333,6 +333,16 @@ Description:	"Details of what's changed (or not changed)."
 Value:			LOCATABLE // DELTA: Changed from Class<T> to LOCATABLE because no idea what is meant!
 
 
+Element:		NonCompletion
+Based on:		Performance
+Concept:		TBD
+Description:	"A record that a clinical act was initiated by not completed."
+0..1			NonCompletionTimeframe
+
+Element:		NonCompletionTimeframe
+Concept:		TBD
+Description:	"The time interval considered when the action had been intended for execution."
+Value:			DateTimeRange
 
 
 

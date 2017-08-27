@@ -622,4 +622,45 @@ Description:	"Indicates characteristic of patient that may requires special cons
 0..1			Type // DELTA: Changed from TEXT to CodedText
 0..1			DateRange
 
+Element:		Street
+Based on:		CLUSTER
+Concept:		TBD
+Description:	"The name of a street"
+0..1			StreetName
+0..1			StreetType
+0..1			StreetDirection
+0..1			Suffix
 
+Element:		StreetName
+Concept:		TBD
+Description:	"Name of the street from a list of names maintained by an organization such as the US Postal Service."
+Value:			CodedText
+
+Element:		StreetType
+Concept:		TBD
+Description:	"The type of street - Court, Lane, Street, Road, Circle, etc..."
+Value:			TEXT
+
+Element:		StreetDirection
+Concept:		TBD
+Description:	"Direction code such as N, S, W, NE, etc..."
+Value:			CodedText
+
+Element:		Suffix
+Concept:		TBD
+Description:	"Term used to qualify the street name suitable for directional references."
+Value:			TEXT
+
+Element:		DetailedAddress
+Based on:		BaseAddress
+Concept:		TBD
+Description:	"A detailed address model."
+0..1			Street
+0..1			PostalBoxNumber
+
+// Finish Detailed Address - many elements omitted
+
+Element:		PostalBoxNumber
+Concept:		TBD
+Description:	"A P.O. Box number."
+Value:			CodedText

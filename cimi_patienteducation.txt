@@ -1,7 +1,7 @@
 Grammar:		DataElement 5.0
 Namespace:		cimi.patienteducation
 Description:	"Package for classes that pertain to Patient Education."
-Uses:			cimi.datatypes, cimi.foundation, cimi.provenance, cimi.topiccore
+Uses:			cimi.datatypes, cimi.foundation, cimi.provenance, cimi.topiccore, cimi.contextcore
 
 Element:		PatientRelatedEducation
 Based on:		ProcedureTopic
@@ -36,3 +36,39 @@ Element:		PersonalizedEducationMaterial
 Concept:		TBD
 Description:	"This property contains the contents of any written materials (usually personalized materials) provided to the Patient."
 Value:			CodedText
+
+
+Element:		PatientEducationPerformed
+Based on:		Performance
+Concept:		TBD
+Description:	"Context associated with the performance of an educational intervention."
+0..1			OralCommunicationSummary
+0..1			PercentComplete
+0..1			LevelOfUnderstanding
+0..1			ProfessionalTime
+0..1			TextProvided
+
+Element:		OralCommunicationSummary
+Concept:		TBD
+Description:	"This property may be used to summarize an oral communication with the Patient."
+Value:			TEXT
+
+Element:		PercentComplete
+Concept:		TBD
+Description:	"The percent of the course or session that was performed."
+Value:			Quantity
+
+Element:		LevelOfUnderstanding
+Concept:		TBD
+Description:	"A qualitative assessment of how well the Patient (or Patient's representative) understood the material presented. Example values include: Poor, Fair, Good, Group - no assessment, Refused, etc."
+Value:			CodedText
+
+Element:		ProfessionalTime
+Concept:		TBD
+Description:	"Public «PQ» TimeQuantity professionalTime"
+Value:			Quantity
+
+Element:		TextProvided
+Concept:		TBD
+Description:	"This property contains the contents of any written materials (usually personalized materials) provided to the Patient. This property may also be used to summarize an oral communication with the Patient. Note that the identification of pre-defined materials should be accomplished using the educationalMaterialsProvided property rather than reproducing the content of such materials here."
+Value:			TEXT

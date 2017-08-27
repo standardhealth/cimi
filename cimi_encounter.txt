@@ -418,3 +418,61 @@ Based on:		AbstractDurableEncounter
 Concept:		TBD
 Description:	"An encounter that is similar to outpatient but the patient is admitted to a bed."
 0..1			LengthOfStay
+
+Element:		Referral
+Based on:		ProcedureTopic
+Concept:		TBD
+Description:	"Used to record and send details about a request for referral service or transfer of a patient to the care of another provider or provider organization."
+0..1			GroupIdentifier
+0..*			ServiceRequested
+0..1			OriginatingEncounter // DELTA: Changed from Context to avoid collision
+0..1			Specialty
+0..*			Recipient
+0..*			SupportingInformation
+
+Element:		GroupIdentifier
+Concept:		TBD
+Description:	"Composite request this is part of"
+Value:			Identifier
+
+Element:		ServiceRequested
+Concept:		TBD
+Description:	"Actions requested as part of the referral"
+Value:			CodedText
+
+Element:		OriginatingEncounter
+Concept:		TBD
+Description:	"Originating encounter"
+Value:			ClinicalStatement  // BALLOT: Wrong datatype
+
+Element:		Specialty
+Concept:		TBD
+Description:	"The clinical specialty (discipline) that the referral is requested for"
+Value:			CodedText
+
+Element:		Recipient
+Concept:		TBD
+Description:	"Receiver of referral &#47; transfer of care request"
+Value:			PARTICIPATION
+
+Element:		SupportingInformation
+Concept:		TBD
+Description:	"Additonal information to support referral or transfer of care request"
+Value:			ClinicalStatement
+
+Element:		SurgicalProcedureOnDevice
+Based on:		SurgicalProcedure
+Concept:		TBD
+Description:	"Procedure for the insertion or removal of an implant."
+0..*			Implant
+0..*			ImplantCode
+
+Element:		Implant
+Concept:		TBD
+Description:	"Something placed in a person's body or on its surface during the procedure and remains postoperatively. E.g., stents, tubes, artificial joints, and drains."
+Value:			Device
+
+Element:		ImplantCode
+Concept:		TBD
+Description:	"Concept representing something placed in a person's body or on its surface during the procedure and remains postoperatively. E.g., stents, tubes, artificial joints, and drains."
+Value:			CodedText
